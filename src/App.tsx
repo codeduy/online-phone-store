@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AdminLayout from "./components/admin/AdminLayout";        
 import 'primeicons/primeicons.css';
 import AdminDashboard from "./pages/admin/AdminDashboard";
-
+import AdminProducts from "./pages/admin/AdminProducts";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 
@@ -15,6 +15,7 @@ const App = () => {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="/admin/dashboard" />} />
           <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="products" element={<AdminProducts />} />
           {/* Admin routes */}
         </Route>
       </Routes>

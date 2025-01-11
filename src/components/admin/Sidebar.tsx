@@ -64,7 +64,7 @@ const Sidebar = () => {
           key={index}
           label={item.label}
           icon={item.icon}
-          className="w-full mb-2 p-button-text text-left cursor-pointer border border-gray-300 rounded hover:bg-gray-200 hover:border-blue-500"
+          className="p-2 w-full mb-2 p-button-text text-left cursor-pointer border border-gray-300 rounded hover:bg-gray-200 hover:border-blue-500"
           onClick={item.command}
         />
       ))}
