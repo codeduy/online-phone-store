@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Menu } from 'primereact/menu';
+import { Button } from 'primereact/button';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -58,8 +58,16 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 min-h-screen bg-white shadow-lg">
-      <Menu model={menuItems} className="w-full" />
+    <div className="h-full p-4">
+      {menuItems.map((item, index) => (
+        <Button
+          key={index}
+          label={item.label}
+          icon={item.icon}
+          className="w-full mb-2 p-button-text text-left cursor-pointer border border-gray-300 rounded hover:bg-gray-200 hover:border-blue-500"
+          onClick={item.command}
+        />
+      ))}
     </div>
   );
 };

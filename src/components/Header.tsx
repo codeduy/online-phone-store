@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
+import '/src/styles/tailwind.css';
 
 
 export default function Header() {
@@ -46,10 +47,12 @@ export default function Header() {
   );
 
   const centerContent = (
-    <IconField iconPosition="left">
-      <InputIcon className="pi pi-search" />
-      <InputText placeholder="Tìm kiếm" />
-    </IconField>
+    <div className="p-inputgroup">
+    <span className="p-inputgroup-addon hover:border hover:border-blue-500 cursor-pointer">
+      <i className="pi pi-search" />
+    </span>
+    <InputText placeholder="Tìm kiếm" />
+  </div>
   );
 
   const endContent = (
