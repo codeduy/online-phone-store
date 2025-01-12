@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -6,13 +6,16 @@ import { DataTable } from 'primereact/datatable';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Column } from 'primereact/column';
 import { FileUpload } from 'primereact/fileupload';
-import { Checkbox } from 'primereact/checkbox';
 import { Card } from 'primereact/card';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Dropdown } from 'primereact/dropdown';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { classNames } from 'primereact/utils';
+import 'papaparse';
+import 'xlsx';
+import 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { saveAs } from 'file-saver';
+import { robotoFontData } from '../../assets/font/fontData';
 
 const AdminProducts = () => {
   const [showAddCategory, setShowAddCategory] = useState(false);
@@ -29,26 +32,43 @@ const AdminProducts = () => {
   const [brands, setBrands] = useState([{ name: 'Samsung' }, { name: 'iPhone' }]);
   const [selectedBrand, setSelectedBrand] = useState<{ name: string } | null>(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [showExportOptions, setShowExportOptions] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  
 
 
-interface Product {
-    id: number;
-    name: string;
-    price: number;
-    category: string;
-    image: string;
-}
+  interface Product {
+      id: number;
+      name: string;
+      price: number;
+      discount: number;
+      category: string;
+      image: string;
+  }
 
-const calculateDiscountedPrice = (price: number, discount: number): number => {
-    return price - (price * discount / 100);
-};
+  const calculateDiscountedPrice = (price: number, discount: number): number => {
+      return price - (price * discount / 100);
+  };
 
-const products: Product[] = [
-    { id: 1, name: 'Sản phẩm A', price: 100000, category: 'Danh mục 1', image: 'image1.jpg' },
-    { id: 2, name: 'Sản phẩm B', price: 200000, category: 'Danh mục 2', image: 'image2.jpg' },
-];
+  const products: Product[] = [
+    { 
+        id: 1, 
+        name: 'Sản phẩm A', 
+        price: 100000, 
+        discount: 10,
+        category: 'Danh mục 1', 
+        image: 'image1.jpg' 
+    },
+    { 
+        id: 2, 
+        name: 'Sản phẩm B', 
+        price: 200000,
+        discount: 20, 
+        category: 'Danh mục 2', 
+        image: 'image2.jpg' 
+    },
+  ];
 
   
 
@@ -76,6 +96,68 @@ const products: Product[] = [
     setShowSuccess(true);
   };
 
+  const exportCSV = () => {
+    import('papaparse').then(papaparse => {
+      const csv = papaparse.unparse(products);
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'products_export_' + new Date().getTime() + '.csv');
+      link.click();
+    });
+  };
+
+  interface SaveAsExcelFileParams {
+    buffer: ArrayBuffer;
+    fileName: string;
+  }
+
+  const saveAsExcelFile = ({ buffer, fileName }: SaveAsExcelFileParams): void => {
+    const data = new Blob([buffer], { type: 'application/octet-stream' });
+    saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
+  };
+
+  const exportExcel = () => {
+    import('xlsx').then(xlsx => {
+      const worksheet = xlsx.utils.json_to_sheet(products);
+      const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+      const excelBuffer = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+      saveAsExcelFile({ buffer: excelBuffer, fileName: 'products' });
+    });
+  };
+
+  const exportPDF = () => {
+    import('jspdf').then(jsPDF => {
+      import('jspdf-autotable').then(() => {
+        const doc = new jsPDF.default();
+
+        
+        doc.addFileToVFS("Roboto-Regular.ttf", robotoFontData);
+        doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+        doc.setFont("Roboto");
+
+        autoTable(doc, {
+          head: [['Mã sản phẩm', 'Tên sản phẩm', 'Giá sản phẩm', 'Danh mục sản phẩm']],
+          body: products.map(product => [product.id, product.name, product.price, product.category]),
+          styles: {
+            font: 'Roboto',
+            fontStyle: 'normal'
+          },
+          headStyles: {
+            font: 'Roboto',
+            fontStyle: 'normal'
+          },
+          bodyStyles: {
+            font: 'Roboto',
+            fontStyle: 'normal'
+          }
+        });
+        doc.save('products.pdf');
+      });
+    });
+  };
+
   return (
     <div className="p-4">
       {/* First Row */}
@@ -96,9 +178,17 @@ const products: Product[] = [
           className="border border-gray-300 hover:bg-gray-200 p-2"
         />
         <Button 
-          label="Xuất danh sách sản phẩm (PDF)" 
+          label="Xuất danh sách sản phẩm" 
+          onClick={() => setShowExportOptions(!showExportOptions)} 
           className="border border-gray-300 hover:bg-gray-200 p-2"
         />
+        {showExportOptions && (
+          <div className="flex gap-2">
+            <Button type="button" icon="pi pi-file" rounded onClick={exportCSV} data-pr-tooltip="CSV" />
+            <Button type="button" icon="pi pi-file-excel" severity="success" rounded onClick={exportExcel} data-pr-tooltip="XLS" />
+            <Button type="button" icon="pi pi-file-pdf" severity="warning" rounded onClick={exportPDF} data-pr-tooltip="PDF" />
+          </div>
+        )}
         <div className="flex items-center border border-gray-300 rounded p-2">
           <i className="pi pi-search mr-2 cursor-pointer" />
           <span className="p-float-label">
@@ -115,15 +205,35 @@ const products: Product[] = [
           <DataTable value={products} responsiveLayout="scroll">
             <Column field="id" header="Mã sản phẩm" />
             <Column field="name" header="Tên sản phẩm" />
-            <Column field="price" header="Giá sản phẩm" />
+            <Column field="price" header="Giá ban đầu" />
+            <Column field="discount" header="% giảm" />
+            <Column 
+              field="discountedPrice" 
+              header="Giá sau khi giảm" 
+              body={(rowData) => calculateDiscountedPrice(rowData.price, rowData.discount)} 
+            />
             <Column field="category" header="Danh mục sản phẩm" />
-            <Column field="image" header="Ảnh sản phẩm" body={(rowData) => <img src={rowData.image} alt={rowData.name} className="w-16 h-16" />} />
-            <Column header="Thao tác" body={(rowData) => (
-              <div className="flex gap-2">
-                <InputSwitch checked={switchValues[rowData.id] || false} onChange={(e) => handleSwitchChange(rowData.id, e.value)} />
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-text pb-6" onClick={() => handleEditProduct(rowData)} />
-              </div>
-            )} />
+            <Column 
+              field="image" 
+              header="Ảnh sản phẩm" 
+              body={(rowData) => <img src={rowData.image} alt={rowData.name} className="w-16 h-16" />} 
+            />
+            <Column 
+              header="Thao tác" 
+              body={(rowData) => (
+                <div className="flex gap-2">
+                  <InputSwitch 
+                    checked={switchValues[rowData.id] || false} 
+                    onChange={(e) => handleSwitchChange(rowData.id, e.value)} 
+                  />
+                  <Button 
+                    icon="pi pi-pencil" 
+                    className="p-button-rounded p-button-text pb-6" 
+                    onClick={() => handleEditProduct(rowData)} 
+                  />
+                </div>
+              )} 
+            />
           </DataTable>
         </Card>
       </div>
@@ -135,7 +245,18 @@ const products: Product[] = [
             <InputText id="brandName" value={brandName} onChange={(e) => setBrandName(e.target.value)} placeholder=" " className="p-2 border" />
             <label htmlFor="brandName">Tên hãng</label>
         </span>
-          <FileUpload mode="basic" name="logo" accept="image/*" maxFileSize={1000000} />
+        <div className="mt-0">
+            <label htmlFor="logo" className="block mb-2">Logo (tối đa 1 ảnh)</label>
+            <FileUpload mode="advanced" name="logo" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
+              if (e.files.length > 1) {
+                handleUploadError('Chỉ được phép tải lên tối đa 1 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
+                e.files.splice(e.files.length); // Keep only the first file
+              } else {
+                e.options.clear();
+                handleUploadSuccess();
+              }
+            }} />
+          </div>
           <div className="flex gap-4">
             <Button label="Hủy bỏ" className="p-button-secondary border p-2 hover:bg-red-500 hover:text-white" onClick={() => setShowAddCategory(false)} />
             <Button label="Thêm" className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white"/>
@@ -291,3 +412,4 @@ const products: Product[] = [
 };
 
 export default AdminProducts;
+
