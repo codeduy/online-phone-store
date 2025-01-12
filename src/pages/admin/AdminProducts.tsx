@@ -28,7 +28,9 @@ const AdminProducts = () => {
   const [switchValues, setSwitchValues] = useState<{ [key: number]: boolean }>({});
   const [brands, setBrands] = useState([{ name: 'Samsung' }, { name: 'iPhone' }]);
   const [selectedBrand, setSelectedBrand] = useState<{ name: string } | null>(null);
-
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
 
 
 interface Product {
@@ -63,6 +65,15 @@ const products: Product[] = [
     setProductName(product.name);
     setPrice(product.price);
     setShowEditProduct(true);
+  };
+
+  const handleUploadError = (message: string) => {
+    setAlertMessage(message);
+    setShowAlert(true);
+  };
+
+  const handleUploadSuccess = () => {
+    setShowSuccess(true);
   };
 
   return (
@@ -164,14 +175,40 @@ const products: Product[] = [
             <label htmlFor="brand" className="block mb-2">Hãng</label>
             <Dropdown id="brand" value={selectedBrand} options={brands} onChange={(e) => setSelectedBrand(e.value)} optionLabel="name" placeholder="Chọn hãng" className="p-1 border" />
           </div>
-          <FileUpload mode="basic" name="productImage" accept="image/*" maxFileSize={1000000} multiple />
-          <span>
-            <label htmlFor="productInfo">Thông tin sản phẩm</label>
-            <ReactQuill value={productInfo} onChange={setProductInfo} placeholder=" " className="p-2 h-40" />
-          </span>
+          <div className="mt-6">
+            <label htmlFor="mainImage" className="block mb-2">Ảnh chính (tối đa 2 ảnh)</label>
+            <FileUpload mode="advanced" name="mainImage" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
+              if (e.files.length > 2) {
+                handleUploadError('Chỉ được phép tải lên tối đa 2 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
+                e.files.splice(e.files.length);
+              } else {
+                e.options.clear();
+                // Handle the file upload logic here
+                //e.options.onUpload(e);
+                handleUploadSuccess();
+              }
+            }} />
+          </div>
+          <div className="mt-6">
+            <label htmlFor="additionalImages" className="block mb-2">Ảnh phụ (tối đa 10 ảnh)</label>
+            <FileUpload mode="advanced" name="additionalImages" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
+              if (e.files.length > 10) {
+                handleUploadError('Chỉ được phép tải lên tối đa 10 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
+                e.files.splice(e.files.length);
+              } else {
+                e.options.clear();
+                //e.options.onUpload(e);
+                handleUploadSuccess();
+              }
+            }} />
+          </div>
+          <div className="mt-0">
+            <label htmlFor="productInfo" className="block mb-2">Thông tin sản phẩm</label>
+            <InputTextarea id="productInfo" value={productInfo} onChange={(e) => setProductInfo(e.target.value)} placeholder=" " className="p-2 border w-full" autoResize />
+          </div>
           <div className="flex gap-4">
-            <Button label="Hủy bỏ" className="p-button-secondary border p-2 hover:bg-red-500 hover:text-white mt-7" onClick={() => setShowAddProduct(false)} />
-            <Button label="Lưu" className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-7"/>
+            <Button label="Hủy bỏ" className="p-button-secondary border p-2 hover:bg-red-500 hover:text-white mt-0" onClick={() => setShowAddProduct(false)} />
+            <Button label="Lưu" className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-0"/>
           </div>
         </div>
       </Dialog>
@@ -198,15 +235,55 @@ const products: Product[] = [
             <label htmlFor="brand" className="block mb-2">Hãng</label>
             <Dropdown id="brand" value={selectedBrand} options={brands} onChange={(e) => setSelectedBrand(e.value)} optionLabel="name" placeholder="Chọn hãng" className="p-1 border" />
           </div>
-          <FileUpload mode="basic" name="editProductImage" accept="image/*" maxFileSize={1000000} multiple />
-          <span>
-            <label htmlFor="productInfo">Thông tin sản phẩm</label>
-            <ReactQuill value={productInfo} onChange={setProductInfo} placeholder=" " className="p-2 h-40" />
-          </span>
-          <div className="flex gap-4">
-            <Button label="Hủy bỏ" className="p-button-secondary border p-2 hover:bg-red-500 hover:text-white mt-7" onClick={() => setShowEditProduct(false)} />
-            <Button label="Lưu" className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-7"/>
+          <div className="mt-6">
+            <label htmlFor="mainImage" className="block mb-2">Ảnh chính (tối đa 2 ảnh)</label>
+            <FileUpload mode="advanced" name="mainImage" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
+              if (e.files.length > 2) {
+                handleUploadError('Chỉ được phép tải lên tối đa 2 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
+                e.files.splice(e.files.length);
+              } else {
+                e.options.clear();
+                // Handle the file upload logic here
+                //e.options.onUpload(e);
+                handleUploadSuccess();
+              }
+            }} />
           </div>
+          <div className="mt-6">
+            <label htmlFor="additionalImages" className="block mb-2">Ảnh phụ (tối đa 10 ảnh)</label>
+            <FileUpload mode="advanced" name="additionalImages" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
+              if (e.files.length > 10) {
+                handleUploadError('Chỉ được phép tải lên tối đa 10 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
+                e.files.splice(e.files.length);
+              } else {
+                e.options.clear();
+                //e.options.onUpload(e);
+                handleUploadSuccess();
+              }
+            }} />
+          </div>
+          <div className="mt-0">
+            <label htmlFor="productInfo" className="block mb-2">Thông tin sản phẩm</label>
+            <InputTextarea id="productInfo" value={productInfo} onChange={(e) => setProductInfo(e.target.value)} placeholder=" " className="p-2 border w-full" autoResize />
+          </div>
+          <div className="flex gap-4">
+            <Button label="Hủy bỏ" className="p-button-secondary border p-2 hover:bg-red-500 hover:text-white mt-0" onClick={() => setShowEditProduct(false)} />
+            <Button label="Lưu" className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-0"/>
+          </div>
+        </div>
+      </Dialog>
+
+      <Dialog header="Thông báo" visible={showAlert} onHide={() => setShowAlert(false)} style={{ width: '25vw' }} closable={false}>
+        <div className="p-4">
+          <p>{alertMessage}</p>
+          <Button label="Đóng" onClick={() => setShowAlert(false)} className="p-button-secondary mt-4 p-2 border cursor-pointer hover:bg-red-500" />
+        </div>
+      </Dialog>
+
+      <Dialog header="Thành công" visible={showSuccess} onHide={() => setShowSuccess(false)} style={{ width: '50vw' }} closable={false}>
+        <div className="p-4">
+          <p>Upload thành công!</p>
+          <Button label="Đóng" onClick={() => setShowSuccess(false)} className="p-button-secondary mt-4 p-2 border cursor-pointer hover:bg-green-500" />
         </div>
       </Dialog>
     </div>
