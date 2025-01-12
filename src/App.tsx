@@ -5,6 +5,7 @@ import AdminLayout from "./components/admin/AdminLayout";
 import 'primeicons/primeicons.css';
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
+import AdminOrders from "./pages/admin/AdminOrders";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 
@@ -16,6 +17,7 @@ const App = () => {
           <Route index element={<Navigate to="/admin/dashboard" />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="products" element={<AdminProducts />} />
+          <Route path="orders" element={<AdminOrders />} />
           {/* Admin routes */}
         </Route>
       </Routes>
