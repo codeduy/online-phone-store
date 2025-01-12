@@ -8,6 +8,7 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminCustomers from "./pages/admin/AdminCustomers";
 import AdminPayments from "./pages/admin/AdminPayments";
+import AdminStaffs from "./pages/admin/AdminStaffs";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="orders" element={<AdminOrders />} />
           <Route path="customers" element={<AdminCustomers />} />
           <Route path="payments" element={<AdminPayments />} />
+          <Route path="staffs" element={<AdminStaffs />} />
           {/* Admin routes */}
         </Route>
       </Routes>

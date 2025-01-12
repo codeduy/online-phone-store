@@ -38,7 +38,7 @@ const AdminSidebar = ({ onItemClick }: { onItemClick: () => void }) => {
     {
       label: 'Quản lý nhân viên',
       icon: 'pi pi-user',
-      command: () => {navigate('/admin/staff');onItemClick();}
+      command: () => {navigate('/admin/staffs');onItemClick();}
     },
     {
       label: 'Quản lý cấp quản lý',
