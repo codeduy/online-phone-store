@@ -9,6 +9,7 @@ import { FileUpload } from 'primereact/fileupload';
 import { Checkbox } from 'primereact/checkbox';
 import { Card } from 'primereact/card';
 import { InputSwitch } from 'primereact/inputswitch';
+import { Dropdown } from 'primereact/dropdown';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { classNames } from 'primereact/utils';
@@ -25,6 +26,9 @@ const AdminProducts = () => {
   const [productInfo, setProductInfo] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [switchValues, setSwitchValues] = useState<{ [key: number]: boolean }>({});
+  const [brands, setBrands] = useState([{ name: 'Samsung' }, { name: 'iPhone' }]);
+  const [selectedBrand, setSelectedBrand] = useState<{ name: string } | null>(null);
+
 
 
 interface Product {
@@ -129,27 +133,37 @@ const products: Product[] = [
       </Dialog>
 
       <Dialog header={<span className="p-0">Danh sách hãng</span>} visible={showBrandList} onHide={() => setShowBrandList(false)}>
-        {/* Add brand list content here */}
+        <div className="flex flex-col gap-4 p-4">
+          {brands.map((brand, index) => (
+            <div key={index} className="border p-2 rounded">
+              {brand.name}
+            </div>
+          ))}
+        </div>
       </Dialog>
 
       <Dialog header={<span className="p-0">Thêm sản phẩm mới</span>} visible={showAddProduct} onHide={() => setShowAddProduct(false)} style={{ width: '70vw' }} >
-        <div className="flex flex-col gap-4 mt-6">
-          <span className="p-float-label">
+        <div className="flex flex-col gap-4 mt-1">
+          <span className="">
+            <label htmlFor="productName" className="block mb-2">Tên sản phẩm</label>
             <InputText id="productName" value={productName} onChange={(e) => setProductName(e.target.value)} placeholder=" " className="p-2 border" />
-            <label htmlFor="productName">Tên sản phẩm</label>
           </span>
-          <span className="p-float-label mt-6">
+          <span className="mt-0">
+            <label htmlFor="price" className="block mb-2">Giá ban đầu</label>
             <InputText id="price" value={price.toString()} onChange={(e) => setPrice(Number(e.target.value))} placeholder=" " className="p-2 border" />
-            <label htmlFor="price">Giá ban đầu</label>
           </span>
-          <span className="p-float-label mt-6">
+          <span className="mt-0">
+            <label htmlFor="discount" className="block mb-2">% giảm giá</label>
             <InputText id="discount" value={discount.toString()} onChange={(e) => setDiscount(Number(e.target.value))} placeholder=" " className="p-2 border" />
-            <label htmlFor="discount">% giảm giá</label>
           </span>
-          <span className="p-float-label mt-6">
+          <span className="mt-0">
+            <label htmlFor="discountedPrice" className="block mb-2">Giá sau khi giảm</label>
             <InputText id="discountedPrice" value={calculateDiscountedPrice(price, discount).toString()} readOnly placeholder=" " className="p-2 border" />
-            <label htmlFor="discountedPrice">Giá sau khi giảm</label>
           </span>
+          <div className="mt-0">
+            <label htmlFor="brand" className="block mb-2">Hãng</label>
+            <Dropdown id="brand" value={selectedBrand} options={brands} onChange={(e) => setSelectedBrand(e.value)} optionLabel="name" placeholder="Chọn hãng" className="p-1 border" />
+          </div>
           <FileUpload mode="basic" name="productImage" accept="image/*" maxFileSize={1000000} multiple />
           <span>
             <label htmlFor="productInfo">Thông tin sản phẩm</label>
@@ -163,20 +177,32 @@ const products: Product[] = [
       </Dialog>
 
       <Dialog header={<span className="p-0">Chỉnh sửa sản phẩm</span>} visible={showEditProduct} onHide={() => setShowEditProduct(false)} style={{ width: '70vw' }} >
-        <div className="flex flex-col gap-4 mt-6">
-          <span className="p-float-label">
-            <InputText id="editProductName" value={productName} onChange={(e) => setProductName(e.target.value)} placeholder=" " className="p-2 border" />
-            <label htmlFor="editProductName">Tên sản phẩm</label>
+        <div className="flex flex-col gap-4 mt-1">
+        <span className="">
+            <label htmlFor="productName" className="block mb-2">Tên sản phẩm</label>
+            <InputText id="productName" value={productName} onChange={(e) => setProductName(e.target.value)} placeholder=" " className="p-2 border" />
           </span>
-          <span className="p-float-label mt-6">
-            <InputText id="editPrice" value={price.toString()} onChange={(e) => setPrice(Number(e.target.value))} placeholder=" " className="p-2 border" />
-            <label htmlFor="editPrice">Giá sản phẩm</label>
+          <span className="mt-0">
+            <label htmlFor="price" className="block mb-2">Giá ban đầu</label>
+            <InputText id="price" value={price.toString()} onChange={(e) => setPrice(Number(e.target.value))} placeholder=" " className="p-2 border" />
           </span>
-          <span className="p-float-label mt-6">
-            <InputText id="editCategory" value={selectedProduct?.category || ''} onChange={(e) => setSelectedProduct({ ...selectedProduct, category: e.target.value })} placeholder=" " className="p-2 border" />
-            <label htmlFor="editCategory">Danh mục sản phẩm</label>
+          <span className="mt-0">
+            <label htmlFor="discount" className="block mb-2">% giảm giá</label>
+            <InputText id="discount" value={discount.toString()} onChange={(e) => setDiscount(Number(e.target.value))} placeholder=" " className="p-2 border" />
           </span>
+          <span className="mt-0">
+            <label htmlFor="discountedPrice" className="block mb-2">Giá sau khi giảm</label>
+            <InputText id="discountedPrice" value={calculateDiscountedPrice(price, discount).toString()} readOnly placeholder=" " className="p-2 border" />
+          </span>
+          <div className="mt-0">
+            <label htmlFor="brand" className="block mb-2">Hãng</label>
+            <Dropdown id="brand" value={selectedBrand} options={brands} onChange={(e) => setSelectedBrand(e.value)} optionLabel="name" placeholder="Chọn hãng" className="p-1 border" />
+          </div>
           <FileUpload mode="basic" name="editProductImage" accept="image/*" maxFileSize={1000000} multiple />
+          <span>
+            <label htmlFor="productInfo">Thông tin sản phẩm</label>
+            <ReactQuill value={productInfo} onChange={setProductInfo} placeholder=" " className="p-2 h-40" />
+          </span>
           <div className="flex gap-4">
             <Button label="Hủy bỏ" className="p-button-secondary border p-2 hover:bg-red-500 hover:text-white mt-7" onClick={() => setShowEditProduct(false)} />
             <Button label="Lưu" className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-7"/>
