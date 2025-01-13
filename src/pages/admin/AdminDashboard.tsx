@@ -17,10 +17,10 @@ const AdminDashboard = () => {
     { name: 'Sản phẩm C', sold: 100, revenue: 10000000 },
   ];
 
-  const managerRanking = [
-    { name: 'Nguyễn Văn A', branch: 'Chi nhánh 1', revenue: 95000000 },
-    { name: 'Trần Thị B', branch: 'Chi nhánh 2', revenue: 88000000 },
-    { name: 'Lê Văn C', branch: 'Chi nhánh 3', revenue: 82000000 },
+  const staffRanking = [
+    { name: 'Staff A', orders: 50, revenue: 5000000 },
+    { name: 'Staff B', orders: 40, revenue: 4000000 },
+    // Add more sample data...
   ];
 
   return (
@@ -69,10 +69,10 @@ const AdminDashboard = () => {
         </Card>
 
         <Card className="shadow-lg">
-          <h3 className="text-xl font-semibold mb-4">Xếp hạng quản lý</h3>
-          <DataTable value={managerRanking} responsiveLayout="scroll">
-            <Column field="name" header="Tên quản lý" />
-            <Column field="branch" header="Chi nhánh" />
+          <h3 className="text-xl font-semibold mb-4">Xếp hạng nhân viên</h3>
+          <DataTable value={staffRanking} responsiveLayout="scroll">
+            <Column field="name" header="Tên nhân viên" />
+            <Column field="orders" header="Đơn hàng đã bán" />
             <Column 
               field="revenue" 
               header="Doanh thu" 
