@@ -12,6 +12,7 @@ import AdminStaffs from "./pages/admin/AdminStaffs";
 
 import UserLayout from "./components/user/UserLayout";
 import UserHome from "./pages/user/UserHome";
+import UserCart from "./pages/user/UserCart";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 
@@ -32,6 +33,7 @@ const App = () => {
 
         <Route path="/" element={<UserLayout />}>
           <Route index element={<UserHome />} />
+          <Route path="cart" element={<UserCart />} />
           {/* User routes */}
         </Route>
       </Routes>

@@ -41,7 +41,7 @@ export default function Header() {
         src="\src\assets\img\logo.png"
         alt="Website Logo"
         className="h-12 w-auto cursor-pointer"
-        onClick={() => navigate('/admin')}
+        onClick={() => navigate('/')}
       />
     </div>
   );
