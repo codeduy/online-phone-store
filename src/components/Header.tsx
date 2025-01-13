@@ -49,10 +49,10 @@ export default function Header() {
 
   const centerContent = (
     <div className="p-inputgroup">
-    <span className="p-inputgroup-addon hover:border hover:border-blue-500 cursor-pointer">
+    {/* <span className="p-inputgroup-addon hover:border hover:border-blue-500 cursor-pointer">
       <i className="pi pi-search" />
     </span>
-    <InputText placeholder="Tìm kiếm" />
+    <InputText placeholder="Tìm kiếm" /> */}
   </div>
   );
 
@@ -68,13 +68,13 @@ export default function Header() {
       />
 
       {/* Shopping cart */}
-      <Button
+      {/* <Button
         icon="pi pi-shopping-cart"
         className="p-button-rounded p-button-text"
         badge="0"
         badgeClassName="p-badge-danger"
         onClick={() => navigate('/cart')}
-      />
+      /> */}
 
       {/* User profile */}
       <Menu model={userMenuItems} popup ref={menuRef} />
