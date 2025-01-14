@@ -13,10 +13,12 @@ import { InputIcon } from 'primereact/inputicon';
 import '/src/styles/tailwind.css';
 
 
+
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const menuRef = useRef<Menu>(null);
   const navigate = useNavigate();
+  const [visible, setVisible] = useState(false);
 
   const userMenuItems = [
     {
@@ -32,7 +34,7 @@ export default function Header() {
     {
       label: 'Đăng xuất',
       icon: 'pi pi-sign-out',
-      command: () => navigate('/logout')
+      command: () => navigate('/admin/login')
     }
   ];
 

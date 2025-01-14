@@ -13,6 +13,7 @@ import AdminNews from "./pages/admin/AdminNews.tsx";
 import AdminStatistics from "./pages/admin/AdminStatistics";
 import AdminProfile from "./pages/admin/AdminProfile.tsx";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminLogin from "./pages/admin/AdminLogin";
 
 import UserLayout from "./components/user/UserLayout";
 import UserHome from "./pages/user/UserHome";
@@ -39,6 +40,9 @@ const App = () => {
           <Route path="settings" element={<AdminSettings />} />
           {/* Admin routes */}
         </Route>
+
+        <Route path="/admin/login" element={<AdminLogin />} />
+        
 
         <Route path="/" element={<UserLayout />}>
           <Route index element={<UserHome />} />
