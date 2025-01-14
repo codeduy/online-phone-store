@@ -22,7 +22,7 @@ export default function Header() {
     {
       label: 'Thông tin người dùng',
       icon: 'pi pi-user',
-      command: () => navigate('/profile')
+      command: () => navigate('/admin/profile')
     },
     {
       label: 'Thiết đặt',
