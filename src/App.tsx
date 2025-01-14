@@ -12,6 +12,7 @@ import AdminStaffs from "./pages/admin/AdminStaffs";
 import AdminNews from "./pages/admin/AdminNews.tsx";
 import AdminStatistics from "./pages/admin/AdminStatistics";
 import AdminProfile from "./pages/admin/AdminProfile.tsx";
+import AdminSettings from "./pages/admin/AdminSettings";
 
 import UserLayout from "./components/user/UserLayout";
 import UserHome from "./pages/user/UserHome";
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="news" element={<AdminNews />} />
           <Route path="statistics" element={<AdminStatistics />} />
           <Route path="profile" element={<AdminProfile />} />
+          <Route path="settings" element={<AdminSettings />} />
           {/* Admin routes */}
         </Route>
 

@@ -27,7 +27,7 @@ export default function Header() {
     {
       label: 'Thiết đặt',
       icon: 'pi pi-cog',
-      command: () => navigate('/settings')
+      command: () => navigate('/admin/settings')
     },
     {
       label: 'Đăng xuất',
