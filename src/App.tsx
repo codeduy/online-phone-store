@@ -10,6 +10,7 @@ import AdminCustomers from "./pages/admin/AdminCustomers";
 import AdminPayments from "./pages/admin/AdminPayments";
 import AdminStaffs from "./pages/admin/AdminStaffs";
 import AdminNews from "./pages/admin/AdminNews.tsx";
+import AdminStatistics from "./pages/admin/AdminStatistics";
 
 import UserLayout from "./components/user/UserLayout";
 import UserHome from "./pages/user/UserHome";
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="payments" element={<AdminPayments />} />
           <Route path="staffs" element={<AdminStaffs />} />
           <Route path="news" element={<AdminNews />} />
+          <Route path="statistics" element={<AdminStatistics />} />
           {/* Admin routes */}
         </Route>
 
