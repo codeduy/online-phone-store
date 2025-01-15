@@ -15,6 +15,17 @@ import AdminProfile from "./pages/admin/AdminProfile.tsx";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLogin from "./pages/admin/AdminLogin";
 
+import StaffDashboard from "./pages/staff/StaffDashboard";
+import StaffProducts from "./pages/staff/StaffProducts";
+import StaffOrders from "./pages/staff/StaffOrders.tsx";
+import StaffCustomers from "./pages/staff/StaffCustomers";
+import StaffPayments from "./pages/staff/StaffPayments.tsx";
+import StaffNews from "./pages/staff/StaffNews";
+import StaffStatistics from "./pages/staff/StaffStatistics";
+import StaffProfile from "./pages/staff/StaffProfile.tsx";
+import StaffLogin from "./pages/staff/StaffLogin";
+import StaffLayout from "./components/staff/StaffLayout";
+
 import UserLayout from "./components/user/UserLayout";
 import UserHome from "./pages/user/UserHome";
 import UserCart from "./pages/user/UserCart";
@@ -42,6 +53,22 @@ const App = () => {
         </Route>
 
         <Route path="/admin/login" element={<AdminLogin />} />
+
+        <Route path="/staff" element={<StaffLayout />}>
+          <Route index element={<Navigate to="/staff/dashboard" />} />
+          <Route path="dashboard" element={<StaffDashboard />} />
+          <Route path="products" element={<StaffProducts />} />
+          <Route path="orders" element={<StaffOrders />} />
+          <Route path="customers" element={<StaffCustomers />} />
+          <Route path="payments" element={<StaffPayments />} />          
+          <Route path="news" element={<StaffNews />} />
+          <Route path="statistics" element={<StaffStatistics />} />
+          <Route path="profile" element={<StaffProfile />} />
+          
+          {/* Admin routes */}
+        </Route>
+
+        <Route path="/staff/login" element={<StaffLogin />} />
         
 
         <Route path="/" element={<UserLayout />}>
