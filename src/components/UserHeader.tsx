@@ -24,11 +24,6 @@ export default function Header() {
       command: () => navigate('/profile')
     },
     {
-      label: 'Thiết đặt',
-      icon: 'pi pi-cog',
-      command: () => navigate('/settings')
-    },
-    {
       label: 'Đăng xuất',
       icon: 'pi pi-sign-out',
       command: () => navigate('/logout')

@@ -1,24 +1,25 @@
-
-import React from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
 import { ToggleButton } from 'primereact/togglebutton';
-import { useState, useRef } from 'react';
-import { SplitButton } from 'primereact/splitbutton';
 import { Menu } from 'primereact/menu';
 import { useNavigate } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
 import '/src/styles/tailwind.css';
-
+import '/src/styles/darkmode.css';
 
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const menuRef = useRef<Menu>(null);
   const navigate = useNavigate();
-  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+      if (darkMode) {
+          document.body.classList.add('dark-mode');
+      } else {
+          document.body.classList.remove('dark-mode');
+      }
+  }, [darkMode]);
 
   const userMenuItems = [
     {

@@ -72,7 +72,8 @@ const App = () => {
         
 
         <Route path="/" element={<UserLayout />}>
-          <Route index element={<UserHome />} />
+          <Route index element={<Navigate to="/home" />} />
+          <Route path="home" element={<UserHome />} />
           <Route path="cart" element={<UserCart />} />
           {/* User routes */}
         </Route>

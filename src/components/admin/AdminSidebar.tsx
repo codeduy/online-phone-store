@@ -48,7 +48,7 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <div className="h-full p-4">
+    <div className="h-full p-4 ">
       {menuItems.map((item, index) => (
         <Button
           key={index}
