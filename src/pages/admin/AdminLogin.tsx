@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
+import { Password } from 'primereact/password';
+
 
 const AdminLogin = () => {
     const [username, setUsername] = useState('');
@@ -26,6 +28,12 @@ const AdminLogin = () => {
         navigate('/admin/dashboard');
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleLogin();
+        }
+    };
+
     return (
         <div className="flex justify-center items-center h-screen">
             <Toast ref={toast} />
@@ -38,17 +46,19 @@ const AdminLogin = () => {
                         id="username" 
                         value={username} 
                         onChange={(e) => setUsername(e.target.value)} 
+                        onKeyDown={handleKeyDown} 
                         className="p-inputtext-sm w-full border p-2"
                     />
                 </div>
                 <div className="mb-4">
                     <label htmlFor="password" className="block pb-1">Mật khẩu</label>
-                    <div className="relative w-full">
+                    <div className="relative w-full border">
                         <InputText 
                             id="password" 
                             type={showPassword ? "text" : "password"} 
                             value={password} 
                             onChange={(e) => setPassword(e.target.value)} 
+                            onKeyDown={handleKeyDown} 
                             className="p-inputtext-sm w-full border p-2 pr-10"
                         />
                         <Button 
