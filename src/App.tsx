@@ -32,7 +32,7 @@ import UserCart from "./pages/user/UserCart";
 import UserProfile from "./pages/user/UserProfile";
 import UserLogin from "./pages/user/UserLogin";
 import UserRegister from "./pages/user/UserRegister.tsx";
-
+import UserForgotPassword from "./pages/user/UserForgotPassword";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 
@@ -84,6 +84,7 @@ const App = () => {
         <Route path="logout" element={<Navigate to="/login" />} />
         <Route path="login" element={<UserLogin />} />
         <Route path="register" element={<UserRegister />} />
+        <Route path="forgot-password" element={<UserForgotPassword />} />
       </Routes>
     </BrowserRouter>
   )
