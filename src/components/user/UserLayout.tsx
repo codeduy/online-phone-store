@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import Header from "../UserHeader";
+import UserFooter from "./UserFooter";
 import '/src/styles/tailwind.css';
 import { useState } from 'react';
-import { Button } from 'primereact/button';
 import UserSidebar from "./UserSidebar";
 
 const UserLayout = () => {
@@ -21,6 +21,9 @@ const UserLayout = () => {
           <Outlet />
         </main>
       </div>
+      <footer className="bg-white shadow-md border border-gray-300 rounded-lg m-4 p-4">
+        <UserFooter />
+      </footer>
     </div>
   );
 };

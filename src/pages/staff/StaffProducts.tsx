@@ -9,7 +9,7 @@ import { FileUpload } from 'primereact/fileupload';
 import { Card } from 'primereact/card';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Dropdown } from 'primereact/dropdown';
-import 'react-quill/dist/quill.snow.css';
+// import 'react-quill/dist/quill.snow.css';
 import 'papaparse';
 import 'xlsx';
 import 'jspdf';
