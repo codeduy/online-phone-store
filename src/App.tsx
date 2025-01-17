@@ -29,6 +29,7 @@ import StaffLayout from "./components/staff/StaffLayout";
 import UserLayout from "./components/user/UserLayout";
 import UserHome from "./pages/user/UserHome";
 import UserCart from "./pages/user/UserCart";
+import UserProfile from "./pages/user/UserProfile";
 
 
 axios.defaults.baseURL = "http://localhost:8000/api";
@@ -75,6 +76,7 @@ const App = () => {
           <Route index element={<Navigate to="/home" />} />
           <Route path="home" element={<UserHome />} />
           <Route path="cart" element={<UserCart />} />
+          <Route path="profile" element={<UserProfile />} />
           {/* User routes */}
         </Route>
       </Routes>
