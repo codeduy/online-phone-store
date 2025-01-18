@@ -9,11 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
+import { OverlayPanel } from 'primereact/overlaypanel';
 import '/src/styles/tailwind.css';
 
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
+  const overlayPanelRef = useRef<OverlayPanel>(null);
   const menuRef = useRef<Menu>(null);
   const navigate = useNavigate();
 
@@ -35,19 +37,57 @@ export default function Header() {
       <img
         src="\src\assets\img\logo.png"
         alt="Website Logo"
-        className="h-12 w-auto cursor-pointer"
+        className="h-12 w-auto cursor-pointer mr-20"
         onClick={() => navigate('/')}
       />
+      <Button
+          label="Danh mục sản phẩm"
+          icon="pi pi-bars"
+          className="p-button-secondary p-2 ml-6 border"
+          onClick={(e) => overlayPanelRef.current?.toggle(e)}
+        />
+        <OverlayPanel ref={overlayPanelRef} className="w-64">
+          <ul className="list-none p-0 m-0">
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/samsung')}>Samsung</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/iphone')}>iPhone</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/xiaomi')}>Xiaomi</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/realme')}>Realme</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/vivo')}>Vivo</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/oneplus')}>OnePlus</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/techno')}>Techno</li>
+          </ul>
+        </OverlayPanel>
+      <span className="p-inputgroup-addon hover:border hover:border-blue-500 cursor-pointer">
+        <i className="pi pi-search" />
+      </span>
+      <InputText placeholder="Tìm kiếm" />      
     </div>
   );
 
   const centerContent = (
-    <div className="p-inputgroup">
-    <span className="p-inputgroup-addon hover:border hover:border-blue-500 cursor-pointer">
-      <i className="pi pi-search" />
-    </span>
-    <InputText placeholder="Tìm kiếm" />
-  </div>
+    <div className="p-inputgroup ">
+        {/* <Button
+          label="Danh mục sản phẩm"
+          icon="pi pi-bars"
+          className="p-button-secondary p-2 mr-2 border"
+          onClick={(e) => overlayPanelRef.current?.toggle(e)}
+        />
+        <OverlayPanel ref={overlayPanelRef} className="w-64">
+          <ul className="list-none p-0 m-0">
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/samsung')}>Samsung</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/iphone')}>iPhone</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/xiaomi')}>Xiaomi</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/realme')}>Realme</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/vivo')}>Vivo</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/oneplus')}>OnePlus</li>
+            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/techno')}>Techno</li>
+          </ul>
+        </OverlayPanel>
+      <span className="p-inputgroup-addon hover:border hover:border-blue-500 cursor-pointer">
+        <i className="pi pi-search" />
+      </span>
+      <InputText placeholder="Tìm kiếm" /> */}
+    </div>
   );
 
   const endContent = (
