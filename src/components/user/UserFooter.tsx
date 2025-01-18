@@ -21,7 +21,7 @@ const UserFooter = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                    <h4 className="text-lg font-bold mb-2">Website</h4>
+                    <h4 className="text-lg font-bold mb-2">Mobile Shop</h4>
                     <p><FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />Địa chỉ: 123 Đường ABC, Quận XYZ</p>
                     <p><FontAwesomeIcon icon={faPhone} className="mr-2" />Số điện thoại: 0123 456 789</p>
                     <p><FontAwesomeIcon icon={faEnvelope} className="mr-2" />Email: info@example.com</p>
