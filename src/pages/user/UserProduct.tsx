@@ -175,7 +175,7 @@ const UserProduct = () => {
           </div>
         </div>
         <div className="flex items-center justify-center">
-          <Button label="Lọc" className="p-button-primary border p-2" onClick={handleFilter} />
+          <Button label="Lọc" icon="pi pi-filter" className="p-button-primary border p-2" onClick={handleFilter} />
         </div>
       </div>
 
