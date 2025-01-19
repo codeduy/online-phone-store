@@ -116,27 +116,28 @@ const UserProductsByBrand = () => {
             <h3 className="text-lg font-bold">{product.name}</h3>
             <p className="text-gray-600">{product.price}</p>
             <div className="grid grid-cols-2 gap-2">
-            <div className="flex flex-col">
-              <Link to={`/product/${generateSlug(product.name)}`}>
-                <Button label="Xem chi tiết" className="p-button-secondary mt-2 w-full border p-2" />
-              </Link>
-              <Button 
-                label="So sánh" 
-                icon="pi pi-exchange" 
-                className="p-button-info mt-2 border p-2" 
-                onClick={() => addToComparison(product)} 
-              />
-            </div>
-            <div className="flex flex-col items-end">
-              <Button 
-                label='Yêu thích'
-                // icon="pi pi-heart" 
-                icon={`pi ${favoriteProducts.includes(product.id) ? 'pi-heart-fill' : 'pi-heart'}`} 
-                className="p-button-rounded p-button-text text-red-500 mt-4" 
-                onClick={() => toggleFavorite(product.id)}
-              />
-              <Rating value={product.rating} readOnly stars={5} cancel={false} className="mt-6" />
-            </div>
+              <div className="flex flex-col">
+                <Link to={`/product/${generateSlug(product.name)}`}>
+                  <Button label="Xem chi tiết" className="p-button-secondary mt-2 w-full border p-2" />
+                </Link>
+                <Button 
+                  label="So sánh" 
+                  icon="pi pi-exchange" 
+                  className="p-button-info mt-2 border p-2" 
+                  onClick={() => addToComparison(product)} 
+                />
+              </div>
+              <div className="flex flex-col items-end">
+                <Button 
+                  label='Yêu thích'
+                  // icon="pi pi-heart" 
+                  icon={`pi ${favoriteProducts.includes(product.id) ? 'pi-heart-fill' : 'pi-heart'}`} 
+                  // className="p-button-rounded p-button-text text-red-500 mt-4"
+                  className={`p-button-rounded p-button-text ${favoriteProducts.includes(product.id) ? 'text-red-500' : 'text-gray-500'} mt-5`}  
+                  onClick={() => toggleFavorite(product.id)}
+                />
+                <Rating value={product.rating} readOnly stars={5} cancel={false} className="mt-6" />
+              </div>
           </div>
           </div>
         ))}
