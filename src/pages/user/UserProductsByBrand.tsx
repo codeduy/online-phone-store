@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-import { Dropdown } from 'primereact/dropdown';
 import { Rating } from 'primereact/rating';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -37,14 +36,14 @@ const UserProductsByBrand = () => {
 
   const products = productsByBrand[brand.toLowerCase()] || [];
 
-  const sortOptions = [
-    { label: 'Giá cao - thấp', value: 'priceDesc' },
-    { label: 'Giá thấp - cao', value: 'priceAsc' },
-    { label: 'Khuyến mãi hot', value: 'discountDesc' }
-  ];
+  // const sortOptions = [
+  //   { label: 'Giá cao - thấp', value: 'priceDesc' },
+  //   { label: 'Giá thấp - cao', value: 'priceAsc' },
+  //   { label: 'Khuyến mãi hot', value: 'discountDesc' }
+  // ];
 
-  const handleSortChange = (e: { value: string }) => {
-    setSortOption(e.value);
+  const handleSortChange = (value: string) => {
+    setSortOption(value);
   };
 
   const sortedProducts = [...products].sort((a, b) => {
@@ -134,7 +133,11 @@ const UserProductsByBrand = () => {
       <Toast ref={toast} />
       <h1 className="text-2xl font-bold mb-4">Sản phẩm của {brand}</h1>
       <div className="flex justify-between items-center mb-4">
-        <Dropdown value={sortOption} options={sortOptions} onChange={handleSortChange} placeholder="Sắp xếp theo" />
+        <div className="flex space-x-2">
+          <Button label="Giá cao - thấp" className={sortOption === 'priceDesc' ? 'p-button-primary border p-3' : 'p-button-secondary border p-0'} onClick={() => handleSortChange('priceDesc')} />
+          <Button label="Giá thấp - cao" className={sortOption === 'priceAsc' ? 'p-button-primary border p-3' : 'p-button-secondary border p-0'} onClick={() => handleSortChange('priceAsc')} />
+          <Button label="Khuyến mãi hot" className={sortOption === 'discountDesc' ? 'p-button-primary border p-3' : 'p-button-secondary border p-0'} onClick={() => handleSortChange('discountDesc')} />
+        </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {filteredProducts.map((product) => (
