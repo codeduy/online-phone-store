@@ -2,20 +2,22 @@ import React, { useState, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
+import { Dropdown } from 'primereact/dropdown';
+import { Rating } from 'primereact/rating';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import { Rating } from 'primereact/rating';
 
 const UserProductsByBrand = () => {
   const { brand = '' } = useParams<{ brand: string }>();
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
-  const [comparisonProducts, setComparisonProducts] = useState<Array<{ id: string; name: string; price: string; originalPrice?: string; image: string }>>([]);
+  const [comparisonProducts, setComparisonProducts] = useState<Array<{ id: string; name: string; price: string; originalPrice?: string; image: string; discount?: string }>>([]);
   const [showComparisonBar, setShowComparisonBar] = useState(false);
   const [isComparisonBarMinimized, setIsComparisonBarMinimized] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [favoriteProducts, setFavoriteProducts] = useState<string[]>([]);
+  const [sortOption, setSortOption] = useState<string | null>(null);
 
   const productsByBrand: { [key: string]: Array<{ id: string; name: string; price: string; originalPrice?: string; image: string; rating: number; discount?: string }> } = {
     samsung: [
@@ -34,6 +36,29 @@ const UserProductsByBrand = () => {
   };
 
   const products = productsByBrand[brand.toLowerCase()] || [];
+
+  const sortOptions = [
+    { label: 'Giá cao - thấp', value: 'priceDesc' },
+    { label: 'Giá thấp - cao', value: 'priceAsc' },
+    { label: 'Khuyến mãi hot', value: 'discountDesc' }
+  ];
+
+  const handleSortChange = (e: { value: string }) => {
+    setSortOption(e.value);
+  };
+
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sortOption === 'priceAsc') {
+      return parseFloat(a.price.replace('$', '')) - parseFloat(b.price.replace('$', ''));
+    } else if (sortOption === 'priceDesc') {
+      return parseFloat(b.price.replace('$', '')) - parseFloat(a.price.replace('$', ''));
+    } else if (sortOption === 'discountDesc') {
+      const discountA = a.discount ? parseFloat(a.discount.replace('%', '')) : 0;
+      const discountB = b.discount ? parseFloat(b.discount.replace('%', '')) : 0;
+      return discountB - discountA;
+    }
+    return 0;
+  });
 
   const toggleFavorite = (productId: string) => {
     if (favoriteProducts.includes(productId)) {
@@ -83,7 +108,7 @@ const UserProductsByBrand = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredProducts = sortedProducts.filter(product => product.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const handleCompareNow = () => {
     if (comparisonProducts.length < 2) {
@@ -108,8 +133,11 @@ const UserProductsByBrand = () => {
     <div className="p-4">
       <Toast ref={toast} />
       <h1 className="text-2xl font-bold mb-4">Sản phẩm của {brand}</h1>
+      <div className="flex justify-between items-center mb-4">
+        <Dropdown value={sortOption} options={sortOptions} onChange={handleSortChange} placeholder="Sắp xếp theo" />
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div key={product.id} className="p-4 border rounded-lg flex flex-col items-center relative">
             {product.discount && (
               <div className="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-2 py-1">
@@ -117,12 +145,12 @@ const UserProductsByBrand = () => {
               </div>
             )}
             <img src={product.image} alt={product.name} className="w-full h-40 object-cover mb-2" />
-            <h3 className="text-lg font-bold">{product.name}</h3>
+            <h3 className="text-lg font-bold text-center">{product.name}</h3>
             <div className="flex items-center space-x-2">
               <span className="text-red-500 font-bold">{product.price}</span>
               {product.originalPrice && (
                 <span className="text-gray-500 line-through">{product.originalPrice}</span>
-              )}              
+              )}
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col">
