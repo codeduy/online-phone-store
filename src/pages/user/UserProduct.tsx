@@ -54,35 +54,37 @@ const UserProduct = () => {
   //   { id: '8', name: 'iPhone SE', price: '$399', image: '/path/to/iphone4.jpg', rating: 4.2 }
   // ];
 
-  const productsByBrand: { [key: string]: Array<{ id: string; name: string; price: string; image: string; rating: number }> } = {
+  interface Product {
+      id: string;
+      name: string;
+      price: string;
+      originalPrice?: string;
+      image: string;
+      rating: number;
+      discount?: string;
+  }
+
+  const productsByBrand: { [key: string]: Array<{ id: string; name: string; price: string; originalPrice?: string; image: string; rating: number; discount?: string}> } = {
     Samsung: [
-      { id: '1', name: 'Samsung Galaxy S21', price: '$799', image: '/path/to/samsung1.jpg', rating: 4.5 },
-      { id: '2', name: 'Samsung Galaxy Note 20', price: '$999', image: '/path/to/samsung2.jpg', rating: 4.7 },
-      { id: '3', name: 'Samsung Galaxy A52', price: '$499', image: '/path/to/samsung3.jpg', rating: 4.3 },
-      { id: '4', name: 'Samsung Galaxy Z Fold 3', price: '$1799', image: '/path/to/samsung4.jpg', rating: 4.8 },
-      { id: '5', name: 'Samsung Galaxy Z Fold 3', price: '$1799', image: '/path/to/samsung4.jpg', rating: 4.8 }
+      { id: '1', name: 'Samsung Galaxy S21', price: '$719', originalPrice: '$799', image: '/path/to/samsung1.jpg', rating: 4.5, discount: '10%' },
+      { id: '2', name: 'Samsung Galaxy Note 20', price: '$849', originalPrice: '$999', image: '/path/to/samsung2.jpg', rating: 4.7, discount: '15%' },
+      { id: '3', name: 'Samsung Galaxy A52', price: '$474', originalPrice: '$499', image: '/path/to/samsung3.jpg', rating: 4.3, discount: '5%' },
+      { id: '4', name: 'Samsung Galaxy Z Fold 3', price: '$1439', originalPrice: '$1799', image: '/path/to/samsung4.jpg', rating: 4.8, discount: '20%' },
+      { id: '5', name: 'Samsung Galaxy Z Fold 3', price: '$1799', originalPrice: '$1799', image: '/path/to/samsung4.jpg', rating: 4.8,  discount: '20%' }
     ],
     iPhone: [
-      { id: '5', name: 'iPhone 13', price: '$799', image: '/path/to/iphone1.jpg', rating: 4.6 },
-      { id: '6', name: 'iPhone 13 Pro', price: '$999', image: '/path/to/iphone2.jpg', rating: 4.8 },
-      { id: '7', name: 'iPhone 12', price: '$699', image: '/path/to/iphone3.jpg', rating: 4.4 },
-      { id: '8', name: 'iPhone SE', price: '$399', image: '/path/to/iphone4.jpg', rating: 4.2 },
-      { id: '9', name: 'iPhone SE', price: '$399', image: '/path/to/iphone4.jpg', rating: 4.2 }
+      { id: '5', name: 'iPhone 13', price: '$719', originalPrice: '$799', image: '/path/to/iphone1.jpg', rating: 4.6, discount: '10%' },
+      { id: '6', name: 'iPhone 13 Pro', price: '$849', originalPrice: '$999', image: '/path/to/iphone2.jpg', rating: 4.8, discount: '15%' },
+      { id: '7', name: 'iPhone 12', price: '$474', originalPrice: '$499', image: '/path/to/iphone3.jpg', rating: 4.4, discount: '5%' },
+      { id: '8', name: 'iPhone SE', price: '$1439', originalPrice: '$1799', image: '/path/to/iphone4.jpg', rating: 4.2, discount: '20%' },
+      { id: '9', name: 'iPhone SE', price: '$1799', originalPrice: '$1799', image: '/path/to/iphone4.jpg', rating: 4.2,  discount: '20%' }
     ]
     // Add more products for other brands
   };
 
-  interface Product {
-    id: string;
-    name: string;
-    price: string;
-    image: string;
-    rating: number;
-  }
-
-  interface BrandProducts {
-    [key: string]: Product[];
-  }
+  // interface BrandProducts {
+  //   [key: string]: Product[];
+  // }
 
   const toggleFavorite = (productId: string) => {
     if (favoriteProducts.includes(productId)) {
@@ -156,10 +158,22 @@ const UserProduct = () => {
 
   const productTemplate = (product: Product): JSX.Element => {
     return (
-      <div className="p-2 border rounded shadow-md mr-3">
+      <div className="p-2 border rounded shadow-md mr-3 relative">
+        {product.discount && (
+          <div className="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-2 py-1">
+            {product.discount} OFF
+          </div>
+        )}
         <img src={product.image} alt={product.name} className="w-full h-40 object-cover mb-2" />
-        <h3 className="text-lg font-bold">{product.name}</h3>
-        <p className="text-gray-600">{product.price}</p>
+        <div className="flex flex-col items-center">
+        <h3 className="text-lg font-bold text-center">{product.name}</h3>
+        <div className="flex items-center space-x-2">
+          <span className="text-red-500 font-bold">{product.price}</span>
+          {product.originalPrice && (
+            <span className="text-gray-500 line-through">{product.originalPrice}</span>
+          )}
+        </div>
+      </div>
         <div className="grid grid-cols-2 gap-2">
           <div className="flex flex-col">
             <Link to={`/product/${generateSlug(product.name)}`}>
