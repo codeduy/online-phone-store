@@ -12,6 +12,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import { robotoFontData } from '../../assets/font/fontData';
+import { Link } from 'react-router-dom';
 
 interface Order {
     id: number;
@@ -138,6 +139,14 @@ const StaffOrders = () => {
         });
     };
 
+    const actionBodyTemplate = (rowData) => {
+        return (
+          <Link to={`/staff/orders/${rowData.id}`}>
+            <Button label="Xem chi tiết" className="p-button-link" />
+          </Link>
+        );
+      };
+
     return (
         <div className="p-4">
             {/* First Row */}
@@ -210,6 +219,7 @@ const StaffOrders = () => {
                                 />
                             )}
                         />
+                        <Column header="Thao tác" body={actionBodyTemplate} />
                     </DataTable>
                 </Card>
             </div>

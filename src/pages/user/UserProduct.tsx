@@ -205,8 +205,12 @@ const UserProduct = () => {
   };
 
   const handleFilter = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Implement filtering logic here
-    console.log('Filtering products...');
+    const selectedBrandsQuery = selectedBrands.join(',');
+    const priceRangeQuery = `${priceRange[0]}-${priceRange[1]}`;
+    const selectedScreenQuery = selectedScreen.join(',');
+  
+    const queryString = `hang=${selectedBrandsQuery}&price=${priceRangeQuery}&manhinh=${selectedScreenQuery}`;
+    navigate(`/user-products-filter?${queryString}`);
   };
 
   const handleCheckboxChange = (selectedItems: string[], setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {

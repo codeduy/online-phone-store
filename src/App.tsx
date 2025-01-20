@@ -27,6 +27,8 @@ import StaffStatistics from "./pages/staff/StaffStatistics";
 import StaffProfile from "./pages/staff/StaffProfile.tsx";
 import StaffLogin from "./pages/staff/StaffLogin";
 import StaffLayout from "./components/staff/StaffLayout";
+import StaffCoupons from "./pages/staff/StaffCoupons";
+import StaffOrderDetails from "./pages/staff/StaffOrderDetails";
 
 import UserLayout from "./components/user/UserLayout";
 import UserHome from "./pages/user/UserHome";
@@ -74,7 +76,8 @@ const App = () => {
           <Route path="news" element={<StaffNews />} />
           <Route path="statistics" element={<StaffStatistics />} />
           <Route path="profile" element={<StaffProfile />} />
-          {/* <Route path="orders" element={<StaffCoupons />} /> */}
+          <Route path="coupons" element={<StaffCoupons />} />
+          <Route path="/staff/orders/:id" element={<StaffOrderDetails/>} />
           {/* Staff routes */}
         </Route>
 

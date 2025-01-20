@@ -16,6 +16,11 @@ const StaffSidebar = () => {
       command: () => {navigate('/staff/products');}
     },
     {
+      label: 'Quản lý mã giảm giá',
+      icon: 'pi pi-tags',
+      command: () => {navigate('/staff/coupons');}
+    },
+    {
       label: 'Quản lý đơn hàng',
       icon: 'pi pi-shopping-cart',
       command: () => {navigate('/staff/orders');}

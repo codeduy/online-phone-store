@@ -4,18 +4,22 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { DataTable } from 'primereact/datatable';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { InputNumber } from 'primereact/inputnumber';
 import { Column } from 'primereact/column';
 import { FileUpload } from 'primereact/fileupload';
 import { Card } from 'primereact/card';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Dropdown } from 'primereact/dropdown';
-// import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.snow.css';
 import 'papaparse';
 import 'xlsx';
 import 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { saveAs } from 'file-saver';
 import { robotoFontData } from '../../assets/font/fontData';
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 const StaffProducts = () => {
   const [showAddCategory, setShowAddCategory] = useState(false);
@@ -36,16 +40,91 @@ const StaffProducts = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   
+  const [selectedReleaseYear, setSelectedReleaseYear] = useState('');
+  const [selectedInternalStorage, setSelectedInternalStorage] = useState('');
+  const [selectedRam, setSelectedRam] = useState('');
+  const [selectedScreen, setSelectedScreen] = useState('');
+  const [selectedDemand, setSelectedDemand] = useState('');
+  const [selectedSpecialFeatures, setSelectedSpecialFeatures] = useState([]);
 
+  
 
   interface Product {
-      id: number;
-      name: string;
-      price: number;
-      discount: number;
-      category: string;
-      image: string;
+    id: number;
+    name: string;
+    price: number;
+    discount: number;
+    category: string;
+    image: string;
+    releaseYear?: string;
+    internalStorage?: string;
+    ram?: string;
+    screen?: string;
+    demand?: string;
+    specialFeatures?: string[];
   }
+
+  const releaseYears = [
+    { label: '2019', value: '2019' },
+    { label: '2020', value: '2020' },
+    { label: '2021', value: '2021' },
+    { label: '2022', value: '2022' },
+    { label: '2023', value: '2023' },
+    { label: '2024', value: '2024' },
+    { label: '2025', value: '2025' }
+  ];
+  
+  const internalStorages = [
+    { label: '64GB', value: '64GB' },
+    { label: '128GB', value: '128GB' },
+    { label: '256GB', value: '256GB' },
+    { label: '512GB', value: '512GB' },
+    { label: '1TB', value: '1TB' }
+  ];
+  
+  const rams = [
+    { label: '3GB', value: '3GB' },
+    { label: '4GB', value: '4GB' },
+    { label: '6GB', value: '6GB' },
+    { label: '8GB', value: '8GB' },
+    { label: '12GB', value: '12GB' }
+  ];
+  
+  const screens = [
+    { label: '60Hz', value: '60Hz' },
+    { label: '90Hz', value: '90Hz' },
+    { label: '120Hz', value: '120Hz' },
+    { label: '144Hz', value: '144Hz' }
+  ];
+  
+  const demands = [
+    { label: 'Chơi game/cấu hình cao', value: 'Chơi game/cấu hình cao' },
+    { label: 'Pin khủng trên 5000mAh', value: 'Pin khủng trên 5000mAh' },
+    { label: 'Chụp ảnh - quay phim', value: 'Chụp ảnh - quay phim' },
+    { label: 'Mỏng nhẹ', value: 'Mỏng nhẹ' }
+  ];
+  
+  const specialFeatures = [
+    { label: 'Kháng nước - bụi', value: 'Kháng nước - bụi' },
+    { label: 'Hỗ trợ 5G', value: 'Hỗ trợ 5G' },
+    { label: 'Bảo mật khuôn mặt 3D', value: 'Bảo mật khuôn mặt 3D' },
+    { label: 'Công nghệ NFC', value: 'Công nghệ NFC' }
+  ];
+
+  const [productData, setProductData] = useState({
+    productName: '',
+    price: 0,
+    discount: 0,
+    brand: null,
+    mainImage: null,
+    additionalImages: [],
+    productInfo: ''
+  });
+
+  const handleInputChange = (e: any, field: string) => {
+    const value = e.target ? e.target.value : e.value;
+    setProductData({ ...productData, [field]: value });
+  };
 
   const calculateDiscountedPrice = (price: number, discount: number): number => {
       return price - (price * discount / 100);
@@ -85,6 +164,11 @@ const StaffProducts = () => {
     setProductName(product.name);
     setPrice(product.price);
     setShowEditProduct(true);
+  };
+
+  const handleSaveProduct = () => {
+    // Add your save product logic here
+    setShowAddProduct(false);
   };
 
   const handleUploadError = (message: string) => {
@@ -274,126 +358,183 @@ const StaffProducts = () => {
         </div>
       </Dialog>
 
-      <Dialog header={<span className="p-0">Thêm sản phẩm mới</span>} visible={showAddProduct} onHide={() => setShowAddProduct(false)} style={{ width: '70vw' }} >
-        <div className="flex flex-col gap-4 mt-1">
-          <span className="">
-            <label htmlFor="productName" className="block mb-2">Tên sản phẩm</label>
+      <Dialog header={<span className="p-0">Thêm sản phẩm mới</span>} visible={showAddProduct} onHide={() => setShowAddProduct(false)} style={{ width: '70vw' }}>
+      <div className="p-fluid grid grid-cols-2 gap-4">
+        {/* Column 1 */}
+        <div className="col">
+          <div className="p-field">
+            <label htmlFor="productName">Tên sản phẩm</label>
             <InputText id="productName" value={productName} onChange={(e) => setProductName(e.target.value)} placeholder=" " className="p-2 border" />
-          </span>
-          <span className="mt-0">
-            <label htmlFor="price" className="block mb-2">Giá ban đầu</label>
-            <InputText id="price" value={price.toString()} onChange={(e) => setPrice(Number(e.target.value))} placeholder=" " className="p-2 border" />
-          </span>
-          <span className="mt-0">
-            <label htmlFor="discount" className="block mb-2">% giảm giá</label>
-            <InputText id="discount" value={discount.toString()} onChange={(e) => setDiscount(Number(e.target.value))} placeholder=" " className="p-2 border" />
-          </span>
-          <span className="mt-0">
-            <label htmlFor="discountedPrice" className="block mb-2">Giá sau khi giảm</label>
-            <InputText id="discountedPrice" value={calculateDiscountedPrice(price, discount).toString()} readOnly placeholder=" " className="p-2 border" />
-          </span>
-          <div className="mt-0">
-            <label htmlFor="brand" className="block mb-2">Hãng</label>
+          </div>
+          <div className="p-field">
+            <label htmlFor="price">Giá ban đầu</label>
+            <InputNumber id="price" value={price} onChange={(e) => setPrice(Number(e.value))} min={0} className="p-2 border" />
+          </div>
+          <div className="p-field">
+            <label htmlFor="discount">% giảm giá</label>
+            <InputNumber id="discount" value={discount} onChange={(e) => setDiscount(Number(e.value))} min={0} max={100} className="p-2 border" />
+          </div>
+          <div className="p-field">
+            <label htmlFor="discountedPrice">Giá sau khi giảm</label>
+            <InputNumber id="discountedPrice" value={calculateDiscountedPrice(price, discount)} readOnly className="p-2 border" />
+          </div>
+          <div className="p-field">
+            <label htmlFor="brand">Hãng</label>
             <Dropdown id="brand" value={selectedBrand} options={brands} onChange={(e) => setSelectedBrand(e.value)} optionLabel="name" placeholder="Chọn hãng" className="p-1 border" />
           </div>
-          <div className="mt-6">
-            <label htmlFor="mainImage" className="block mb-2">Ảnh chính (tối đa 2 ảnh)</label>
-            <FileUpload mode="advanced" name="mainImage" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
-              if (e.files.length > 2) {
-                handleUploadError('Chỉ được phép tải lên tối đa 2 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
-                e.files.splice(e.files.length);
-              } else {
-                e.options.clear();
-                // Handle the file upload logic here
-                //e.options.onUpload(e);
-                handleUploadSuccess();
-              }
-            }} />
+        </div>
+
+        {/* Column 2 */}
+        <div className="col">
+          <div className="p-field">
+            <label htmlFor="releaseYear">Năm ra mắt</label>
+            <Dropdown id="releaseYear" value={selectedReleaseYear} options={releaseYears} onChange={(e) => setSelectedReleaseYear(e.value)} optionLabel="label" placeholder="Chọn năm ra mắt" className="p-1 border" />
           </div>
-          <div className="mt-6">
-            <label htmlFor="additionalImages" className="block mb-2">Ảnh phụ (tối đa 10 ảnh)</label>
-            <FileUpload mode="advanced" name="additionalImages" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
-              if (e.files.length > 10) {
-                handleUploadError('Chỉ được phép tải lên tối đa 10 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
-                e.files.splice(e.files.length);
-              } else {
-                e.options.clear();
-                //e.options.onUpload(e);
-                handleUploadSuccess();
-              }
-            }} />
+          <div className="p-field">
+            <label htmlFor="internalStorage">Bộ nhớ trong</label>
+            <Dropdown id="internalStorage" value={selectedInternalStorage} options={internalStorages} onChange={(e) => setSelectedInternalStorage(e.value)} optionLabel="label" placeholder="Chọn bộ nhớ trong" className="p-1 border" />
           </div>
-          <div className="mt-0">
-            <label htmlFor="productInfo" className="block mb-2">Thông tin sản phẩm</label>
-            <InputTextarea id="productInfo" value={productInfo} onChange={(e) => setProductInfo(e.target.value)} placeholder=" " className="p-2 border w-full" autoResize />
+          <div className="p-field">
+            <label htmlFor="ram">Dung lượng RAM</label>
+            <Dropdown id="ram" value={selectedRam} options={rams} onChange={(e) => setSelectedRam(e.value)} optionLabel="label" placeholder="Chọn dung lượng RAM" className="p-1 border" />
           </div>
-          <div className="flex gap-4">
-            <Button label="Hủy bỏ" className="p-button-secondary border p-2 hover:bg-red-500 hover:text-white mt-0" onClick={() => setShowAddProduct(false)} />
-            <Button label="Lưu" className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-0"/>
+          <div className="p-field">
+            <label htmlFor="screen">Màn hình</label>
+            <Dropdown id="screen" value={selectedScreen} options={screens} onChange={(e) => setSelectedScreen(e.value)} optionLabel="label" placeholder="Chọn màn hình" className="p-1 border" />
+          </div>
+          <div className="p-field">
+            <label htmlFor="demand">Nhu cầu</label>
+            <Dropdown id="demand" value={selectedDemand} options={demands} onChange={(e) => setSelectedDemand(e.value)} optionLabel="label" placeholder="Chọn nhu cầu" className="p-1 border" />
+          </div>
+          <div className="p-field">
+            <label htmlFor="specialFeatures">Tính năng đặc biệt</label>
+            <Dropdown id="specialFeatures" value={selectedSpecialFeatures} options={specialFeatures} onChange={(e) => setSelectedSpecialFeatures(e.value)} optionLabel="label" placeholder="Chọn tính năng đặc biệt" multiple className="p-1 border" />
           </div>
         </div>
-      </Dialog>
+      </div>
 
-      <Dialog header={<span className="p-0">Chỉnh sửa sản phẩm</span>} visible={showEditProduct} onHide={() => setShowEditProduct(false)} style={{ width: '70vw' }} >
-        <div className="flex flex-col gap-4 mt-1">
-        <span className="">
-            <label htmlFor="productName" className="block mb-2">Tên sản phẩm</label>
-            <InputText id="productName" value={productName} onChange={(e) => setProductName(e.target.value)} placeholder=" " className="p-2 border" />
-          </span>
-          <span className="mt-0">
-            <label htmlFor="price" className="block mb-2">Giá ban đầu</label>
-            <InputText id="price" value={price.toString()} onChange={(e) => setPrice(Number(e.target.value))} placeholder=" " className="p-2 border" />
-          </span>
-          <span className="mt-0">
-            <label htmlFor="discount" className="block mb-2">% giảm giá</label>
-            <InputText id="discount" value={discount.toString()} onChange={(e) => setDiscount(Number(e.target.value))} placeholder=" " className="p-2 border" />
-          </span>
-          <span className="mt-0">
-            <label htmlFor="discountedPrice" className="block mb-2">Giá sau khi giảm</label>
-            <InputText id="discountedPrice" value={calculateDiscountedPrice(price, discount).toString()} readOnly placeholder=" " className="p-2 border" />
-          </span>
-          <div className="mt-0">
-            <label htmlFor="brand" className="block mb-2">Hãng</label>
-            <Dropdown id="brand" value={selectedBrand} options={brands} onChange={(e) => setSelectedBrand(e.value)} optionLabel="name" placeholder="Chọn hãng" className="p-1 border" />
-          </div>
-          <div className="mt-6">
-            <label htmlFor="mainImage" className="block mb-2">Ảnh chính (tối đa 2 ảnh)</label>
-            <FileUpload mode="advanced" name="mainImage" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
-              if (e.files.length > 2) {
-                handleUploadError('Chỉ được phép tải lên tối đa 2 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
-                e.files.splice(e.files.length);
-              } else {
-                e.options.clear();
-                // Handle the file upload logic here
-                //e.options.onUpload(e);
-                handleUploadSuccess();
-              }
-            }} />
-          </div>
-          <div className="mt-6">
-            <label htmlFor="additionalImages" className="block mb-2">Ảnh phụ (tối đa 10 ảnh)</label>
-            <FileUpload mode="advanced" name="additionalImages" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
-              if (e.files.length > 10) {
-                handleUploadError('Chỉ được phép tải lên tối đa 10 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
-                e.files.splice(e.files.length);
-              } else {
-                e.options.clear();
-                //e.options.onUpload(e);
-                handleUploadSuccess();
-              }
-            }} />
-          </div>
-          <div className="mt-0">
-            <label htmlFor="productInfo" className="block mb-2">Thông tin sản phẩm</label>
-            <InputTextarea id="productInfo" value={productInfo} onChange={(e) => setProductInfo(e.target.value)} placeholder=" " className="p-2 border w-full" autoResize />
-          </div>
-          <div className="flex gap-4">
-            <Button label="Hủy bỏ" className="p-button-secondary border p-2 hover:bg-red-500 hover:text-white mt-0" onClick={() => setShowEditProduct(false)} />
-            <Button label="Lưu" className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-0"/>
-          </div>
+      <div className="mt-6">
+        <label htmlFor="mainImage" className="block mb-2">Ảnh chính (tối đa 2 ảnh)</label>
+        <FileUpload mode="advanced" name="mainImage" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
+          if (e.files.length > 2) {
+            handleUploadError('Chỉ được phép tải lên tối đa 2 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
+            e.files.splice(e.files.length);
+          } else {
+            e.options.clear();
+            handleUploadSuccess();
+          }
+        }} />
+      </div>
+      <div className="mt-6">
+        <label htmlFor="additionalImages" className="block mb-2">Ảnh phụ (tối đa 10 ảnh)</label>
+        <FileUpload mode="advanced" name="additionalImages" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
+          if (e.files.length > 10) {
+            handleUploadError('Chỉ được phép tải lên tối đa 10 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
+            e.files.splice(e.files.length);
+          } else {
+            e.options.clear();
+            handleUploadSuccess();
+          }
+        }} />
+      </div>
+      <div className="mt-0">
+        <label htmlFor="productInfo" className="block mb-2">Thông tin sản phẩm</label>
+        <InputTextarea id="productInfo" value={productInfo} onChange={(e) => setProductInfo(e.target.value)} placeholder=" " className="p-2 border w-full" autoResize />
+      </div>
+      <div className="flex gap-4">
+        <Button label="Hủy bỏ" className="p-button-secondary border p-2 hover:bg-red-500 hover:text-white mt-0" onClick={() => setShowAddProduct(false)} />
+        <Button label="Lưu" className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-0" onClick={handleSaveProduct} />
+      </div>
+    </Dialog>
+
+    <Dialog header={<span className="p-0">Chỉnh sửa sản phẩm</span>} visible={showEditProduct} onHide={() => setShowEditProduct(false)} style={{ width: '70vw' }}>
+    <div className="p-fluid grid grid-cols-2 gap-4">
+      {/* Column 1 */}
+      <div className="col">
+        <div className="p-field">
+          <label htmlFor="productName">Tên sản phẩm</label>
+          <InputText id="productName" value={productName} onChange={(e) => setProductName(e.target.value)} placeholder=" " className="p-2 border" />
         </div>
-      </Dialog>
+        <div className="p-field">
+          <label htmlFor="price">Giá ban đầu</label>
+          <InputNumber id="price" value={price} onChange={(e) => setPrice(Number(e.value))} min={0} className="p-2 border" />
+        </div>
+        <div className="p-field">
+          <label htmlFor="discount">% giảm giá</label>
+          <InputNumber id="discount" value={discount} onChange={(e) => setDiscount(Number(e.value))} min={0} max={100} className="p-2 border" />
+        </div>
+        <div className="p-field">
+          <label htmlFor="discountedPrice">Giá sau khi giảm</label>
+          <InputNumber id="discountedPrice" value={calculateDiscountedPrice(price, discount)} readOnly className="p-2 border" />
+        </div>
+        <div className="p-field">
+          <label htmlFor="brand">Hãng</label>
+          <Dropdown id="brand" value={selectedBrand} options={brands} onChange={(e) => setSelectedBrand(e.value)} optionLabel="name" placeholder="Chọn hãng" className="p-1 border" />
+        </div>
+      </div>
 
+      {/* Column 2 */}
+      <div className="col">
+        <div className="p-field">
+          <label htmlFor="releaseYear">Năm ra mắt</label>
+          <Dropdown id="releaseYear" value={selectedReleaseYear} options={releaseYears} onChange={(e) => setSelectedReleaseYear(e.value)} optionLabel="label" placeholder="Chọn năm ra mắt" className="p-1 border" />
+        </div>
+        <div className="p-field">
+          <label htmlFor="internalStorage">Bộ nhớ trong</label>
+          <Dropdown id="internalStorage" value={selectedInternalStorage} options={internalStorages} onChange={(e) => setSelectedInternalStorage(e.value)} optionLabel="label" placeholder="Chọn bộ nhớ trong" className="p-1 border" />
+        </div>
+        <div className="p-field">
+          <label htmlFor="ram">Dung lượng RAM</label>
+          <Dropdown id="ram" value={selectedRam} options={rams} onChange={(e) => setSelectedRam(e.value)} optionLabel="label" placeholder="Chọn dung lượng RAM" className="p-1 border" />
+        </div>
+        <div className="p-field">
+          <label htmlFor="screen">Màn hình</label>
+          <Dropdown id="screen" value={selectedScreen} options={screens} onChange={(e) => setSelectedScreen(e.value)} optionLabel="label" placeholder="Chọn màn hình" className="p-1 border" />
+        </div>
+        <div className="p-field">
+          <label htmlFor="demand">Nhu cầu</label>
+          <Dropdown id="demand" value={selectedDemand} options={demands} onChange={(e) => setSelectedDemand(e.value)} optionLabel="label" placeholder="Chọn nhu cầu" className="p-1 border" />
+        </div>
+        <div className="p-field">
+          <label htmlFor="specialFeatures">Tính năng đặc biệt</label>
+          <Dropdown id="specialFeatures" value={selectedSpecialFeatures} options={specialFeatures} onChange={(e) => setSelectedSpecialFeatures(e.value)} optionLabel="label" placeholder="Chọn tính năng đặc biệt" multiple className="p-1 border" />
+        </div>
+      </div>
+    </div>
+
+    <div className="mt-6">
+      <label htmlFor="mainImage" className="block mb-2">Ảnh chính (tối đa 2 ảnh)</label>
+      <FileUpload mode="advanced" name="mainImage" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
+        if (e.files.length > 2) {
+          handleUploadError('Chỉ được phép tải lên tối đa 2 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
+          e.files.splice(e.files.length);
+        } else {
+          e.options.clear();
+          handleUploadSuccess();
+        }
+      }} />
+    </div>
+    <div className="mt-6">
+      <label htmlFor="additionalImages" className="block mb-2">Ảnh phụ (tối đa 10 ảnh)</label>
+      <FileUpload mode="advanced" name="additionalImages" accept="image/*" maxFileSize={1000000} multiple customUpload uploadHandler={(e) => {
+        if (e.files.length > 10) {
+          handleUploadError('Chỉ được phép tải lên tối đa 10 ảnh. Vui lòng loại bỏ ảnh không cần thiết và thử lại !');
+          e.files.splice(e.files.length);
+        } else {
+          e.options.clear();
+          handleUploadSuccess();
+        }
+      }} />
+    </div>
+    <div className="mt-0">
+      <label htmlFor="productInfo" className="block mb-2">Thông tin sản phẩm</label>
+      <InputTextarea id="productInfo" value={productInfo} onChange={(e) => setProductInfo(e.target.value)} placeholder=" " className="p-2 border w-full" autoResize />
+    </div>
+    <div className="flex gap-4">
+      <Button label="Hủy bỏ" className="p-button-secondary border p-2 hover:bg-red-500 hover:text-white mt-0" onClick={() => setShowEditProduct(false)} />
+      <Button label="Lưu" className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-0" onClick={handleSaveProduct} />
+    </div>
+  </Dialog>
       <Dialog header="Thông báo" visible={showAlert} onHide={() => setShowAlert(false)} style={{ width: '25vw' }} closable={false}>
         <div className="p-4">
           <p>{alertMessage}</p>
@@ -412,4 +553,5 @@ const StaffProducts = () => {
 };
 
 export default StaffProducts;
+
 
