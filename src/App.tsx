@@ -15,6 +15,7 @@ import AdminProfile from "./pages/admin/AdminProfile.tsx";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminCoupons from "./pages/admin/AdminCoupons";
+import AdminOrderDetails from "./pages/admin/AdminOrderDetails";
 
 import StaffDashboard from "./pages/staff/StaffDashboard";
 import StaffProducts from "./pages/staff/StaffProducts";
@@ -57,6 +58,7 @@ const App = () => {
           <Route path="profile" element={<AdminProfile />} />
           <Route path="settings" element={<AdminSettings />} />
           <Route path="coupons" element={<AdminCoupons />} />
+          <Route path="/admin/orders/:id" element={<AdminOrderDetails/>} />
           {/* Admin routes */}
         </Route>
 
@@ -73,7 +75,7 @@ const App = () => {
           <Route path="statistics" element={<StaffStatistics />} />
           <Route path="profile" element={<StaffProfile />} />
           {/* <Route path="orders" element={<StaffCoupons />} /> */}
-          {/* Admin routes */}
+          {/* Staff routes */}
         </Route>
 
         <Route path="/staff/login" element={<StaffLogin />} />
