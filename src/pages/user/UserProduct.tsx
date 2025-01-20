@@ -205,13 +205,18 @@ const UserProduct = () => {
   };
 
   const handleFilter = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const selectedBrandsQuery = selectedBrands.join(',');
-    const priceRangeQuery = `${priceRange[0]}-${priceRange[1]}`;
-    const selectedScreenQuery = selectedScreen.join(',');
-  
-    const queryString = `hang=${selectedBrandsQuery}&price=${priceRangeQuery}&manhinh=${selectedScreenQuery}`;
-    navigate(`/user-products-filter?${queryString}`);
-  };
+      const selectedBrandsQuery = selectedBrands.join(',');
+      const priceRangeQuery = `${priceRange[0]}-${priceRange[1]}`;
+      const selectedScreenQuery = selectedScreen.join(',');
+      const selectedReleaseYearQuery = selectedYears.join(',');
+      const selectedInternalStorageQuery = selectedMemory.join(',');
+      const selectedRamQuery = selectedRam.join(',');
+      const selectedDemandQuery = selectedNeeds.join(',');
+      const selectedSpecialFeaturesQuery = selectedFeatures.join(',');
+    
+      const queryString = `hang=${selectedBrandsQuery}&price=${priceRangeQuery}&manhinh=${selectedScreenQuery}&nam=${selectedReleaseYearQuery}&bonho=${selectedInternalStorageQuery}&ram=${selectedRamQuery}&nhucau=${selectedDemandQuery}&tinhnang=${selectedSpecialFeaturesQuery}`;
+      navigate(`/user-products-filter?${queryString}`);
+    };
 
   const handleCheckboxChange = (selectedItems: string[], setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {
     if (selectedItems.includes(value)) {
