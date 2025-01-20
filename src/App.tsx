@@ -14,6 +14,7 @@ import AdminStatistics from "./pages/admin/AdminStatistics";
 import AdminProfile from "./pages/admin/AdminProfile.tsx";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLogin from "./pages/admin/AdminLogin";
+import AdminCoupons from "./pages/admin/AdminCoupons";
 
 import StaffDashboard from "./pages/staff/StaffDashboard";
 import StaffProducts from "./pages/staff/StaffProducts";
@@ -35,6 +36,7 @@ import UserRegister from "./pages/user/UserRegister.tsx";
 import UserForgotPassword from "./pages/user/UserForgotPassword";
 import UserProduct from "./pages/user/UserProduct.tsx";
 import UserProductsByBrand from "./pages/user/UserProductsByBrand";
+import UserProductsFilter from "./pages/user/UserProductsFilter.tsx";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 
@@ -54,6 +56,7 @@ const App = () => {
           <Route path="statistics" element={<AdminStatistics />} />
           <Route path="profile" element={<AdminProfile />} />
           <Route path="settings" element={<AdminSettings />} />
+          <Route path="coupons" element={<AdminCoupons />} />
           {/* Admin routes */}
         </Route>
 
@@ -69,7 +72,7 @@ const App = () => {
           <Route path="news" element={<StaffNews />} />
           <Route path="statistics" element={<StaffStatistics />} />
           <Route path="profile" element={<StaffProfile />} />
-          
+          {/* <Route path="orders" element={<StaffCoupons />} /> */}
           {/* Admin routes */}
         </Route>
 
@@ -83,6 +86,7 @@ const App = () => {
           <Route path="profile" element={<UserProfile />} /> 
           <Route path="products" element={<UserProduct />} />    
           <Route path="products/:brand" element={<UserProductsByBrand />} />
+          <Route path="user-products-filter" element={<UserProductsFilter />} />
            
           {/* User routes */}
         </Route>
