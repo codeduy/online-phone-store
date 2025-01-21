@@ -40,6 +40,7 @@ import UserForgotPassword from "./pages/user/UserForgotPassword";
 import UserProduct from "./pages/user/UserProduct.tsx";
 import UserProductsByBrand from "./pages/user/UserProductsByBrand";
 import UserProductsFilter from "./pages/user/UserProductsFilter.tsx";
+import UserProductDetail from "./pages/user/UserProductDetail.tsx";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 
@@ -92,7 +93,7 @@ const App = () => {
           <Route path="products" element={<UserProduct />} />    
           <Route path="products/:brand" element={<UserProductsByBrand />} />
           <Route path="user-products-filter" element={<UserProductsFilter />} />
-           
+          <Route path="/product/:slug" element={<UserProductDetail/>} />
           {/* User routes */}
         </Route>
         <Route path="logout" element={<Navigate to="/login" />} />
