@@ -10,6 +10,7 @@ import { InputText } from 'primereact/inputtext';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { TabMenu } from 'primereact/tabmenu';
 import { Dropdown } from 'primereact/dropdown';
+import { useCart } from './CartContext';
 
 const UserProductDetail = () => {
     const { slug } = useParams();
@@ -92,6 +93,18 @@ const UserProductDetail = () => {
     //         }, 3000);
     //     }
     // };
+
+    const { addToCart } = useCart();
+  
+    const handleAddToCart = () => {
+        const cartItem = {
+        id: Date.now(), // or use product.id
+        name: product.name,
+        price: product.price,
+        quantity: 1
+        };
+        addToCart(cartItem);
+    };
 
     const handleConfirmAddress = () => {
         // Check if all address components are selected
@@ -227,10 +240,6 @@ const UserProductDetail = () => {
     originalPrice: 0,
     discount: 0,
     shippingInfo: '',
-  };
-
-  const handleAddToCart = () => {
-    // Add to cart logic
   };
 
   const handleBuyNow = () => {

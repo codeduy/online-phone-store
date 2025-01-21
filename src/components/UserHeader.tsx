@@ -11,13 +11,14 @@ import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import '/src/styles/tailwind.css';
-
+import { useCart } from '../pages/user/CartContext.tsx';
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const overlayPanelRef = useRef<OverlayPanel>(null);
   const menuRef = useRef<Menu>(null);
   const navigate = useNavigate();
+  const { cartCount } = useCart();
 
   const userMenuItems = [
     {
@@ -105,7 +106,7 @@ export default function Header() {
       <Button
         icon="pi pi-shopping-cart"
         className="p-button-rounded p-button-text"
-        badge="0"
+        badge={cartCount.toString()}
         badgeClassName="p-badge-danger"
         onClick={() => navigate('/cart')}
       />

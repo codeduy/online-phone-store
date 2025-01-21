@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import '/src/styles/tailwind.css';
 import '/src/styles/darkmode.css';
 
-
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const menuRef = useRef<Menu>(null);
@@ -89,7 +88,7 @@ export default function Header() {
     </div>
   );
 
-  return (
+  return (    
     <div className="card">
       <Toolbar start={startContent} center={centerContent} end={endContent} />
     </div>

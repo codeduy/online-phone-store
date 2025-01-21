@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
@@ -6,6 +6,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { RadioButton } from 'primereact/radiobutton';
 import { Checkbox } from 'primereact/checkbox';
+import { useCart } from './CartContext';
 
 const UserCart = () => {
   const [deliveryOption, setDeliveryOption] = useState('store');
@@ -18,7 +19,7 @@ const UserCart = () => {
     gender: 'Anh',
     otherReceiver: false
   });
-  const [cartItems, setCartItems] = useState([
+  const [localCartItems, setLocalCartItems] = useState([
     { id: 1, name: 'Product A', price: 100000, quantity: 1 },
     { id: 2, name: 'Product B', price: 200000, quantity: 2 },
     // Add more sample items...
@@ -27,16 +28,25 @@ const UserCart = () => {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('bank');
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const { cartItems, removeFromCart, updateQuantity } = useCart();
 
-  const handleQuantityChange = (id, delta) => {
-    setCartItems(cartItems.map(item => 
-      item.id === id ? { ...item, quantity: item.quantity + delta } : item
-    ));
+  const handleQuantityChange = (id: number, delta: number) => {
+    updateQuantity(id, delta);
   };
 
-  const handleDeleteItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
+  const handleDeleteItem = (id: number) => {
+    removeFromCart(id);
   };
+
+  // const handleQuantityChange = (id, delta) => {
+  //   setCartItems(cartItems.map(item => 
+  //     item.id === id ? { ...item, quantity: item.quantity + delta } : item
+  //   ));
+  // };
+
+  // const handleDeleteItem = (id) => {
+  //   setCartItems(cartItems.filter(item => item.id !== id));
+  // };
 
   const handleApplyDiscount = () => {
     // Add logic to apply discount based on discountCode
