@@ -43,6 +43,7 @@ import UserProductsFilter from "./pages/user/UserProductsFilter.tsx";
 import UserProductDetail from "./pages/user/UserProductDetail.tsx";
 import { CartProvider } from "./pages/user/CartContext";
 import UserProductReview from "./pages/user/UserProductReview.tsx";
+import UserProductsCompare from "./pages/user/UserProductsCompare.tsx";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 
@@ -98,6 +99,8 @@ const App = () => {
             <Route path="user-products-filter" element={<UserProductsFilter />} />
             <Route path="/product/:slug" element={<UserProductDetail/>} />
             <Route path="/product/:slug/review" element={<UserProductReview/>} />
+            <Route path="/products/compare/:comparisonUrl" element={<UserProductsCompare />} />
+            <Route path="/product/compare/:comparisonUrl" element={<UserProductsCompare />} />
             {/* User routes */}
           </Route>
           <Route path="logout" element={<Navigate to="/login" />} />

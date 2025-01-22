@@ -137,7 +137,7 @@ const UserProduct = () => {
       return;
     }
     const comparisonUrl = comparisonProducts.map(product => generateSlug(product.name)).join('-vs-');
-    navigate(`/compare/${comparisonUrl}`);
+    navigate(`/products/compare/${comparisonUrl}`);
   };
 
   const handleMinimizeComparisonBar = () => {
