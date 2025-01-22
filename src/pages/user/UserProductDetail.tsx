@@ -577,7 +577,7 @@ const UserProductDetail = () => {
                         <div className="flex flex-col items-center">
                             <Rating value={averageRating} readOnly stars={5} cancel={false} />
                             <span className="mt-2">{averageRating.toFixed(1)}/5</span>
-                            <span className="mt-2">{totalReviews} người dùng đã đánh giá</span>
+                            <span className="mt-2">{totalReviews} khách hàng đã đánh giá</span>
                         </div>
                         <div>
                             {ratingCounts.map(({ star, percentage }) => (
