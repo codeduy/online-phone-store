@@ -323,11 +323,13 @@ const UserProductsCompare = () => {
                         {products.map((product) => (
                             <div key={product.id} className="p-4 border rounded-lg shadow">                                
                                 <div className="relative">
-                                <Button 
-                                    icon="pi pi-times" 
-                                    className="absolute top-0 right-0 p-button-text bg-white border border-black p-button-danger z-10"
-                                    onClick={() => removeProduct(product.id)}
-                                />
+                                    {products.length > 1 && (
+                                        <Button 
+                                            icon="pi pi-times" 
+                                            className="absolute top-0 right-0 p-button-text bg-white border border-black p-button-danger z-10"
+                                            onClick={() => removeProduct(product.id)}
+                                        />
+                                    )}
                                     <Link to={`/product/${generateSlug(product.name)}`}>
                                         <div className="flex items-center justify-center">
                                             <div className="aspect-w-4 aspect-h-3 w-48 h-48 mb-4">
