@@ -4,8 +4,18 @@ export default {
     './src/**/*.{html,js,jsx,ts,tsx}', 
   ],
   theme: {
-    extend: {},
+    extend: {
+      minWidth: {
+        'page': '1280px',
+      },
+      container: {
+        center: true,
+        padding: '1rem',
+        screens: {
+          DEFAULT: '1280px',
+        },
+      },
+    },
   },
   plugins: [],
 }
-
