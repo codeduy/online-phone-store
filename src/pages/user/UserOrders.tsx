@@ -157,6 +157,7 @@ const sampleOrders: Order[] = [
 type OrderStatus = 'all' | 'pending' | 'paid' | 'shipping' | 'delivered' | 'cancelled';
 
 const UserOrders: React.FC = () => {
+    const [isScrolledPastTabs, setIsScrolledPastTabs] = useState(false);
     const navigate = useNavigate();
     const [orders, setOrders] = useState<Order[]>(sampleOrders);
     const [activeTab, setActiveTab] = useState(0);
@@ -164,7 +165,18 @@ const UserOrders: React.FC = () => {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [filteredOrders, setFilteredOrders] = useState<Order[]>(sampleOrders);
 
-
+    useEffect(() => {
+        const handleScroll = () => {
+            const tabsElement = document.getElementById('status-tabs');
+            if (tabsElement) {
+                const tabsPosition = tabsElement.getBoundingClientRect().top;
+                setIsScrolledPastTabs(tabsPosition < 0);
+            }
+        };
+    
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const tabs = [
         { label: 'Tất cả', value: 'all' },
@@ -206,12 +218,14 @@ const UserOrders: React.FC = () => {
     const OrderItem = ({ order }: { order: Order }) => (
         <div className="grid grid-cols-5 gap-4 p-4 border rounded-lg mb-4 bg-white">
             {/* Column 1: Image (20%) */}
-            <div className="col-span-1">
-                <img
-                    src={order.items[0].image}
-                    alt={order.items[0].name}
-                    className="w-full h-32 object-cover rounded-lg"
-                />
+            <div className="col-span-1 flex items-center justify-center">
+                <div className="w-24 h-24">
+                    <img
+                        src={order.items[0].image}
+                        alt={order.items[0].name}
+                        className="w-full h-full object-contain rounded-lg"
+                    />
+                </div>
             </div>
 
             {/* Column 2: Details (80%) */}
@@ -248,6 +262,29 @@ const UserOrders: React.FC = () => {
 
     return (
         <div className="p-4 space-y-2">
+            {/* Fixed container for tabs */}
+            <div 
+                className={`flex fixed top-0 bg-white z-50 transition-all duration-300 transform ${
+                    isScrolledPastTabs ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'
+                }`}
+            >
+                <div className="container mx-auto p-4">
+                    <TabMenu 
+                        model={tabs} 
+                        activeIndex={activeTab} 
+                        onTabChange={(e) => setActiveTab(e.index)}
+                        className="shadow-lg"
+                        pt={{
+                            menuitem: ({ state }: { state: { active: boolean } }) => ({
+                                className: state.active 
+                                    ? 'bg-blue-50 cursor-pointer' 
+                                    : 'hover:text-blue-600 cursor-pointer transition-colors duration-200'
+                            })
+                        }}
+                    />
+                </div>
+            </div>
+
             {/* Row 1: Total Orders */}
             <div className='justify-center flex'>
                 <div className="bg-white p-4 rounded-lg shadow">
@@ -281,12 +318,20 @@ const UserOrders: React.FC = () => {
 
 
             {/* Row 3: Status Tabs */}
-            <div className='flex'>
+            <div id="status-tabs" className='flex'>
                 <div className="bg-white rounded-lg shadow">
                     <TabMenu 
                         model={tabs} 
                         activeIndex={activeTab} 
                         onTabChange={(e) => setActiveTab(e.index)}
+                        className="shadow-lg"
+                        pt={{
+                            menuitem: ({ state }: { state: { active: boolean } }) => ({
+                                className: state.active 
+                                    ? 'bg-blue-50 cursor-pointer' 
+                                    : 'hover:text-blue-600 cursor-pointer transition-colors duration-200'
+                            })
+                        }}
                     />
                 </div>
             </div>
