@@ -7,6 +7,24 @@ body {
     overflow-x: auto;
   }
 
+.custom-confirm-popup .p-confirm-popup-accept {
+    border: 1px solid #090203;
+    margin-left: 0.5rem;
+    padding: 0.1rem;
+}
+
+.custom-confirm-popup .p-confirm-popup-reject {
+    border: 1px solid #090203;
+    padding: 0.1rem;
+    background: #f8f9fa;
+}
+
+.custom-confirm-popup .p-confirm-popup-accept {
+    border: 1px solid #090203;
+    padding: 0.1rem;
+    background: #dc3545;
+}
+
 /* .bg-gray-800 {
     background-color: #2d3748;
 }
