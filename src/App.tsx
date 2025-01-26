@@ -48,6 +48,7 @@ import UserOrders from "./pages/user/UserOrders.tsx";
 import UserOrderDetail from "./pages/user/UserOrderDetail.tsx";
 import UserFavorites from "./pages/user/UserFavorites.tsx";
 import UserContact from "./pages/user/UserContact.tsx";
+import UserNews from "./pages/user/UserNews.tsx";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 
@@ -109,6 +110,7 @@ const App = () => {
             <Route path="orders/:orderId" element={<UserOrderDetail />} />
             <Route path="/favorites" element={<UserFavorites />}/>
             <Route path="/contact" element={<UserContact />}/>
+            <Route path="/news" element={<UserNews />}/>
             {/* User routes */}
           </Route>
           <Route path="logout" element={<Navigate to="/login" />} />
