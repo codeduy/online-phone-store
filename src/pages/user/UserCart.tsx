@@ -61,6 +61,16 @@ const UserCart = () => {
   const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const totalAfterDiscount = total - discountAmount;
 
+    if (cartItems.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center h-[60vh]">
+                <p className="text-gray-500 text-lg">
+                    Giỏ hàng của bạn đang trống. Vui lòng chọn thêm sản phẩm để mua sắm nhé !
+                </p>
+            </div>
+        );
+    }
+
   return (
     <div className="p-4">
       {/* First Row */}
