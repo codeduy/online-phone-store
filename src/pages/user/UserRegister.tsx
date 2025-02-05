@@ -1,143 +1,216 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
+import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 
+// Định nghĩa kiểu dữ liệu cho form
+interface FormData {
+  username: string;    // Tên đăng nhập
+  fullName: string;    // Họ và tên
+  phoneNumber: string; // Số điện thoại
+  email: string;       // Email
+  password: string;    // Mật khẩu
+  confirmPassword: string; // Xác nhận mật khẩu
+}
+
+// Định nghĩa kiểu dữ liệu cho các lỗi
+interface FormErrors {
+  [key: string]: string;
+}
+
+// Component chính
 const UserRegister = () => {
-    const [username, setUsername] = useState('');
-    const [fullName, setFullName] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);    
-    const toast = useRef<Toast>(null);
-    const navigate = useNavigate();
+  // Quản lý dữ liệu form
+  const [formData, setFormData] = useState<FormData>({
+    username: '',
+    fullName: '',
+    phoneNumber: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
 
-    const handleRegister = () => {
-        if (!username || !fullName || !phoneNumber || !password || !confirmPassword) {
-            toast.current?.show({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng điền đầy đủ thông tin.', life: 3000 });
-            return;
-        }
-        if (!/^\d+$/.test(phoneNumber)) {
-            toast.current?.show({ severity: 'error', summary: 'Lỗi', detail: 'Số điện thoại chỉ được chứa số.', life: 3000 });
-            return;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            toast.current?.show({ severity: 'error', summary: 'Lỗi', detail: 'Địa chỉ email không hợp lệ.', life: 3000 });
-            return;
-        }
-        if (password.length < 8) {
-            toast.current?.show({ severity: 'error', summary: 'Lỗi', detail: 'Mật khẩu phải có ít nhất 8 kí tự.', life: 3000 });
-            return;
-        }
-        if (password !== confirmPassword) {
-            toast.current?.show({ severity: 'error', summary: 'Lỗi', detail: 'Mật khẩu không khớp.', life: 3000 });
-            return;
-        }
-        // Implement registration logic here
-        // For now, just navigate to the login page
-        toast.current?.show({ severity: 'success', summary: 'Thành công', detail: 'Đăng kí thành công!', life: 3000 });
-        navigate('/login');
-    };
+  // Quản lý trạng thái lỗi và loading
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            handleRegister();
-        }
-    };
+  // Quản lý hiển thị/ẩn mật khẩu
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    return (
-        <div className="flex justify-center items-center h-screen">
-            <Toast ref={toast} />
-            <div className="p-4 border rounded shadow-md w-96">
-                <h2 className="text-center mb-2">E-Commerce Website</h2>
-                <h4 className="text-center mb-4">Đăng kí tài khoản người dùng</h4>
-                <div className="mb-2">
-                    <label htmlFor="username" className="block pb-1">Tên người dùng</label>
-                    <InputText 
-                        id="username" 
-                        value={username} 
-                        onChange={(e) => setUsername(e.target.value)} 
-                        className="p-inputtext-sm w-full border p-2"
-                        onKeyDown={handleKeyDown}
-                    />
-                </div>
-                <div className="mb-2">
-                    <label htmlFor="fullName" className="block pb-1">Họ và tên</label>
-                    <InputText 
-                        id="fullName" 
-                        value={fullName} 
-                        onChange={(e) => setFullName(e.target.value)} 
-                        className="p-inputtext-sm w-full border p-2"
-                        onKeyDown={handleKeyDown}
-                    />
-                </div>
-                <div className="mb-2">
-                    <label htmlFor="phoneNumber" className="block pb-1">Số điện thoại</label>
-                    <InputText 
-                        id="phoneNumber" 
-                        value={phoneNumber} 
-                        onChange={(e) => setPhoneNumber(e.target.value)} 
-                        className="p-inputtext-sm w-full border p-2"
-                        onKeyDown={handleKeyDown}
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="email" className="block pb-1">Địa chỉ email</label>
-                    <InputText 
-                        id="email" 
-                        value={email} 
-                        onChange={(e) => setEmail(e.target.value)} 
-                        className="p-inputtext-sm w-full border p-2"
-                        onKeyDown={handleKeyDown}
-                    />
-                </div>
-                <div className="mb-2">
-                    <label htmlFor="password" className="block pb-1">Nhập mật khẩu</label>
-                    <div className="relative w-full border">
-                        <InputText 
-                            id="password" 
-                            type={showPassword ? "text" : "password"} 
-                            value={password} 
-                            onChange={(e) => setPassword(e.target.value)} 
-                            onKeyDown={handleKeyDown} 
-                            className="p-inputtext-sm w-full border p-2 pr-10"
-                        />
-                        <Button 
-                            icon={showPassword ? "pi pi-eye-slash" : "pi pi-eye"} 
-                            className="p-button-text p-button-plain absolute right-0 top-0 h-full" 
-                            onClick={() => setShowPassword(!showPassword)} 
-                        />
-                    </div>
-                </div>
-                <div className="mb-2">
-                    <label htmlFor="confirmPassword" className="block pb-1">Nhập lại mật khẩu</label>
-                    <div className="relative w-full border">
-                        <InputText 
-                            id="confirmPassword" 
-                            type={showConfirmPassword ? "text" : "password"} 
-                            value={confirmPassword} 
-                            onChange={(e) => setConfirmPassword(e.target.value)} 
-                            className="p-inputtext-sm w-full border p-2 pr-10"
-                            onKeyDown={handleKeyDown}
-                        />
-                        <Button 
-                            icon={showConfirmPassword ? "pi pi-eye-slash" : "pi pi-eye"} 
-                            className="p-button-text p-button-plain absolute right-0 top-0 h-full" 
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
-                        />
-                    </div>                    
-                </div>
-                <Button label="Đăng kí" onClick={handleRegister} className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white w-full mb-2" />
-                <div className="flex justify-center">
-                    <Link to="/login" className="text-blue-500 hover:underline">Đã có tài khoản?</Link>
-                </div>
-            </div>
+  // Kiểm tra dữ liệu form
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    // Kiểm tra các trường bắt buộc
+    Object.keys(formData).forEach(key => {
+      if (!formData[key as keyof FormData]) {
+        newErrors[key] = 'Trường này là bắt buộc';
+      }
+    });
+
+    // Kiểm tra số điện thoại chỉ chứa số
+    if (formData.phoneNumber && !/^\d+$/.test(formData.phoneNumber)) {
+      newErrors.phoneNumber = 'Số điện thoại chỉ được chứa số';
+    }
+
+    // Kiểm tra email hợp lệ
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Địa chỉ email không hợp lệ';
+    }
+
+    // Kiểm tra độ dài mật khẩu
+    if (formData.password && formData.password.length < 8) {
+      newErrors.password = 'Mật khẩu phải có ít nhất 8 kí tự';
+    }
+
+    // Kiểm tra mật khẩu xác nhận
+    if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Mật khẩu không khớp';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Xử lý thay đổi input
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Xóa lỗi khi người dùng bắt đầu nhập
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  // Xử lý submit form
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    try {
+      // Giả lập gọi API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      alert('Đăng ký thành công!');
+    } catch (error) {
+      alert('Có lỗi xảy ra. Vui lòng thử lại.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Các class CSS thường dùng
+  const inputClassName = "w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all";
+  const errorClassName = "text-red-500 text-sm mt-1";
+  const labelClassName = "block text-sm font-medium text-gray-700 mb-1";
+
+  // Danh sách các trường input cơ bản
+  const basicFields = [
+    { name: 'username', label: 'Tên người dùng', type: 'text' },
+    { name: 'fullName', label: 'Họ và tên', type: 'text' },
+    { name: 'phoneNumber', label: 'Số điện thoại', type: 'tel' },
+    { name: 'email', label: 'Địa chỉ email', type: 'email' }
+  ];
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
+        {/* Header */}
+        <div>
+          <h2 className="text-center text-3xl font-extrabold text-gray-900">
+            E-Commerce Website
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Đăng ký tài khoản người dùng
+          </p>
         </div>
-    );
+
+        {/* Form đăng ký */}
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            {/* Các trường thông tin cơ bản */}
+            {basicFields.map(field => (
+              <div key={field.name}>
+                <label htmlFor={field.name} className={labelClassName}>
+                  {field.label}
+                </label>
+                <input
+                  id={field.name}
+                  name={field.name}
+                  type={field.type}
+                  value={formData[field.name as keyof FormData]}
+                  onChange={handleChange}
+                  className={`${inputClassName} ${errors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {errors[field.name] && (
+                  <p className={errorClassName}>{errors[field.name]}</p>
+                )}
+              </div>
+            ))}
+
+            {/* Trường mật khẩu */}
+            {[
+              { name: 'password', label: 'Nhập mật khẩu' },
+              { name: 'confirmPassword', label: 'Nhập lại mật khẩu' }
+            ].map(field => (
+              <div key={field.name}>
+                <label htmlFor={field.name} className={labelClassName}>
+                  {field.label}
+                </label>
+                <div className="relative">
+                  <input
+                    id={field.name}
+                    name={field.name}
+                    type={field.name === 'password' ? (showPassword ? 'text' : 'password') : (showConfirmPassword ? 'text' : 'password')}
+                    value={formData[field.name as keyof FormData]}
+                    onChange={handleChange}
+                    className={`${inputClassName} ${errors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {/* Nút hiển thị/ẩn mật khẩu */}
+                  <button
+                    type="button"
+                    onClick={() => field.name === 'password' ? setShowPassword(!showPassword) : setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {field.name === 'password' ? 
+                      (showPassword ? <EyeOff size={20} /> : <Eye size={20} />) :
+                      (showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />)
+                    }
+                  </button>
+                </div>
+                {errors[field.name] && (
+                  <p className={errorClassName}>{errors[field.name]}</p>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Nút đăng ký */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white 
+              ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'}`}
+          >
+            {isLoading ? 'Đang xử lý...' : 'Đăng ký'}
+          </button>
+
+          {/* Link đăng nhập */}
+          <div className="text-center">
+            <a href="/login" className="text-sm text-blue-600 hover:text-blue-500">
+              Đã có tài khoản?
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default UserRegister;

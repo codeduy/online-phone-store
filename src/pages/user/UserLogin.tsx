@@ -1,91 +1,175 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
-import { Checkbox } from 'primereact/checkbox';
+import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 
+// Định nghĩa kiểu dữ liệu cho form đăng nhập
+interface LoginFormData {
+  username: string;    // Tên đăng nhập
+  password: string;    // Mật khẩu
+  rememberMe: boolean; // Ghi nhớ đăng nhập
+}
 
-const StaffLogin = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [rememberMe, setRememberMe] = useState(false);
-    const toast = useRef<Toast>(null);
-    const navigate = useNavigate();
+// Component chính
+const LoginPage = () => {
+  // Quản lý dữ liệu form
+  const [formData, setFormData] = useState<LoginFormData>({
+    username: '',
+    password: '',
+    rememberMe: false
+  });
 
-    const handleLogin = () => {
-        if (!username) {
-            toast.current?.show({ severity: 'error', summary: 'Lỗi', detail: 'Tên người dùng không được để trống.', life: 3000 });
-            return;
-        }
-        else if (password.length < 8) {
-            toast.current?.show({ severity: 'error', summary: 'Lỗi', detail: 'Mật khẩu phải có ít nhất 8 kí tự.', life: 3000 });
-            return;
-        }
-        // Implement login logic here
-        // For now, just navigate to the admin dashboard
-        toast.current?.show({ severity: 'success', summary: 'Thành công', detail: 'Đăng nhập thành công!', life: 3000 });
-        navigate('/');
-    };
+  // Quản lý trạng thái
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>('');
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            handleLogin();
-        }
-    };
+  // Xử lý thay đổi input
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    // Xóa thông báo lỗi khi người dùng bắt đầu nhập
+    if (error) setError('');
+  };
 
-    return (
-        <div className="flex justify-center items-center h-screen">
-            <Toast ref={toast} />
-            <div className="p-4 border rounded shadow-md w-96">
-                <h2 className="text-center mb-2">E-Commerce Website</h2>
-                <h4 className="text-center mb-4">Chào mừng quý khách</h4>
-                <div className="mb-4">
-                    <label htmlFor="username" className="block pb-1">Tên người dùng</label>
-                    <InputText 
-                        id="username" 
-                        value={username} 
-                        onChange={(e) => setUsername(e.target.value)} 
-                        onKeyDown={handleKeyDown} 
-                        className="p-inputtext-sm w-full border p-2"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="password" className="block pb-1">Mật khẩu</label>
-                    <div className="relative w-full border">
-                        <InputText 
-                            id="password" 
-                            type={showPassword ? "text" : "password"} 
-                            value={password} 
-                            onChange={(e) => setPassword(e.target.value)} 
-                            onKeyDown={handleKeyDown} 
-                            className="p-inputtext-sm w-full border p-2 pr-10"
-                        />
-                        <Button 
-                            icon={showPassword ? "pi pi-eye-slash" : "pi pi-eye"} 
-                            className="p-button-text p-button-plain absolute right-0 top-0 h-full" 
-                            onClick={() => setShowPassword(!showPassword)} 
-                        />
-                    </div>
-                </div>
-                <div className="mb-4 flex items-center">
-                    <Checkbox 
-                        inputId="rememberMe" 
-                        checked={rememberMe} 
-                        onChange={(e) => setRememberMe(e.checked || false)} 
-                        className='border'
-                    />
-                    <label htmlFor="rememberMe" className="ml-2">Nhớ tài khoản?</label>
-                </div>
-                <Button label="Đăng nhập" onClick={handleLogin} className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white w-full" />
-                <div className="flex justify-between">
-                    <Link to="/register" className="text-blue-500 hover:underline">Chưa có tài khoản?</Link>
-                    <Link to="/forgot-password" className="text-blue-500 hover:underline">Quên mật khẩu?</Link>                    
-                </div>
-            </div>
+  // Kiểm tra form trước khi submit
+  const validateForm = (): boolean => {
+    if (!formData.username) {
+      setError('Tên người dùng không được để trống');
+      return false;
+    }
+    if (formData.password.length < 8) {
+      setError('Mật khẩu phải có ít nhất 8 kí tự');
+      return false;
+    }
+    return true;
+  };
+
+  // Xử lý đăng nhập
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    try {
+      // Giả lập gọi API đăng nhập
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      alert('Đăng nhập thành công!');
+      // Chuyển hướng sau khi đăng nhập thành công
+      window.location.href = '/';
+    } catch (error) {
+      setError('Có lỗi xảy ra. Vui lòng thử lại.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Các class CSS thường dùng
+  const inputClassName = "w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all";
+  const labelClassName = "block text-sm font-medium text-gray-700 mb-1";
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
+        {/* Header */}
+        <div>
+          <h2 className="text-center text-3xl font-extrabold text-gray-900">
+            E-Commerce Website
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Chào mừng quý khách
+          </p>
         </div>
-    );
+
+        {/* Form đăng nhập */}
+        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+          {/* Hiển thị lỗi nếu có */}
+          {error && (
+            <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded">
+              {error}
+            </div>
+          )}
+
+          {/* Trường tên đăng nhập */}
+          <div>
+            <label htmlFor="username" className={labelClassName}>
+              Tên người dùng
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              value={formData.username}
+              onChange={handleChange}
+              className={`${inputClassName} border-gray-300`}
+            />
+          </div>
+
+          {/* Trường mật khẩu */}
+          <div>
+            <label htmlFor="password" className={labelClassName}>
+              Mật khẩu
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleChange}
+                className={`${inputClassName} border-gray-300`}
+              />
+              {/* Nút hiển thị/ẩn mật khẩu */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </div>
+
+          {/* Checkbox ghi nhớ đăng nhập */}
+          <div className="flex items-center">
+            <input
+              id="rememberMe"
+              name="rememberMe"
+              type="checkbox"
+              checked={formData.rememberMe}
+              onChange={handleChange}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-900">
+              Nhớ tài khoản?
+            </label>
+          </div>
+
+          {/* Nút đăng nhập */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white 
+              ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'}`}
+          >
+            {isLoading ? 'Đang xử lý...' : 'Đăng nhập'}
+          </button>
+
+          {/* Links */}
+          <div className="flex justify-between text-sm">
+            <a href="/register" className="text-blue-600 hover:text-blue-500">
+              Chưa có tài khoản?
+            </a>
+            <a href="/forgot-password" className="text-blue-600 hover:text-blue-500">
+              Quên mật khẩu?
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
-export default StaffLogin;
+export default LoginPage;
