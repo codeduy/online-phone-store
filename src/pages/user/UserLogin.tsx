@@ -78,7 +78,8 @@ const LoginPage = () => {
     try {
         const response = await axios.post('http://localhost:3000/api/auth/login', {
             username: formData.username,
-            password: formData.password
+            password: formData.password,
+            rememberMe: formData.rememberMe
         }, {
             withCredentials: true
         });
@@ -89,11 +90,15 @@ const LoginPage = () => {
             window.location.href = '/';
         }
     } catch (error: any) {
-        setError(error.response?.data?.message || 'Invalid credentials');
+        if (error.response?.status === 401) {
+            setError('Thông tin đăng nhập không chính xác!');
+        } else {
+            setError('Đã xảy ra lỗi. Vui lòng thử lại.');
+        }
     } finally {
         setIsLoading(false);
     }
-};
+  };
 
   // Các class CSS thường dùng
   const inputClassName = "w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all";

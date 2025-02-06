@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import axios from 'axios';
 
 enum ResetStep {
   EMAIL_INPUT = 'EMAIL_INPUT',
@@ -64,70 +65,51 @@ const ForgotPasswordPage = () => {
   };
 
   const handleSendVerificationCode = async () => {
-    if (!isValidEmail(formData.email)) {
-      setError('Địa chỉ email không hợp lệ');
-      return;
-    }
-
     setIsLoading(true);
     try {
-      // Kiểm tra email tồn tại
-      const emailExists = await checkEmailExists(formData.email);
-      if (!emailExists) {
-        setError('Email này chưa được đăng ký trong hệ thống');
-        return;
-      }
-
-      // Nếu email tồn tại, tiếp tục gửi mã xác nhận
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setCurrentStep(ResetStep.VERIFY_CODE);
-      setCountdown(30);
-      setError('');
-    } catch (error) {
-      setError('Không thể gửi mã xác nhận. Vui lòng thử lại.');
+        await axios.post('http://localhost:3000/api/auth/check-email', {
+            email: formData.email
+        });
+        setCurrentStep(ResetStep.VERIFY_CODE);
+        setCountdown(30);
+    } catch (error: any) {
+        setError(error.response?.data?.message || 'Error sending verification code');
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
   };
 
   const handleVerifyCode = async () => {
-    if (!formData.verificationCode) {
-      setError('Vui lòng nhập mã xác nhận');
-      return;
-    }
-
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setCurrentStep(ResetStep.NEW_PASSWORD);
-      setError('');
-    } catch (error) {
-      setError('Mã xác nhận không đúng');
+        const response = await axios.post('http://localhost:3000/api/auth/verify-code', {
+            email: formData.email,
+            code: formData.verificationCode
+        });
+        setCurrentStep(ResetStep.NEW_PASSWORD);
+        localStorage.setItem('resetToken', response.data.resetToken);
+    } catch (error: any) {
+        setError(error.response?.data?.message || 'Invalid verification code');
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
   };
 
   const handleResetPassword = async () => {
-    if (formData.newPassword.length < 8) {
-      setError('Mật khẩu phải có ít nhất 8 kí tự');
-      return;
-    }
-
-    if (formData.newPassword !== formData.confirmPassword) {
-      setError('Mật khẩu không khớp');
-      return;
-    }
-
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      alert('Đặt lại mật khẩu thành công!');
-      window.location.href = '/login';
-    } catch (error) {
-      setError('Không thể đặt lại mật khẩu. Vui lòng thử lại.');
+        const resetToken = localStorage.getItem('resetToken');
+        await axios.post('http://localhost:3000/api/auth/reset-password', {
+            resetToken,
+            newPassword: formData.newPassword
+        });
+        localStorage.removeItem('resetToken');
+        alert('Password reset successful');
+        window.location.href = '/login';
+    } catch (error: any) {
+        setError(error.response?.data?.message || 'Error resetting password');
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
   };
 
