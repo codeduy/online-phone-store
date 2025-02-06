@@ -1,2 +1,0 @@
-# SalesWeb
-dự án CNTT
