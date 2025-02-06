@@ -50,7 +50,8 @@ import UserFavorites from "./pages/user/UserFavorites.tsx";
 import UserContact from "./pages/user/UserContact.tsx";
 import UserNews from "./pages/user/UserNews.tsx";
 
-axios.defaults.baseURL = "http://localhost:8000/api";
+axios.defaults.baseURL = "http://localhost:3000/api";
+axios.defaults.withCredentials = true;
 
 const App = () => {
   return (

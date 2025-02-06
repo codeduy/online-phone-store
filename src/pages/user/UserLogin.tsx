@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 // Định nghĩa kiểu dữ liệu cho form đăng nhập
 interface LoginFormData {
@@ -10,6 +12,26 @@ interface LoginFormData {
 
 // Component chính
 const LoginPage = () => {
+  useEffect(() => {
+    const checkAuth = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        try {
+            const response = await axios.post('http://localhost:3000/api/auth/verify-token', null, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (response.data.valid) {
+                window.location.href = '/home';
+            }
+        } catch (error) {
+            localStorage.removeItem('token');
+        }
+    };
+
+    checkAuth();
+  }, []);
   // Quản lý dữ liệu form
   const [formData, setFormData] = useState<LoginFormData>({
     username: '',
@@ -54,17 +76,24 @@ const LoginPage = () => {
 
     setIsLoading(true);
     try {
-      // Giả lập gọi API đăng nhập
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      alert('Đăng nhập thành công!');
-      // Chuyển hướng sau khi đăng nhập thành công
-      window.location.href = '/';
-    } catch (error) {
-      setError('Có lỗi xảy ra. Vui lòng thử lại.');
+        const response = await axios.post('http://localhost:3000/api/auth/login', {
+            username: formData.username,
+            password: formData.password
+        }, {
+            withCredentials: true
+        });
+
+        if (response.data.token) {
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+            window.location.href = '/';
+        }
+    } catch (error: any) {
+        setError(error.response?.data?.message || 'Invalid credentials');
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+};
 
   // Các class CSS thường dùng
   const inputClassName = "w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all";

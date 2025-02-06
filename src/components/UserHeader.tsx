@@ -1,8 +1,7 @@
-import React from 'react';
 import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
 import { ToggleButton } from 'primereact/togglebutton';
-import { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { SplitButton } from 'primereact/splitbutton';
 import { Menu } from 'primereact/menu';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +11,9 @@ import { InputIcon } from 'primereact/inputicon';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import '/src/styles/tailwind.css';
 import { useCart } from '../pages/user/CartContext.tsx';
+import axios from 'axios';
+import { Dialog } from 'primereact/dialog';
+
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
@@ -19,8 +21,31 @@ export default function Header() {
   const menuRef = useRef<Menu>(null);
   const navigate = useNavigate();
   const { cartCount } = useCart();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
-  const userMenuItems = [
+  const handleLogoutClick = () => {
+    setShowLogoutDialog(true);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('/auth/logout');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    setShowLogoutDialog(false);
+  };
+
+  const userMenuItems = isAuthenticated ? [
     {
       label: 'Thông tin người dùng',
       icon: 'pi pi-user',
@@ -29,7 +54,13 @@ export default function Header() {
     {
       label: 'Đăng xuất',
       icon: 'pi pi-sign-out',
-      command: () => navigate('/logout')
+      command: handleLogout
+    }
+  ] : [
+    {
+      label: 'Đăng nhập',
+      icon: 'pi pi-sign-in',
+      command: () => navigate('/login')
     }
   ];
 
