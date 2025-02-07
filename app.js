@@ -6,9 +6,9 @@ var mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();  // Để sử dụng biến môi trường từ .env
 const { cleanupUnusedImages } = require('./utils/cleanupImages');
+const categoryRouter = require('./routes/categoryRouter');
 
 const productsRouter = require('./routes/products');
-const categoriesRouter = require('./routes/categories');
 const productDetailsRouter = require('./routes/productDetails');
 const usersRouter = require('./routes/userRouter');
 const userProfilesRouter = require('./routes/userProfiles');
@@ -48,7 +48,7 @@ app.use(cors({
 }));
 // Các route
 app.use("/products", productsRouter);
-app.use("/categories", categoriesRouter);
+app.use("/categories", categoryRouter);
 app.use("/productDetails", productDetailsRouter);
 app.use("/users", usersRouter);
 app.use("/userProfiles", userProfilesRouter);
@@ -66,6 +66,7 @@ app.use("/newsEvents", newsEventsRouter);
 //app.use("/auth", usersRouter); // For auth routes like register
 // app.use("/", usersRouter); 
 app.use("/api/auth", usersRouter);
+app.use('/api/categories', categoryRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -421,5 +421,4 @@ module.exports = {
     resetPassword,
     updateProfile,
     changePassword,
-    cleanupUnusedImages
 }
