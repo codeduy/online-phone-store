@@ -13,7 +13,13 @@ import '/src/styles/tailwind.css';
 import { useCart } from '../pages/user/CartContext.tsx';
 import axios from 'axios';
 import { Dialog } from 'primereact/dialog';
-import { Category } from './types';
+
+interface Category {
+  _id: string;
+  name: string;
+  link: string;
+  logo_url: string;
+}
 
 export default function UserHeader() {
   const [darkMode, setDarkMode] = useState(false);

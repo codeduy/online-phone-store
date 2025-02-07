@@ -5,6 +5,7 @@ import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { useRef } from 'react';
 import { IoLocationOutline, IoCallOutline, IoMailOutline, IoTimeOutline, IoLogoFacebook, IoLogoTwitter, IoLogoInstagram } from 'react-icons/io5';
+import axios from 'axios';
 
 interface ContactForm {
     name: string;
@@ -24,15 +25,34 @@ const UserContact: React.FC = () => {
         message: ''
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission
-        toast.current?.show({
-            severity: 'success',
-            summary: 'Thành công',
-            detail: 'Thông tin của bạn đã được gửi',
-            life: 3000
-        });
+        try {
+            const response = await axios.post('http://localhost:3000/api/contacts', formData);
+            
+            toast.current?.show({
+                severity: 'success',
+                summary: 'Thành công',
+                detail: response.data.message,
+                life: 3000
+            });
+    
+            // Reset form on success
+            setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                subject: '',
+                message: ''
+            });
+        } catch (error: any) {
+            toast.current?.show({
+                severity: 'error',
+                summary: 'Lỗi',
+                detail: error.response?.data?.message || 'Có lỗi xảy ra',
+                life: 3000
+            });
+        }
     };
 
     return (
