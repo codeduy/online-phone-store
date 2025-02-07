@@ -7,23 +7,23 @@ const newsEventSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    content: {
+    sub_title: {  // Changed from content to sub_title
       type: String,
       required: true,
-      // Bạn có thể sử dụng thư viện Markdown hoặc HTML để lưu trữ nội dung nếu cần.
+      trim: true,
     },
     image: {
-      type: String, // URL của hình ảnh đại diện
+      type: String,
       default: null,
     },
     type: {
       type: String,
-      enum: ["news", "event", "announcement"], // Loại bài viết
+      enum: ["promotion", "tech"],
       required: true,
     },
-    staff_id: {
+    staff_id: { 
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Liên kết với bảng users
+      ref: "User",
       required: true,
     },
     start_date: {
@@ -36,8 +36,8 @@ const newsEventSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["draft", "published", "archived"], // Trạng thái bài viết
-      default: "draft", // Mặc định là "draft"
+      enum: ["true", "false"],
+      default: "true",
     },
     created_at: {
       type: Date,
@@ -49,11 +49,15 @@ const newsEventSchema = new mongoose.Schema(
     },
     link: {
       type: String,
-      required: true, // Đường dẫn đến bài viết/sự kiện
+      required: true,
+    },
+    is_external_link: {
+      type: Boolean,
+      default: false,
     },
     meta: {
       type: String,
-      default: "", // Tên miền (nếu có)
+      default: "",
     },
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }

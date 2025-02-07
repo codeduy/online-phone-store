@@ -6,12 +6,16 @@ var mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();  // Để sử dụng biến môi trường từ .env
 const { cleanupUnusedImages } = require('./utils/cleanupImages');
-const categoryRouter = require('./routes/categoryRouter');
+
+const usersRoutes = require('./routes/userRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const newsEventRoutes = require('./routes/newsEventsRoutes');
+const contactRoutes = require('./routes/contactRoutes');
+
 
 const productsRouter = require('./routes/products');
 const productDetailsRouter = require('./routes/productDetails');
-const usersRouter = require('./routes/userRouter');
-const userProfilesRouter = require('./routes/userProfiles');
+
 const deliveryServicesRouter = require('./routes/deliveryServices');
 const shipmentsRouter = require('./routes/shipments');
 const shipmentLogsRouter = require('./routes/shipmentLogs');
@@ -22,7 +26,6 @@ const transactionsRouter = require('./routes/transactions');
 const staffsRouter = require('./routes/staffs');
 const reportsRouter = require('./routes/reports');
 const logsRouter = require('./routes/logs');
-const newsEventsRouter = require('./routes/newsEvents');
 
 var app = express();
 
@@ -46,27 +49,29 @@ app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true
 }));
-// Các route
-app.use("/products", productsRouter);
-app.use("/categories", categoryRouter);
-app.use("/productDetails", productDetailsRouter);
-app.use("/users", usersRouter);
-app.use("/userProfiles", userProfilesRouter);
-app.use("/deliveryServices", deliveryServicesRouter);
-app.use("/shipments", shipmentsRouter);
-app.use("/shipmentLogs", shipmentLogsRouter);
-app.use("/orders", ordersRouter);
-app.use("/orderItems", orderItemsRouter);
-app.use("/promotions", promotionsRouter);
-app.use("/transactions", transactionsRouter);
-app.use("/staffs", staffsRouter);
-app.use("/reports", reportsRouter);
-app.use("/logs", logsRouter);
-app.use("/newsEvents", newsEventsRouter);
+// // Các route
+// app.use("/products", productsRouter);
+// app.use("/categories", categoryRouter);
+// app.use("/productDetails", productDetailsRouter);
+// app.use("/users", usersRouter);
+// app.use("/userProfiles", userProfilesRouter);
+// app.use("/deliveryServices", deliveryServicesRouter);
+// app.use("/shipments", shipmentsRouter);
+// app.use("/shipmentLogs", shipmentLogsRouter);
+// app.use("/orders", ordersRouter);
+// app.use("/orderItems", orderItemsRouter);
+// app.use("/promotions", promotionsRouter);
+// app.use("/transactions", transactionsRouter);
+// app.use("/staffs", staffsRouter);
+// app.use("/reports", reportsRouter);
+// app.use("/logs", logsRouter);
+// app.use("/newsEvents", newsEventsRouter);
 //app.use("/auth", usersRouter); // For auth routes like register
 // app.use("/", usersRouter); 
-app.use("/api/auth", usersRouter);
-app.use('/api/categories', categoryRouter);
+app.use("/api/auth", usersRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/news', newsEventRoutes);
+app.use('/api/contacts', contactRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

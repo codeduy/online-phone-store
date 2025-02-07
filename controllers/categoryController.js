@@ -11,4 +11,4 @@ const categoryController = {
     }
 };
 
-module.exports = categoryController;
+module.exports = categoryController;  
