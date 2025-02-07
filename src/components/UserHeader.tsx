@@ -13,9 +13,9 @@ import '/src/styles/tailwind.css';
 import { useCart } from '../pages/user/CartContext.tsx';
 import axios from 'axios';
 import { Dialog } from 'primereact/dialog';
+import { Category } from './types';
 
-
-export default function Header() {
+export default function UserHeader() {
   const [darkMode, setDarkMode] = useState(false);
   const overlayPanelRef = useRef<OverlayPanel>(null);
   const menuRef = useRef<Menu>(null);
@@ -23,6 +23,19 @@ export default function Header() {
   const { cartCount } = useCart();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get<Category[]>('http://localhost:3000/api/categories');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleLogoutClick = () => {
     setShowLogoutDialog(true);
@@ -80,13 +93,26 @@ export default function Header() {
         />
         <OverlayPanel ref={overlayPanelRef} className="w-64">
           <ul className="list-none p-0 m-0">
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/samsung')}>Samsung</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/iphone')}>iPhone</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/xiaomi')}>Xiaomi</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/realme')}>Realme</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/vivo')}>Vivo</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/oneplus')}>OnePlus</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/techno')}>Techno</li>
+            {categories.map((category: Category) => (
+              <li
+                key={category._id}
+                className="p-2 hover:bg-gray-200 cursor-pointer flex items-center gap-3"
+                onClick={() => {
+                  navigate(category.link);
+                  overlayPanelRef.current?.hide();
+                }}
+              >
+                <img 
+                  src={`http://localhost:3000${category.logo_url}`}
+                  alt={`${category.name} logo`}
+                  className="w-10 h-10 object-contain"
+                  onError={(e) => {
+                    e.currentTarget.src = '/src/assets/img/default-logo.png';
+                  }}
+                />
+                <span className="text-sm">{category.name}</span>
+              </li>
+            ))}
           </ul>
         </OverlayPanel>
       <span className="p-inputgroup-addon hover:border hover:border-blue-500 cursor-pointer">
@@ -98,27 +124,6 @@ export default function Header() {
 
   const centerContent = (
     <div className="p-inputgroup ">
-        {/* <Button
-          label="Danh mục sản phẩm"
-          icon="pi pi-bars"
-          className="p-button-secondary p-2 mr-2 border"
-          onClick={(e) => overlayPanelRef.current?.toggle(e)}
-        />
-        <OverlayPanel ref={overlayPanelRef} className="w-64">
-          <ul className="list-none p-0 m-0">
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/samsung')}>Samsung</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/iphone')}>iPhone</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/xiaomi')}>Xiaomi</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/realme')}>Realme</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/vivo')}>Vivo</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/oneplus')}>OnePlus</li>
-            <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={() => navigate('/products/techno')}>Techno</li>
-          </ul>
-        </OverlayPanel>
-      <span className="p-inputgroup-addon hover:border hover:border-blue-500 cursor-pointer">
-        <i className="pi pi-search" />
-      </span>
-      <InputText placeholder="Tìm kiếm" /> */}
     </div>
   );
 
