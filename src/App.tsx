@@ -50,77 +50,82 @@ import UserFavorites from "./pages/user/UserFavorites.tsx";
 import UserContact from "./pages/user/UserContact.tsx";
 import UserNews from "./pages/user/UserNews.tsx";
 
+import { ComparisonProvider } from "./components/user/ComparisonContext.tsx";
+
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.withCredentials = true;
 
 const App = () => {
   return (
-    <CartProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Navigate to="/admin/dashboard" />} />
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="products" element={<AdminProducts />} />
-            <Route path="orders" element={<AdminOrders />} />
-            <Route path="customers" element={<AdminCustomers />} />
-            <Route path="payments" element={<AdminPayments />} />
-            <Route path="staffs" element={<AdminStaffs />} />
-            <Route path="news" element={<AdminNews />} />
-            <Route path="statistics" element={<AdminStatistics />} />
-            <Route path="profile" element={<AdminProfile />} />
-            <Route path="settings" element={<AdminSettings />} />
-            <Route path="coupons" element={<AdminCoupons />} />
-            <Route path="/admin/orders/:id" element={<AdminOrderDetails/>} />
-            {/* Admin routes */}
-          </Route>
+    <CartProvider>      
+        <BrowserRouter>        
+          <ComparisonProvider>
+            <Routes>
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Navigate to="/admin/dashboard" />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="orders" element={<AdminOrders />} />
+                <Route path="customers" element={<AdminCustomers />} />
+                <Route path="payments" element={<AdminPayments />} />
+                <Route path="staffs" element={<AdminStaffs />} />
+                <Route path="news" element={<AdminNews />} />
+                <Route path="statistics" element={<AdminStatistics />} />
+                <Route path="profile" element={<AdminProfile />} />
+                <Route path="settings" element={<AdminSettings />} />
+                <Route path="coupons" element={<AdminCoupons />} />
+                <Route path="/admin/orders/:id" element={<AdminOrderDetails/>} />
+                {/* Admin routes */}
+              </Route>
 
-          <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
 
-          <Route path="/staff" element={<StaffLayout />}>
-            <Route index element={<Navigate to="/staff/dashboard" />} />
-            <Route path="dashboard" element={<StaffDashboard />} />
-            <Route path="products" element={<StaffProducts />} />
-            <Route path="orders" element={<StaffOrders />} />
-            <Route path="customers" element={<StaffCustomers />} />
-            <Route path="payments" element={<StaffPayments />} />          
-            <Route path="news" element={<StaffNews />} />
-            <Route path="statistics" element={<StaffStatistics />} />
-            <Route path="profile" element={<StaffProfile />} />
-            <Route path="coupons" element={<StaffCoupons />} />
-            <Route path="/staff/orders/:id" element={<StaffOrderDetails/>} />
-            {/* Staff routes */}
-          </Route>
+              <Route path="/staff" element={<StaffLayout />}>
+                <Route index element={<Navigate to="/staff/dashboard" />} />
+                <Route path="dashboard" element={<StaffDashboard />} />
+                <Route path="products" element={<StaffProducts />} />
+                <Route path="orders" element={<StaffOrders />} />
+                <Route path="customers" element={<StaffCustomers />} />
+                <Route path="payments" element={<StaffPayments />} />          
+                <Route path="news" element={<StaffNews />} />
+                <Route path="statistics" element={<StaffStatistics />} />
+                <Route path="profile" element={<StaffProfile />} />
+                <Route path="coupons" element={<StaffCoupons />} />
+                <Route path="/staff/orders/:id" element={<StaffOrderDetails/>} />
+                {/* Staff routes */}
+              </Route>
 
-          <Route path="/staff/login" element={<StaffLogin />} />
-          
+              <Route path="/staff/login" element={<StaffLogin />} />
+              
 
-          <Route path="/" element={<UserLayout />}>
-            <Route index element={<Navigate to="/home" />} />
-            <Route path="home" element={<UserHome />} />
-            <Route path="cart" element={<UserCart />} />
-            <Route path="profile" element={<UserProfile />} /> 
-            <Route path="products" element={<UserProduct />} />    
-            <Route path="products/:brand" element={<UserProductsByBrand />} />
-            <Route path="user-products-filter" element={<UserProductsFilter />} />
-            <Route path="/product/:slug" element={<UserProductDetail/>} />
-            <Route path="/product/:slug/review" element={<UserProductReview/>} />
-            <Route path="/products/compare/:comparisonUrl" element={<UserProductsCompare />} />
-            <Route path="/product/compare/:comparisonUrl" element={<UserProductsCompare />} />
-            <Route path="/orders" element={<UserOrders/>}/> 
-            <Route path="orders/:orderId" element={<UserOrderDetail />} />
-            <Route path="/favorites" element={<UserFavorites />}/>
-            <Route path="/contact" element={<UserContact />}/>
-            <Route path="/news" element={<UserNews />}/>
-            {/* User routes */}
-          </Route>
-          <Route path="logout" element={<Navigate to="/login" />} />
-          <Route path="login" element={<UserLogin />} />
-          <Route path="register" element={<UserRegister />} />
-          <Route path="forgot-password" element={<UserForgotPassword />} />
-        </Routes>
-      </BrowserRouter>
-      </CartProvider>
+              <Route path="/" element={<UserLayout />}>
+                <Route index element={<Navigate to="/home" />} />
+                <Route path="home" element={<UserHome />} />
+                <Route path="cart" element={<UserCart />} />
+                <Route path="profile" element={<UserProfile />} /> 
+                <Route path="products" element={<UserProduct />} />    
+                <Route path="products/:brand" element={<UserProductsByBrand />} />
+                <Route path="user-products-filter" element={<UserProductsFilter />} />
+                <Route path="/product/:slug" element={<UserProductDetail/>} />
+                <Route path="/product/:slug/review" element={<UserProductReview/>} />
+                <Route path="/products/compare/:comparisonUrl" element={<UserProductsCompare />} />
+                <Route path="/product/compare/:comparisonUrl" element={<UserProductsCompare />} />
+                <Route path="/orders" element={<UserOrders/>}/> 
+                <Route path="orders/:orderId" element={<UserOrderDetail />} />
+                <Route path="/favorites" element={<UserFavorites />}/>
+                <Route path="/contact" element={<UserContact />}/>
+                <Route path="/news" element={<UserNews />}/>
+                {/* User routes */}
+              </Route>
+              <Route path="logout" element={<Navigate to="/login" />} />
+              <Route path="login" element={<UserLogin />} />
+              <Route path="register" element={<UserRegister />} />
+              <Route path="forgot-password" element={<UserForgotPassword />} />
+            </Routes>
+          </ComparisonProvider>          
+        </BrowserRouter>
+    </CartProvider>
+    
   )
 }
 
