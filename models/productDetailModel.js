@@ -1,22 +1,112 @@
 const mongoose = require('mongoose');
 
 const productDetailSchema = new mongoose.Schema({
-  product_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
-  trademark: { type: String, required: true },
-  name: { type: String, required: true },
-  sizeGB: { type: [String], required: true }, // Example: ["128GB", "256GB"]
-  color: { type: [String], required: true }, // Example: ["Black", "White", "Blue"]
-  price: { type: Number, required: true },
-  system: { type: String, required: true }, // Example: "Android", "iOS"
-  CPU: { type: String, required: true }, // Example: "Snapdragon 8 Gen 2"
-  GPU: { type: String, required: true }, // Example: "Adreno 740"
-  RAM: { type: String, required: true }, // Example: "8GB", "12GB"
-  camera: { type: String, required: true }, // Example: "50MP + 12MP + 10MP"
-  screen: { type: String, required: true }, // Example: "6.5-inch OLED, 1080x2400px"
-  pin: { type: String, required: true }, // Example: "4000mAh, 25W fast charging"
-  link: { type: String, required: true },
-  meta: { type: String, required: true } // Domain name or any other identifier
+  product_id: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    required: true, 
+    ref: 'Product' 
+  },
+  trademark: { 
+    type: String, 
+    required: true 
+  },
+  name: { 
+    type: String, 
+    required: true 
+  },
+  variants: [{
+    storage: {
+      type: String,
+      required: true
+    },
+    ram: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    }
+  }],
+  color_options: { 
+    type: [String], 
+    required: true 
+  },
+  os: { 
+    type: String, 
+    required: true 
+  },
+  cpu: { 
+    type: String, 
+    required: true 
+  },
+  gpu: { 
+    type: String, 
+    required: true 
+  },
+  camera: {
+    main: { 
+      type: String, 
+      required: true 
+    },
+    front: { 
+      type: String, 
+      required: true 
+    }
+  },
+  display: {
+    type: { 
+      type: String, 
+      required: true 
+    },
+    size: { 
+      type: String, 
+      required: true 
+    },
+    refresh_rate: { 
+      type: String, 
+      required: true 
+    },
+    brightness: { 
+      type: String, 
+      required: true 
+    }
+  },
+  battery: {
+    capacity: { 
+      type: String, 
+      required: true 
+    },
+    charging: { 
+      type: String, 
+      required: true 
+    }
+  },
+  link: { 
+    type: String, 
+    required: true 
+  },
+  meta: { 
+    type: String, 
+    required: true 
+  }
+}, {
+  timestamps: { 
+    createdAt: 'created_at', 
+    updatedAt: 'updated_at' 
+  }
 });
+
+// Helper method to get base price
+productDetailSchema.methods.getBasePrice = function() {
+  return Math.min(...this.variants.map(v => v.price));
+};
+
+// Helper method to get price by configuration
+productDetailSchema.methods.getPriceByConfig = function(storage, ram) {
+  const variant = this.variants.find(v => v.storage === storage && v.ram === ram);
+  return variant ? variant.price : null;
+};
 
 const ProductDetail = mongoose.model('ProductDetail', productDetailSchema, 'productDetails');
 

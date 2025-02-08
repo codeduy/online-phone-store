@@ -3,10 +3,7 @@ const Category = require('./categoryModel');  // Import mô hình Category
 
 // Định nghĩa Schema cho products
 const productSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // Tên sản phẩm
-  description: { type: String, required: true }, // Mô tả chi tiết
-  price: { type: Number, required: true }, // Giá bán
-  stock: { type: Number, default: 0 }, // Số lượng tồn kho
+  name: { type: String, required: true }, // Tên sản phẩm  
   category_id: { type: mongoose.Schema.Types.ObjectId, ref: "Category" }, // Danh mục sản phẩm (liên kết tới bảng category)
   images: { type: [String], default: [] }, // Danh sách đường dẫn ảnh
   created_at: { type: Date, default: Date.now }, // Ngày tạo sản phẩm
