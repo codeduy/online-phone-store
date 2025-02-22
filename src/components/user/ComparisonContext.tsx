@@ -9,6 +9,7 @@ interface ComparisonContextType {
   removeProduct: (productId: string) => void;
   clearProducts: () => void;
   setMinimized: (minimized: boolean) => void;
+  getComparisonProducts: () => Product[];
 }
 
 const ComparisonContext = createContext<ComparisonContextType | undefined>(undefined);
@@ -18,6 +19,7 @@ export const ComparisonProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [isMinimized, setIsMinimized] = useState(true); // Set default to true
   const location = useLocation();
   const [prevPath, setPrevPath] = useState(location.pathname);
+  const getComparisonProducts = () => comparisonProducts;
 
   // Effect để theo dõi thay đổi route
   useEffect(() => {
@@ -59,7 +61,8 @@ export const ComparisonProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     addProduct,
     removeProduct,
     clearProducts,
-    setMinimized: setIsMinimized
+    setMinimized: setIsMinimized,
+    getComparisonProducts
   };
 
   return (

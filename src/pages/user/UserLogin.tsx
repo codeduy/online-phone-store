@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import { useEffect } from 'react';
+import { Toast } from 'primereact/toast';
+import { useRef } from 'react';
 
 // Định nghĩa kiểu dữ liệu cho form đăng nhập
 interface LoginFormData {
-  username: string;    // Tên đăng nhập
-  password: string;    // Mật khẩu
-  rememberMe: boolean; // Ghi nhớ đăng nhập
+  username: string;   
+  password: string;    
+  rememberMe: boolean; 
 }
 
 // Component chính
 const LoginPage = () => {
+  const toast = useRef<Toast>(null);
   useEffect(() => {
     const checkAuth = async () => {
         const token = localStorage.getItem('token');
@@ -75,37 +78,49 @@ const LoginPage = () => {
     if (!validateForm()) return;
 
     setIsLoading(true);
+    setError('');
+
     try {
         const response = await axios.post('http://localhost:3000/api/auth/login', {
             username: formData.username,
-            password: formData.password,
-            rememberMe: formData.rememberMe
-        }, {
-            withCredentials: true
+            password: formData.password
         });
 
-        if (response.data.token) {
+        if (response.data.success && response.data.token) {
             localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-            window.location.href = '/';
+            localStorage.setItem('userId', response.data.user._id);
+            localStorage.setItem('user', JSON.stringify({
+                _id: response.data.user._id,
+                username: response.data.user.username,
+                role: response.data.user.role
+            }));
+
+            window.location.href = response.data.user.role === 'admin' ? '/admin' : '/';
         }
     } catch (error: any) {
-        if (error.response?.status === 401) {
-            setError('Thông tin đăng nhập không chính xác!');
-        } else {
-            setError('Đã xảy ra lỗi. Vui lòng thử lại.');
-        }
+        console.error('Login error:', error);
+        // Show the actual error message from server
+        setError(error.response?.data?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập.');
+        
+        // Show toast with error message
+        toast.current?.show({
+            severity: 'error',
+            summary: 'Lỗi đăng nhập',
+            detail: error.response?.data?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập.',
+            life: 3000
+        });
     } finally {
         setIsLoading(false);
     }
-  };
+};
 
   // Các class CSS thường dùng
   const inputClassName = "w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all";
   const labelClassName = "block text-sm font-medium text-gray-700 mb-1";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="login-container min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      {/* <Toast ref={toast} /> */}
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         {/* Header */}
         <div>

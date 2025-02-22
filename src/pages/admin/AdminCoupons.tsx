@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -9,16 +9,43 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { InputNumber } from 'primereact/inputnumber';
+import axios from 'axios';
+import { Helmet } from 'react-helmet';
+
+interface CouponData {
+  id: string | null;
+  name: string;
+  code: string;
+  type: 'Giảm tuyệt đối' | 'Giảm tương đối';
+  value: number;
+  minOrderValue: number;
+  validity: [Date | null, Date | null];
+  enabled: boolean;
+}
+
+
+
+interface Coupon {
+  _id: string;
+  name: string;
+  code: string;
+  discountType: 'FIXED' | 'PERCENTAGE';
+  discountValue: number;
+  minOrderValue: number;
+  startDate: Date;
+  endDate: Date;
+  isActive: boolean;
+}
 
 const AdminCoupons = () => {
-  const [coupons, setCoupons] = useState<any[]>([]);
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [showDialog, setShowDialog] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [couponData, setCouponData] = useState({
+  const [couponData, setCouponData] = useState<CouponData>({
     id: null,
     name: '',
     code: '',
-    type: '',
+    type: 'Giảm tương đối',
     value: 0,
     minOrderValue: 0,
     validity: [null, null],
@@ -30,9 +57,32 @@ const AdminCoupons = () => {
   const toast = useRef<Toast>(null);
 
   const couponTypes = [
-    { label: 'Giảm tuyệt đối'},
-    { label: 'Giảm tương đối'}
+    { label: 'Giảm tuyệt đối', value: 'Giảm tuyệt đối' },
+    { label: 'Giảm tương đối', value: 'Giảm tương đối' }
   ];
+
+  useEffect(() => {
+    fetchCoupons();
+  }, []);
+
+  const fetchCoupons = async () => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await axios.get('http://localhost:3000/api/admin/vouchers', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (response.data.success) {
+        setCoupons(response.data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching coupons:', error);
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to fetch coupons'
+      });
+    }
+  };
 
   const handleAddCoupon = () => {
     setIsEditing(false);
@@ -41,7 +91,7 @@ const AdminCoupons = () => {
       id: null,
       name: '',
       code: '',
-      type: '',
+      type: 'Giảm tuyệt đối',
       value: 0,
       minOrderValue: 0,
       validity: [null, null],
@@ -49,210 +99,406 @@ const AdminCoupons = () => {
     });
     setStartDate(null);
     setEndDate(null);
-    setValueUnit('');
+    setValueUnit('VND');
   };
 
-  const handleEditCoupon = (coupon: any) => {
+  const handleEditCoupon = (coupon: Coupon) => {
     setIsEditing(true);
     setShowDialog(true);
-    setCouponData(coupon);
-    setStartDate(coupon.validity[0]);
-    setEndDate(coupon.validity[1]);
-    setValueUnit(coupon.type === 'absolute' ? 'VND' : '%');
+    const startDate = new Date(coupon.startDate);
+    const endDate = new Date(coupon.endDate);
+
+    setCouponData({
+      id: coupon._id,
+      name: coupon.name,
+      code: coupon.code,
+      // Fix this line - reversed the mapping
+      type: coupon.discountType === 'FIXED' ? 'Giảm tuyệt đối' : 'Giảm tương đối',
+      value: coupon.discountValue,
+      minOrderValue: coupon.minOrderValue,
+      validity: [startDate, endDate],
+      enabled: coupon.isActive
+    });
+
+    setStartDate(startDate);
+    setEndDate(endDate);
+    // Fix this line - reversed the mapping
+    setValueUnit(coupon.discountType === 'FIXED' ? 'VND' : '%');
   };
 
-  const handleSaveCoupon = () => {
-    // Check for empty fields
-    if (!couponData.name || !couponData.code || !couponData.type || !couponData.value || !couponData.minOrderValue || !startDate || !endDate) {
-      toast.current?.show({ 
-        severity: 'warn', 
-        summary: 'Thông báo', 
-        detail: 'Vui lòng hoàn thiện đầy đủ thông tin trước khi lưu', 
-        life: 3000 
-      });
-      return;
-    }
+  const handleSaveCoupon = async () => {
+    try {
+      // Validate required fields
+      if (!couponData.name || !couponData.code || !startDate || !endDate) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Vui lòng điền đầy đủ thông tin'
+        });
+        return;
+      }
 
-    // Check for existing coupon code
-    const existingCoupon = coupons.find(coupon => coupon.code.toLowerCase() === couponData.code.toLowerCase() && coupon.id !== couponData.id);
-    if (existingCoupon) {
-      toast.current?.show({ 
-        severity: 'error', 
-        summary: 'Thông báo', 
-        detail: 'Mã giảm giá đã tồn tại', 
-        life: 3000 
-      });
-      return;
-    }
+      // Validate dates
+      const start = new Date(startDate);
+      start.setHours(0, 0, 0, 0);
 
-    // Check if discount value is less than minimum order value
-    if (couponData.type === 'absolute' && couponData.value >= couponData.minOrderValue) {
-      toast.current?.show({ 
-        severity: 'error', 
-        summary: 'Thông báo', 
-        detail: 'Giá trị giảm giá phải thấp hơn mức giá đơn hàng tối thiểu', 
-        life: 3000 
-      });
-      return;
-    }
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999);
 
-    // Check if relative discount value is less than 100%
-    if (couponData.type === 'relative' && couponData.value >= 100) {
-      toast.current?.show({ 
-        severity: 'error', 
-        summary: 'Thông báo', 
-        detail: 'Giá trị giảm giá phải thấp hơn 100%!', 
-        life: 3000 
-      });
-      return;
-    }
+      // Validate end date is after start date
+      if (end.getTime() <= start.getTime()) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Ngày kết thúc phải sau ngày bắt đầu'
+        });
+        return;
+      }
 
-    // Check if start date is before end date
-    if (startDate >= endDate) {
-      toast.current?.show({ 
-        severity: 'error', 
-        summary: 'Thông báo', 
-        detail: 'Ngày bắt đầu phải nằm trước ngày kết thúc', 
-        life: 3000 
-      });
-      return;
-    }
+      // Validate discount value based on type
+      if (couponData.type === 'Giảm tương đối') {
+        if (couponData.value <= 0 || couponData.value > 100) {
+          toast.current?.show({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Phần trăm giảm giá phải từ 1% đến 100%'
+          });
+          return;
+        }
+      } else { // Giảm tuyệt đối
+        if (couponData.value <= 0) {
+          toast.current?.show({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Giá trị giảm phải lớn hơn 0 VND'
+          });
+          return;
+        }
+      }
 
-    // Save or update coupon
-    if (isEditing) {
-      const updatedCoupons = coupons.map(coupon => 
-        coupon.id === couponData.id ? { ...couponData, validity: [startDate, endDate] } : coupon
-      );
-      setCoupons(updatedCoupons);
-    } else {
-      setCoupons([...coupons, { 
-        ...couponData, 
-        validity: [startDate, endDate],
-        id: coupons.length + 1 
-      }]);
+      const token = localStorage.getItem('adminToken');
+      const couponPayload = {
+        name: couponData.name.trim(),
+        code: couponData.code.trim().toUpperCase(),
+        // Fix this line - reversed the mapping
+        discountType: couponData.type === 'Giảm tuyệt đối' ? 'FIXED' : 'PERCENTAGE',
+        discountValue: couponData.value,
+        minOrderValue: couponData.minOrderValue,
+        startDate: start.toISOString(),
+        endDate: end.toISOString(),
+        isActive: couponData.enabled
+      };
+
+      console.log('Sending payload:', couponPayload);
+
+      if (isEditing && couponData.id) {
+        const response = await axios.put(
+          `http://localhost:3000/api/admin/vouchers/${couponData.id}`,
+          couponPayload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (response.data.success) {
+          fetchCoupons();
+          setShowDialog(false);
+          toast.current?.show({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Cập nhật mã giảm giá thành công'
+          });
+        }
+      } else {
+        await axios.post(
+          'http://localhost:3000/api/admin/vouchers',
+          couponPayload,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        fetchCoupons();
+        setShowDialog(false);
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Tạo mã giảm giá thành công'
+        });
+      }
+    } catch (error: any) {
+      console.error('Error saving coupon:', error.response?.data || error);
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Lỗi khi lưu mã giảm giá'
+      });
     }
-    
-    setShowDialog(false);
-    setCouponData({
-      id: null,
-      name: '',
-      code: '',
-      type: '',
-      value: 0,
-      minOrderValue: 0,
-      validity: [null, null],
-      enabled: true
-    });
-    setStartDate(null);
-    setEndDate(null);
-    setValueUnit('');
   };
 
   const handleInputChange = (e: any, field: string) => {
     const value = e.target ? e.target.value : e.value;
+
+    // Validate discount value based on type
+    if (field === 'value') {
+      if (couponData.type === 'Giảm tương đối') {
+        if (value > 100) {
+          toast.current?.show({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Phần trăm giảm giá không được vượt quá 100%'
+          });
+          return;
+        }
+      }
+      // Common validation for both types
+      if (value < 0) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Giá trị giảm không được âm'
+        });
+        return;
+      }
+    }
+
     setCouponData({ ...couponData, [field]: value });
     if (field === 'type') {
-      setValueUnit(value === 'absolute' ? 'VND' : '%');
+      setValueUnit(value === 'Giảm tuyệt đối' ? 'VND' : '%');
+      // Reset value when changing type to prevent invalid values
+      setCouponData(prev => ({
+        ...prev,
+        type: value,
+        value: 0
+      }));
     }
   };
 
-  const handleSwitchChange = (e: any, couponId: number) => {
-    const updatedCoupons = coupons.map(coupon => 
-      coupon.id === couponId ? { ...coupon, enabled: e.value } : coupon
-    );
-    setCoupons(updatedCoupons);
+  const handleSwitchChange = async (e: any, couponId: string) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await axios.patch(
+        `http://localhost:3000/api/admin/vouchers/${couponId}/toggle`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (response.data.success) {
+        fetchCoupons();
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Voucher status updated successfully'
+        });
+      }
+    } catch (error) {
+      console.error('Error toggling voucher status:', error);
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to update voucher status'
+      });
+    }
   };
 
-  const handleDeleteCoupon = (couponId: number) => {
-    const updatedCoupons = coupons.filter(coupon => coupon.id !== couponId);
-    setCoupons(updatedCoupons);
+  const handleDeleteCoupon = async (couponId: string) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      await axios.delete(`http://localhost:3000/api/admin/vouchers/${couponId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchCoupons();
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Coupon deleted successfully'
+      });
+    } catch (error) {
+      console.error('Error deleting coupon:', error);
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to delete coupon'
+      });
+    }
   };
 
-  const sortedCoupons = [...coupons].sort((a, b) => b.enabled - a.enabled);
+  const sortedCoupons = [...coupons].sort((a, b) => {
+    const aValue = a.isActive ? 1 : 0;
+    const bValue = b.isActive ? 1 : 0;
+    return bValue - aValue;
+  });
 
   return (
     <div className="p-4">
+      <Helmet>
+        <title>Quản lí mã giảm giá</title>
+        <link rel="icon" href="../../src/assets/img/phone.ico" />
+      </Helmet>
       <Toast ref={toast} />
       <div className="flex justify-between items-center mb-4">
-        <Button className='border p-2' label="Thêm mã giảm giá" icon="pi pi-plus" onClick={handleAddCoupon} />
+        <Button 
+          className='border p-2 bg-white shadow-sm hover:bg-blue-50 text-gray-700 rounded-lg transition-all duration-200' 
+          label="Thêm mã giảm giá" 
+          icon="pi pi-plus" 
+          onClick={handleAddCoupon} 
+        />
       </div>
-
-      <Dialog header={isEditing ? "Chỉnh sửa mã giảm giá" : "Thêm mã giảm giá"} visible={showDialog} style={{ width: '50vw' }} onHide={() => setShowDialog(false)}>
+  
+      <Dialog 
+        header={isEditing ? "Chỉnh sửa mã giảm giá" : "Thêm mã giảm giá"} 
+        visible={showDialog} 
+        style={{ width: '50vw' }} 
+        onHide={() => setShowDialog(false)}
+        className="rounded-lg shadow-md"
+      >
         <div className="p-fluid">
           <div className="p-field">
             <label htmlFor="name">Tên mã giảm giá</label>
-            <InputText className='border p-2' id="name" value={couponData.name} onChange={(e) => handleInputChange(e, 'name')} />
+            <InputText 
+              className='border p-2 rounded-md shadow-sm w-full' 
+              id="name" 
+              value={couponData.name} 
+              onChange={(e) => handleInputChange(e, 'name')} 
+            />
           </div>
           <div className="p-field">
             <label htmlFor="code">Code giảm giá</label>
-            <InputText className='border p-2' id="code" value={couponData.code} onChange={(e) => handleInputChange(e, 'code')} />
+            <InputText 
+              className='border p-2 rounded-md shadow-sm w-full' 
+              id="code" 
+              value={couponData.code} 
+              onChange={(e) => handleInputChange(e, 'code')} 
+            />
           </div>
           <div className="p-field">
             <label htmlFor="type">Loại giảm giá</label>
-            <Dropdown className='border' id="type" value={couponData.type} options={couponTypes} onChange={(e) => handleInputChange(e, 'type')} placeholder="Chọn loại giảm giá" />
+            <Dropdown 
+              className='border p-1 rounded-md shadow-sm w-full' 
+              id="type" 
+              value={couponData.type} 
+              options={couponTypes} 
+              onChange={(e) => handleInputChange(e, 'type')} 
+              placeholder="Chọn loại giảm giá" 
+            />
           </div>
           <div className="p-field">
             <label htmlFor="value">Giá trị giảm giá</label>
-            <div className="p-inputgroup border p-0">
-              <InputNumber id="value" value={couponData.value} onChange={(e) => handleInputChange(e, 'value')} />
+            <div className="p-inputgroup border p-0 rounded-md shadow-sm">
+              <InputNumber 
+                id="value" 
+                value={couponData.value} 
+                onChange={(e) => handleInputChange(e, 'value')} 
+              />
               <span className="p-inputgroup-addon">{valueUnit}</span>
             </div>
           </div>
           <div className="p-field">
             <label htmlFor="minOrderValue">Mức giá đơn hàng tối thiểu</label>
-            <div className="p-inputgroup border p-0">
-              <InputNumber id="minOrderValue" value={couponData.minOrderValue} onChange={(e) => handleInputChange(e, 'minOrderValue')} min={0} />
+            <div className="p-inputgroup border p-0 rounded-md shadow-sm">
+              <InputNumber 
+                id="minOrderValue" 
+                value={couponData.minOrderValue} 
+                onChange={(e) => handleInputChange(e, 'minOrderValue')} 
+                min={0} 
+              />
               <span className="p-inputgroup-addon">VND</span>
             </div>
           </div>
           <div className="p-field">
             <label htmlFor="startDate">Ngày bắt đầu</label>
-            <Calendar 
-              id="startDate" 
-              value={startDate} 
-              onChange={(e) => setStartDate(e.value as Date)} 
+            <Calendar
+              id="startDate"
+              value={startDate}
+              onChange={(e) => setStartDate(e.value as Date)}
               dateFormat="dd/mm/yy"
               showIcon
-              className="w-full border p-2"
+              className="w-full border p-2 rounded-md shadow-sm"
             />
           </div>
           <div className="p-field">
             <label htmlFor="endDate">Ngày kết thúc</label>
-            <Calendar 
-              id="endDate" 
-              value={endDate} 
-              onChange={(e) => setEndDate(e.value as Date)} 
+            <Calendar
+              id="endDate"
+              value={endDate}
+              onChange={(e) => setEndDate(e.value as Date)}
               dateFormat="dd/mm/yy"
               showIcon
-              className="w-full border p-2"
+              className="w-full border p-2 rounded-md shadow-sm"
               minDate={startDate || undefined}
             />
           </div>
-          <div className="p-field border mt-2 p-2">
-            <Button label="Lưu" onClick={handleSaveCoupon} />
+          <div className="p-field mt-2 p-2">
+            <Button 
+              label="Lưu" 
+              className='p-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition-all duration-200'
+              onClick={handleSaveCoupon} 
+            />
           </div>
         </div>
       </Dialog>
-
+  
       <div className="grid grid-cols-1 gap-4">
-        <DataTable value={sortedCoupons}>
-          <Column field="id" header="STT" />
+        <DataTable value={sortedCoupons} className="shadow-md rounded-lg">
+          <Column field="_id" header="ID mã giảm giá" />
           <Column field="name" header="Tên mã giảm giá" />
           <Column field="code" header="Mã giảm giá" />
-          <Column field="value" header="Giá trị giảm" body={(rowData) => `${rowData.value} ${rowData.type === 'absolute' ? 'VND' : '%'}`} />
-          <Column field="minOrderValue" header="Mức giá đơn tối thiểu" body={(rowData) => `${rowData.minOrderValue} VND`} />
-          <Column field="validity" header="Thời gian hiệu lực" body={(rowData) => `${rowData.validity[0]?.toLocaleDateString()} - ${rowData.validity[1]?.toLocaleDateString()}`} />
-          <Column field="enabled" header="Bật/Tắt" body={(rowData) => <InputSwitch checked={rowData.enabled} onChange={(e) => handleSwitchChange(e, rowData.id)} />} />
-          <Column header="Thao tác" body={(rowData) => (
-            <div className="flex space-x-2">
-              <Button icon="pi pi-pencil" className="p-button-rounded p-button-success" onClick={() => handleEditCoupon(rowData)} />
-              <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => handleDeleteCoupon(rowData.id)} />
-            </div>
-          )} />
+          <Column
+            field="discountValue"
+            header="Giá trị giảm"
+            body={(rowData: Coupon) =>
+              `${rowData.discountValue} ${rowData.discountType === 'FIXED' ? 'VND' : '%'}`}
+          />
+          <Column
+            field="minOrderValue"
+            header="Mức giá đơn tối thiểu"
+            body={(rowData: Coupon) => `${rowData.minOrderValue} VND`}
+          />
+          <Column
+            field="startDate"
+            header="Thời gian hiệu lực"
+            body={(rowData: Coupon) =>
+              `${new Date(rowData.startDate).toLocaleDateString()} - ${new Date(rowData.endDate).toLocaleDateString()}`}
+          />
+          <Column
+            field="isActive"
+            header="Bật/Tắt"
+            body={(rowData: Coupon) => (
+              <InputSwitch
+                checked={rowData.isActive}
+                onChange={(e) => handleSwitchChange(e, rowData._id)}
+              />
+            )}
+          />
+          <Column
+            header="Thao tác"
+            body={(rowData: Coupon) => (
+              <div className="flex space-x-2">
+                <Button
+                  icon="pi pi-pencil"
+                  className="p-button-rounded p-button-success shadow-md hover:text-blue-600 hover:bg-blue-50"
+                  onClick={() => handleEditCoupon(rowData)}
+                  tooltip='Chỉnh sửa'
+                />
+                <Button
+                  icon="pi pi-trash"
+                  className="p-button-rounded p-button-danger shadow-md hover:text-red-600 hover:bg-red-50 text-red-500"
+                  onClick={() => handleDeleteCoupon(rowData._id)}
+                  tooltip='Xóa'
+                />
+              </div>
+            )}
+          />
         </DataTable>
       </div>
     </div>
   );
+  
 };
 
 export default AdminCoupons;

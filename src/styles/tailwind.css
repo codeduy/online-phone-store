@@ -25,59 +25,79 @@ body {
     background: #dc3545;
 }
 
+.login-container {
+    background-image: url('/src/assets/img/bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 
-/* .bg-gray-800 {
-    background-color: #2d3748;
+/* userOrderDetail */
+
+.order-steps .p-steps-item.active-step .p-steps-number {
+    background-color: #2563EB;
+    color: white;
 }
 
-.text-white {
-    color: #ffffff;
+.order-steps .p-steps-item.active-step .p-steps-title {
+    color: #2563EB;
+    font-weight: 600;
 }
 
-.p-8 {
-    padding: 2rem;
+.p-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 }
 
-.mt-8 {
-    margin-top: 2rem;
+.p-tag {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
 }
 
-.mb-8 {
-    margin-bottom: 2rem;
+/* userCart */
+
+
+/* image-userproductDetail */
+.custom-galleria {
+    .p-galleria-item-wrapper {
+        min-height: 200px;
+    }
+    
+    .p-galleria-thumbnail-wrapper {
+        background: #f8f9fa;
+        padding: 1rem 0;
+    }
+    
+    .p-galleria-thumbnail-item {
+        opacity: 0.6;
+        &.p-galleria-thumbnail-item-active {
+            opacity: 1;
+        }
+    }
+    
+    .p-galleria-thumbnail-container {
+        padding: 1rem;
+        background-color: #f8f9fa;
+    }
+} 
+
+/* admin product - dropdown */
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    padding: 0.5rem 1rem;
 }
 
-.text-2xl {
-    font-size: 1.5rem;
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:hover {
+    background-color: #f8f9fa;
 }
 
-.mr-2 {
-    margin-right: 0.5rem;
+.p-dropdown .p-dropdown-label.p-placeholder {
+    color: #6c757d;
 }
 
-.text-lg {
-    font-size: 1.125rem;
+.p-dropdown-panel {
+    max-height: 250px;
+    overflow-y: auto;
 }
 
-.font-bold {
-    font-weight: 700;
-}
-
-.hover\:underline:hover {
-    text-decoration: underline;
-}
-
-.grid {
-    display: grid;
-}
-
-.grid-cols-1 {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
-.md\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.gap-8 {
-    gap: 2rem;
-} */

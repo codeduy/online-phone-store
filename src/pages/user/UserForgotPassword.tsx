@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 
 enum ResetStep {
   EMAIL_INPUT = 'EMAIL_INPUT',
@@ -48,21 +49,21 @@ const ForgotPasswordPage = () => {
     if (error) setError('');
   };
 
-  const isValidEmail = (email: string): boolean => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+  // const isValidEmail = (email: string): boolean => {
+  //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // };
 
   // Giả lập kiểm tra email tồn tại trong hệ thống
-  const checkEmailExists = async (email: string): Promise<boolean> => {
-    // Đây là nơi bạn sẽ gọi API thực tế để kiểm tra email
-    // Hiện tại chúng ta giả lập với một Promise
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Giả sử email có đuôi @example.com là tồn tại
-        resolve(email.endsWith('@example.com'));
-      }, 1000);
-    });
-  };
+  // const checkEmailExists = async (email: string): Promise<boolean> => {
+  //   // Đây là nơi bạn sẽ gọi API thực tế để kiểm tra email
+  //   // Hiện tại chúng ta giả lập với một Promise
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => {
+  //       // Giả sử email có đuôi @example.com là tồn tại
+  //       resolve(email.endsWith('@example.com'));
+  //     }, 1000);
+  //   });
+  // };
 
   const handleSendVerificationCode = async () => {
     setIsLoading(true);
@@ -118,7 +119,11 @@ const ForgotPasswordPage = () => {
   const labelClassName = "block text-sm font-medium text-gray-700 mb-1";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="login-container min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Helmet>
+          <title>Đặt lại mật khẩu</title>
+          <link rel="icon" href="../../src/assets/img/phone.ico" />
+      </Helmet>
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div>
           <h2 className="text-center text-3xl font-extrabold text-gray-900">

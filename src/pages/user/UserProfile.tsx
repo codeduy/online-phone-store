@@ -6,36 +6,51 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 
 const UserProfile = () => {
     useEffect(() => {
         const loadUserProfile = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const userData = localStorage.getItem('user');
                 
-                if (!token || !userData) {
+                if (!token) {
                     window.location.href = '/login';
                     return;
                 }
-    
-                const user = JSON.parse(userData);
-                setProfile({
-                    username: user.username || '',
-                    fullName: user.profile?.fullName || '',
-                    address: user.profile?.address || '',
-                    phone: user.profile?.phone || '',
-                    position: user.profile?.position || 'customer'
+        
+                const response = await axios.get('http://localhost:3000/api/auth/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
-    
-                // Load profile image if exists
-                if (user.profile?.imageUrl) {
-                    setProfileImage(`http://localhost:3000${user.profile.imageUrl}`);
+        
+                if (response.data.success) {
+                    const userData = response.data.user;
+                    setProfile({
+                        username: userData.username || '',
+                        fullName: userData.profile.fullName || '',
+                        address: userData.profile.address || '',
+                        phone: userData.profile.phone || '',
+                        position: userData.profile.position || 'customer'
+                    });
+        
+                    // Set profile image if exists
+                    if (userData.profile.imageUrl) {
+                        setProfileImage(`http://localhost:3000${userData.profile.imageUrl}`);
+                    }
                 }
             } catch (error) {
                 console.error('Error loading profile:', error);
-                setDialogMessage('Lỗi tải thông tin người dùng');
-                setDialogVisible(true);
+                if (axios.isAxiosError(error) && error.response?.status === 401) {
+                    // Token expired or invalid
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = '/login';
+                } else {
+                    setDialogMessage('Lỗi tải thông tin người dùng');
+                    setDialogVisible(true);
+                }
             }
         };
     
@@ -215,140 +230,239 @@ const UserProfile = () => {
 
     return (
         <div className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Helmet>
+                <title>Thông tin người dùng</title>
+                <link rel="icon" href="../../src/assets/img/phone.ico" />
+            </Helmet>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Column 1: Profile Image */}
-                <div className="flex flex-col items-center ">
-                    <div className="mb-4">
+                <div className="flex flex-col items-center space-y-6">
+                    <div className="relative">
                         {profileImage ? (
-                            <img src={profileImage as string} alt="Profile" className="w-32 h-32 rounded-full" />
+                            <img 
+                                src={profileImage as string} 
+                                alt="Profile" 
+                                className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                            />
                         ) : (
-                            <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
-                                <span>No Image</span>
+                            <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center border-4 border-white shadow-lg">
+                                <i className="pi pi-user text-4xl text-gray-400"></i>
                             </div>
                         )}
                     </div>
                     <FileUpload 
                         name="profileImage" 
                         customUpload 
-                        uploadHandler={handleFileUpload} 
+                        uploadHandler={handleFileUpload}
                         accept="image/*" 
                         maxFileSize={1000000} 
                         mode="advanced" 
-                        emptyTemplate={<p className="m-0">Kéo và thả ảnh vào đây để tải lên.</p>}
                         chooseLabel="Chọn ảnh"
-                        uploadLabel='Tải lên'
-                        cancelLabel='Hủy'
-                        className='border'
+                        uploadLabel="Tải lên"
+                        cancelLabel="Hủy"
+                        pt={{
+                            content: { className: 'border border-gray-300 rounded-lg' },
+                            chooseButton: { 
+                                className: 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 transition-colors duration-200 rounded-lg px-4 py-2' 
+                            }
+                        }}
                     />
                 </div>
-
+    
                 {/* Column 2: Profile Information */}
-                <div className="flex flex-col gap-4">
-                    <div>
-                        <label htmlFor="username" className="block pb-1">Tên người dùng</label>
+                <div className="space-y-6">
+                    {/* Username */}
+                    <div className="relative">
                         <InputText 
                             id="username" 
                             name="username" 
                             value={profile.username} 
                             onChange={handleInputChange} 
-                            className="p-inputtext-sm w-full border p-2"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 opacity-60 cursor-not-allowed"
                             disabled
                         />
+                        <label className="absolute -top-2 left-4 bg-white px-1 text-xs text-gray-500">
+                            Tên người dùng
+                        </label>
                     </div>
-                    <div>
-                        <label htmlFor="fullName" className="block pb-1">Họ và tên <span className="text-red-500">*</span></label>
+    
+                    {/* Full Name */}
+                    <div className="relative">
                         <InputText 
                             id="fullName" 
                             name="fullName" 
                             value={profile.fullName} 
                             onChange={handleInputChange} 
-                            className="p-inputtext-sm w-full border p-2"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
                         />
+                        <label className="absolute -top-2 left-4 bg-white px-1 text-xs text-blue-600">
+                            Họ và tên <span className="text-red-500">*</span>
+                        </label>
                     </div>
-                    <div>
-                    <label htmlFor="address" className="block pb-1">Địa chỉ</label>
+    
+                    {/* Address */}
+                    <div className="relative">
                         <InputTextarea 
                             id="address" 
                             name="address" 
                             value={profile.address} 
                             onChange={handleInputChange} 
-                            className="p-inputtext-sm w-full border p-2"
+                            rows={3}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
                         />
+                        <label className="absolute -top-2 left-4 bg-white px-1 text-xs text-blue-600">
+                            Địa chỉ <span className="text-red-500">*</span>
+                        </label>
                     </div>
-                    <div>
-                        <label htmlFor="phone" className="block pb-1">Số điện thoại</label>
+    
+                    {/* Phone */}
+                    <div className="relative">
                         <InputText 
                             id="phone" 
                             name="phone" 
                             value={profile.phone} 
                             onChange={handleInputChange} 
-                            className="p-inputtext-sm w-full border p-2"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
                         />
+                        <label className="absolute -top-2 left-4 bg-white px-1 text-xs text-blue-600">
+                            Số điện thoại <span className="text-red-500">*</span>
+                        </label>
                     </div>
-                    {/* <div>
-                        <label htmlFor="position" className="block pb-1">Chức vụ</label>
-                        <InputText 
-                            id="position" 
-                            name="position" 
-                            value={profile.position} 
-                            onChange={handleInputChange} 
-                            className="p-inputtext-sm w-full border p-2"
-                            disabled
+    
+                    {/* Action Buttons */}
+                    <div className="flex justify-start gap-4 pt-4">
+                        <Button 
+                            label="Lưu" 
+                            icon="pi pi-check"
+                            onClick={handleSaveProfile}
+                            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-colors duration-200"
                         />
-                    </div> */}
-                    <div className="flex gap-2">
-                        <Button label="Lưu" onClick={handleSaveProfile} className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-0" />
-                        <Button label="Thay đổi mật khẩu" onClick={() => setPasswordDialogVisible(true)} className="p-button-secondary border p-2 hover:bg-blue-500 hover:text-white mt-0" />
+                        <Button 
+                            label="Thay đổi mật khẩu" 
+                            icon="pi pi-lock"
+                            onClick={() => setPasswordDialogVisible(true)}
+                            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 transition-colors duration-200"
+                        />
                     </div>
                 </div>
             </div>
-
-            <Dialog header="Thông báo" visible={dialogVisible} onHide={() => setDialogVisible(false)}>
-                <p>{dialogMessage}</p>
+    
+            {/* Message Dialog */}
+            <Dialog 
+                header={<span className="text-xl font-semibold">Thông báo</span>}
+                visible={dialogVisible} 
+                onHide={() => setDialogVisible(false)} 
+                className="w-[400px]"
+                pt={{
+                    root: { className: 'bg-white rounded-lg shadow-lg' },
+                    header: { className: 'border-b p-4' },
+                    content: { className: 'p-6' },
+                    closeButton: { className: 'hover:bg-gray-100 rounded-full p-2 transition-colors duration-200' }
+                }}
+            >
+                <p className="text-gray-600">{dialogMessage}</p>
             </Dialog>
-
-            <Dialog header="Thay đổi mật khẩu" visible={passwordDialogVisible} onHide={() => setPasswordDialogVisible(false)}>
-                <div className="flex flex-col gap-4">
-                    <div>
-                        <label htmlFor="oldPassword" className="block pb-1">Mật khẩu hiện tại</label>
+    
+            {/* Change Password Dialog */}
+            <Dialog 
+                header={<span className="text-xl font-semibold">Thay đổi mật khẩu</span>}
+                visible={passwordDialogVisible} 
+                onHide={() => setPasswordDialogVisible(false)} 
+                className="w-[500px]"
+                pt={{
+                    root: { className: 'bg-white rounded-lg shadow-lg' },
+                    header: { className: 'border-b p-4' },
+                    content: { className: 'p-6' },
+                    closeButton: { className: 'hover:bg-gray-100 rounded-full p-2 transition-colors duration-200' }
+                }}
+            >
+                <div className="space-y-6">
+                    {/* Current Password */}
+                    <div className="relative">
                         <InputText 
                             id="oldPassword" 
                             name="oldPassword" 
                             type="password" 
                             value={passwords.oldPassword} 
                             onChange={handlePasswordChange} 
-                            className="p-inputtext-sm w-full border p-2"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
                         />
+                        <label className="absolute -top-2 left-4 bg-white px-1 text-xs text-blue-600">
+                            Mật khẩu hiện tại
+                        </label>
                     </div>
-                    <div>
-                        <label htmlFor="newPassword" className="block pb-1">Mật khẩu mới</label>
+    
+                    {/* New Password */}
+                    <div className="relative">
                         <InputText 
                             id="newPassword" 
                             name="newPassword" 
                             type="password" 
                             value={passwords.newPassword} 
                             onChange={handlePasswordChange} 
-                            className="p-inputtext-sm w-full border p-2"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
                         />
+                        <label className="absolute -top-2 left-4 bg-white px-1 text-xs text-blue-600">
+                            Mật khẩu mới
+                        </label>
                     </div>
-                    <div>
-                        <label htmlFor="confirmPassword" className="block pb-1">Nhập lại mật khẩu mới</label>
+    
+                    {/* Confirm Password */}
+                    <div className="relative">
                         <InputText 
                             id="confirmPassword" 
                             name="confirmPassword" 
                             type="password" 
                             value={passwords.confirmPassword} 
                             onChange={handlePasswordChange} 
-                            className="p-inputtext-sm w-full border p-2"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
+                        />
+                        <label className="absolute -top-2 left-4 bg-white px-1 text-xs text-blue-600">
+                            Nhập lại mật khẩu mới
+                        </label>
+                    </div>
+    
+                    {passwordError && (
+                        <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+                            {passwordError}
+                        </div>
+                    )}
+    
+                    {/* Action Buttons */}
+                    <div className="flex justify-end gap-4 pt-4">
+                        <Button 
+                            label="Hủy" 
+                            icon="pi pi-times"
+                            onClick={() => setPasswordDialogVisible(false)}
+                            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                        />
+                        <Button 
+                            label="Lưu" 
+                            icon="pi pi-check"
+                            onClick={handleChangePassword}
+                            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-colors duration-200"
                         />
                     </div>
-                    {passwordError && <div className="text-red-500">{passwordError}</div>}
-                    <Button label="Lưu" onClick={handleChangePassword} className="p-button-secondary border p-2 hover:bg-green-500 hover:text-white mt-0" />
                 </div>
             </Dialog>
-
-            <Dialog header="Thành công" visible={successDialogVisible} onHide={() => setSuccessDialogVisible(false)}>
-                <p>Profile saved successfully!</p>
+    
+            {/* Success Dialog */}
+            <Dialog 
+                header={<span className="text-xl font-semibold">Thành công</span>}
+                visible={successDialogVisible} 
+                onHide={() => setSuccessDialogVisible(false)}
+                className="w-[400px]"
+                pt={{
+                    root: { className: 'bg-white rounded-lg shadow-lg' },
+                    header: { className: 'border-b p-4' },
+                    content: { className: 'p-6' },
+                    closeButton: { className: 'hover:bg-gray-100 rounded-full p-2 transition-colors duration-200' }
+                }}
+            >
+                <div className="flex items-center gap-3">
+                    <i className="pi pi-check-circle text-green-500 text-2xl"></i>
+                    <p className="text-gray-600">Thông tin đã được cập nhật thành công!</p>
+                </div>
             </Dialog>
         </div>
     );

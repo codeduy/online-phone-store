@@ -10,6 +10,7 @@ interface NewsEvent {
     sub_title: string;
     image: string;
     type: 'promotion' | 'tech';
+    start_date: string;  
     created_at: string;
     link: string;
     is_external_link: boolean;
@@ -38,9 +39,11 @@ const UserNews: React.FC = () => {
                 ]);
                 setPromotions(promotionsRes.data);
                 setNews(newsRes.data);
-            } catch (error) {
+            } 
+            catch (error) {
                 console.error('Error fetching news:', error);
-            } finally {
+            } 
+            finally {
                 setLoading(false);
             }
         };
@@ -154,3 +157,5 @@ const UserNews: React.FC = () => {
 };
 
 export default UserNews;
+
+

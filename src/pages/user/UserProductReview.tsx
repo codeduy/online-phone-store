@@ -10,6 +10,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload, FileUploadHandlerEvent, FileUploadSelectEvent } from 'primereact/fileupload';
 import { Galleria } from 'primereact/galleria';
+import { Helmet } from 'react-helmet';
 
 const UserProductReview = () => {
     const { slug } = useParams();
@@ -414,6 +415,10 @@ const UserProductReview = () => {
 
     return (
         <div className="p-4">
+            <Helmet>
+                <title>Đánh giá sản phẩm</title>
+                <link rel="icon" href="../../src/assets/img/phone.ico" />
+            </Helmet>
 
             {/* Row 1: Rating Overview */}
             <div className="grid grid-cols-2 gap-4 mb-6 p-4 bg-white rounded-lg border">

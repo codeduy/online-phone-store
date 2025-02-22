@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from 'primereact/card';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Helmet } from 'react-helmet';
 
 const AdminDashboard = () => {
   // Mock data - replace with real API calls
@@ -25,6 +26,10 @@ const AdminDashboard = () => {
 
   return (
     <div className="p-4">
+      <Helmet>
+        <title>Trang chủ</title>
+        <link rel="icon" href="../../src/assets/img/phone.ico" />
+      </Helmet>
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <Card className="shadow-lg">

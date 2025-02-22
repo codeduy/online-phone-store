@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { Card } from 'primereact/card';
 import { Chart } from 'primereact/chart';
+import { Helmet } from 'react-helmet';
 
 const AdminStatistics = () => {
     const [dateRange, setDateRange] = useState<Date | Date[] | undefined>(undefined);
@@ -87,6 +88,10 @@ const AdminStatistics = () => {
 
     return (
         <div className="p-4">
+            <Helmet>
+                <title>Báo cáo - thống kê</title>
+                <link rel="icon" href="../../src/assets/img/phone.ico" />
+            </Helmet>
             {/* First Row */}
             <div className="flex justify-between mb-4">
                 <Calendar 

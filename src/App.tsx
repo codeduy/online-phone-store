@@ -17,18 +17,18 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminCoupons from "./pages/admin/AdminCoupons";
 import AdminOrderDetails from "./pages/admin/AdminOrderDetails";
 
-import StaffDashboard from "./pages/staff/StaffDashboard";
-import StaffProducts from "./pages/staff/StaffProducts";
-import StaffOrders from "./pages/staff/StaffOrders.tsx";
-import StaffCustomers from "./pages/staff/StaffCustomers";
-import StaffPayments from "./pages/staff/StaffPayments.tsx";
-import StaffNews from "./pages/staff/StaffNews";
-import StaffStatistics from "./pages/staff/StaffStatistics";
-import StaffProfile from "./pages/staff/StaffProfile.tsx";
-import StaffLogin from "./pages/staff/StaffLogin";
-import StaffLayout from "./components/staff/StaffLayout";
-import StaffCoupons from "./pages/staff/StaffCoupons";
-import StaffOrderDetails from "./pages/staff/StaffOrderDetails";
+// import StaffDashboard from "./pages/staff/StaffDashboard";
+// import StaffProducts from "./pages/staff/StaffProducts";
+// import StaffOrders from "./pages/staff/StaffOrders.tsx";
+// import StaffCustomers from "./pages/staff/StaffCustomers";
+// import StaffPayments from "./pages/staff/StaffPayments.tsx";
+// import StaffNews from "./pages/staff/StaffNews";
+// import StaffStatistics from "./pages/staff/StaffStatistics";
+// import StaffProfile from "./pages/staff/StaffProfile.tsx";
+// import StaffLogin from "./pages/staff/StaffLogin";
+// import StaffLayout from "./components/staff/StaffLayout";
+// import StaffCoupons from "./pages/staff/StaffCoupons";
+// import StaffOrderDetails from "./pages/staff/StaffOrderDetails";
 
 import UserLayout from "./components/user/UserLayout";
 import UserHome from "./pages/user/UserHome";
@@ -51,36 +51,39 @@ import UserContact from "./pages/user/UserContact.tsx";
 import UserNews from "./pages/user/UserNews.tsx";
 
 import { ComparisonProvider } from "./components/user/ComparisonContext.tsx";
+import { FilterProvider } from "./components/user/FilterContext.tsx";
+
 
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.withCredentials = true;
 
 const App = () => {
   return (
-    <CartProvider>      
+    <FilterProvider>
+        <CartProvider>      
         <BrowserRouter>        
           <ComparisonProvider>
             <Routes>
               <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<Navigate to="/admin/dashboard" />} />
-                <Route path="dashboard" element={<AdminDashboard />} />
-                <Route path="products" element={<AdminProducts />} />
-                <Route path="orders" element={<AdminOrders />} />
-                <Route path="customers" element={<AdminCustomers />} />
-                <Route path="payments" element={<AdminPayments />} />
-                <Route path="staffs" element={<AdminStaffs />} />
-                <Route path="news" element={<AdminNews />} />
-                <Route path="statistics" element={<AdminStatistics />} />
-                <Route path="profile" element={<AdminProfile />} />
-                <Route path="settings" element={<AdminSettings />} />
-                <Route path="coupons" element={<AdminCoupons />} />
-                <Route path="/admin/orders/:id" element={<AdminOrderDetails/>} />
-                {/* Admin routes */}
+                  <Route index element={<Navigate to="/admin/dashboard" />} />
+                  <Route path="dashboard" element={<AdminDashboard />} />
+                  <Route path="products" element={<AdminProducts />} />
+                  <Route path="orders" element={<AdminOrders />} />
+                  <Route path="customers" element={<AdminCustomers />} />
+                  <Route path="payments" element={<AdminPayments />} />
+                  <Route path="staffs" element={<AdminStaffs />} />
+                  <Route path="news" element={<AdminNews />} />
+                  <Route path="statistics" element={<AdminStatistics />} />
+                  <Route path="profile" element={<AdminProfile />} />
+                  <Route path="settings" element={<AdminSettings />} />
+                  <Route path="coupons" element={<AdminCoupons />} />
+                  <Route path="/admin/orders/:id" element={<AdminOrderDetails/>} />
+                  {/* Admin routes */}
               </Route>
-
+              <Route path="/admin/logout" element={<Navigate to="/admin/login" />} />
               <Route path="/admin/login" element={<AdminLogin />} />
 
-              <Route path="/staff" element={<StaffLayout />}>
+              {/* <Route path="/staff" element={<StaffLayout />}>
                 <Route index element={<Navigate to="/staff/dashboard" />} />
                 <Route path="dashboard" element={<StaffDashboard />} />
                 <Route path="products" element={<StaffProducts />} />
@@ -91,11 +94,11 @@ const App = () => {
                 <Route path="statistics" element={<StaffStatistics />} />
                 <Route path="profile" element={<StaffProfile />} />
                 <Route path="coupons" element={<StaffCoupons />} />
-                <Route path="/staff/orders/:id" element={<StaffOrderDetails/>} />
+                <Route path="/staff/orders/:id" element={<StaffOrderDetails/>} /> */} 
                 {/* Staff routes */}
-              </Route>
+              {/* </Route> */}
 
-              <Route path="/staff/login" element={<StaffLogin />} />
+              {/* <Route path="/staff/login" element={<StaffLogin />} /> */}
               
 
               <Route path="/" element={<UserLayout />}>
@@ -106,8 +109,8 @@ const App = () => {
                 <Route path="products" element={<UserProduct />} />    
                 <Route path="products/:brand" element={<UserProductsByBrand />} />
                 <Route path="user-products-filter" element={<UserProductsFilter />} />
-                <Route path="/product/:slug" element={<UserProductDetail/>} />
-                <Route path="/product/:slug/review" element={<UserProductReview/>} />
+                <Route path="/products/detail/:link" element={<UserProductDetail/>} />
+                <Route path="/products/detail/:link" element={<UserProductReview/>} />
                 <Route path="/products/compare/:comparisonUrl" element={<UserProductsCompare />} />
                 <Route path="/product/compare/:comparisonUrl" element={<UserProductsCompare />} />
                 <Route path="/orders" element={<UserOrders/>}/> 
@@ -121,10 +124,15 @@ const App = () => {
               <Route path="login" element={<UserLogin />} />
               <Route path="register" element={<UserRegister />} />
               <Route path="forgot-password" element={<UserForgotPassword />} />
+
             </Routes>
           </ComparisonProvider>          
         </BrowserRouter>
     </CartProvider>
+
+    </FilterProvider>
+
+    
     
   )
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 
 // Định nghĩa kiểu dữ liệu cho form
 interface FormData {
@@ -118,7 +119,11 @@ const UserRegister = () => {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="login-container min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Helmet>
+          <title>Đăng kí tài khoản</title>
+          <link rel="icon" href="../../src/assets/img/phone.ico" />
+      </Helmet>
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         {/* Header */}
         <div>
