@@ -12,15 +12,15 @@ const userProfileSchema = new mongoose.Schema({
   },
   phone_number: {
       type: String,
-      default: ''
+      default: null
   },
   address: {
       type: String,
-      default: ''
+      default: null
   },
   image_url: {
       type: String,
-      default: ''
+      default: null
   }
 }, { timestamps: true });
 

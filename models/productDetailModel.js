@@ -4,91 +4,82 @@ const productDetailSchema = new mongoose.Schema({
   product_id: { 
     type: mongoose.Schema.Types.ObjectId, 
     required: true, 
-    ref: 'Product' 
+    ref: 'Product',
+    index: true
   },
   trademark: { 
     type: String, 
-    required: true 
-  },
-  name: { 
-    type: String, 
-    required: true 
-  },
-  variants: [{
-    storage: {
-      type: String,
-      required: true
-    },
-    ram: {
-      type: String,
-      required: true
-    },
-    price: {
-      type: Number,
-      required: true
-    }
-  }],
-  color_options: { 
-    type: [String], 
-    required: true 
+    required: true,
+    index: true
   },
   os: { 
     type: String, 
-    required: true 
+    required: true,
+    trim: true
   },
   cpu: { 
     type: String, 
-    required: true 
+    required: true,
+    trim: true
   },
   gpu: { 
     type: String, 
-    required: true 
+    required: true,
+    trim: true
   },
   camera: {
+    _id: false,
     main: { 
       type: String, 
-      required: true 
+      required: true,
+      trim: true
     },
     front: { 
       type: String, 
-      required: true 
+      required: true,
+      trim: true
     }
   },
   display: {
+    _id: false,
     type: { 
       type: String, 
-      required: true 
+      required: true,
+      trim: true
     },
     size: { 
       type: String, 
-      required: true 
+      required: true,
+      trim: true
     },
     refresh_rate: { 
       type: String, 
-      required: true 
+      required: true,
+      trim: true
     },
     brightness: { 
       type: String, 
-      required: true 
+      required: true,
+      trim: true
     }
   },
   battery: {
+    _id: false,
     capacity: { 
       type: String, 
-      required: true 
+      required: true,
+      trim: true
     },
     charging: { 
       type: String, 
-      required: true 
+      required: true,
+      trim: true
     }
   },
-  link: { 
-    type: String, 
-    required: true 
-  },
-  meta: { 
-    type: String, 
-    required: true 
+  color_options: { 
+    type: [String], 
+    required: true,
+    validate: [arr => arr.length > 0, 'At least one color is required']
   }
 }, {
   timestamps: { 
@@ -97,17 +88,21 @@ const productDetailSchema = new mongoose.Schema({
   }
 });
 
-// Helper method to get base price
-productDetailSchema.methods.getBasePrice = function() {
-  return Math.min(...this.variants.map(v => v.price));
-};
+// Add compound indexes for common queries
+productDetailSchema.index({ trademark: 1, 'display.refresh_rate': 1 });
+productDetailSchema.index({ os: 1, cpu: 1 });
 
-// Helper method to get price by configuration
-productDetailSchema.methods.getPriceByConfig = function(storage, ram) {
-  const variant = this.variants.find(v => v.storage === storage && v.ram === ram);
-  return variant ? variant.price : null;
-};
+// Virtual for full specifications
+productDetailSchema.virtual('fullSpecs').get(function() {
+  return `${this.cpu}, ${this.gpu}, ${this.display.size} ${this.display.type}`;
+});
+
+// Ensure virtuals are included in JSON
+productDetailSchema.set('toJSON', { virtuals: true });
+productDetailSchema.set('toObject', { virtuals: true });
 
 const ProductDetail = mongoose.model('ProductDetail', productDetailSchema, 'productDetails');
 
-module.exports = ProductDetail;
+module.exports = {
+  ProductDetail
+};

@@ -142,36 +142,54 @@ const resetPassword = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        
+        const { username, password } = req.body;        
+        // Find user by username
         const user = await User.findOne({ name: username });
         if (!user) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
         }
-
+        // Check user status
+        if (user.status === 'inactive') {
+            return res.status(403).json({
+                success: false,
+                message: 'Tài khoản đã bị vô hiệu hóa'
+            });
+        }
+        // Verify password
         const validPassword = await bcrypt.compare(password, user.password_hash);
         if (!validPassword) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
         }
-
         // Get user profile data
         const userProfile = await UserProfile.findOne({ user_id: user._id });
         if (!userProfile) {
-            return res.status(404).json({ message: 'Không tìm thấy thông tin người dùng' });
+            return res.status(404).json({
+                success: false,
+                message: 'User profile not found'
+            });
         }
-
+        // Generate JWT token
         const token = jwt.sign(
-            { userId: user._id },
+            { 
+                userId: user._id,
+                role: user.role 
+            },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
 
-        console.log('User Profile:', userProfile);
-
+        // Send response
         res.json({
-            token,
+            success: true,
+            token: token, // Use the generated token here
             user: {
-                id: user._id,
+                _id: user._id,
                 username: user.name,
                 email: user.email,
                 role: user.role,
@@ -181,20 +199,57 @@ const login = async (req, res) => {
                     phone: userProfile.phone_number,
                     position: user.role
                 }
+            },
+            message: 'Login successful'
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+};
+
+const getUserProfile = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        
+        // Find user and their profile
+        const user = await User.findById(userId);
+        const userProfile = await UserProfile.findOne({ user_id: userId });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            user: {
+                _id: user._id,
+                username: user.name,
+                email: user.email,
+                role: user.role,
+                profile: {
+                    fullName: userProfile?.full_name || '',
+                    address: userProfile?.address || '',
+                    phone: userProfile?.phone_number || '',
+                    position: user.role,
+                    imageUrl: userProfile?.image_url || ''
+                }
             }
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Get profile error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching user profile'
+        });
     }
 };
-const getUser = async (req, res) => {   
-    try {
-        const users = await User.find();
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
 
 const getUserById = async (req, res) => {
     try {
@@ -211,16 +266,19 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
     try {
         const { username, fullName, email, password } = req.body;
-
-        // Validate required fields
         if (!username || !fullName || !email || !password) {
             return res.status(400).json({
                 status: 'error',
                 message: 'Vui lòng điền đầy đủ thông tin'
             });
         }
-
-        // Check if email exists
+        // const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+        // if (!phoneRegex.test(phone)) {
+        //     return res.status(400).json({
+        //         status: 'error',
+        //         message: 'Số điện thoại không hợp lệ'
+        //     });
+        // }
         const existingEmail = await User.findOne({ email });
         if (existingEmail) {
             return res.status(400).json({
@@ -228,8 +286,6 @@ const createUser = async (req, res) => {
                 message: 'Email này đã được đăng ký'
             });
         }
-
-        // Check if username exists
         const existingUsername = await User.findOne({ name: username });
         if (existingUsername) {
             return res.status(400).json({
@@ -237,12 +293,15 @@ const createUser = async (req, res) => {
                 message: 'Tên người dùng này đã tồn tại'
             });
         }
-
-        // Hash password
+        // const existingPhone = await UserProfile.findOne({ phone_number: phone });
+        // if (existingPhone) {
+        //     return res.status(400).json({
+        //         status: 'error',
+        //         message: 'Số điện thoại này đã được đăng ký'
+        //     });
+        // }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Create new user
         const user = new User({
             name: username,
             email: email,
@@ -250,18 +309,14 @@ const createUser = async (req, res) => {
             role: 'customer',
             status: 'active'
         });
-
         const savedUser = await user.save();
-
-        // Create user profile with empty optional fields
         const userProfile = new UserProfile({
             user_id: savedUser._id,
             full_name: fullName,
-            phone_number: '',  // Empty phone number
-            address: '',      // Empty address
-            image_url: ''     // Empty image url
+            phone_number: null,  
+            address: null,      
+            image_url: null
         });
-
         await userProfile.save();
 
         res.status(201).json({
@@ -409,8 +464,23 @@ const deleteUser = async (req, res) => {
     }
 }
 
+const handleLogout = async (req, res) => {
+    try {
+        res.json({ 
+            success: true, 
+            message: 'Logged out successfully' 
+        });
+    } catch (error) {
+        console.error('Logout error:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Error during logout' 
+        });
+    }
+};
+
 module.exports = {
-    getUser,
+    getUserProfile,
     getUserById,
     createUser,
     updateUser,
@@ -421,4 +491,5 @@ module.exports = {
     resetPassword,
     updateProfile,
     changePassword,
+    handleLogout
 }

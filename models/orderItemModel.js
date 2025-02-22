@@ -1,37 +1,43 @@
 const mongoose = require("mongoose");
 
-const orderItemSchema = new mongoose.Schema(
-  {
+const orderItemSchema = new mongoose.Schema({
     order_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Order", // Liên kết với bảng orders
-      required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+        required: true,
+        index: true
     },
     product_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product", // Liên kết với bảng products
-      required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
+        index: true
     },
     quantity: {
-      type: Number,
-      required: true,
-      min: 1, // Số lượng ít nhất là 1
+        type: Number,
+        required: true,
+        min: 1
     },
     price: {
-      type: Number,
-      required: true,
-      min: 0, // Giá phải lớn hơn hoặc bằng 0
+        type: Number,
+        required: true,
+        min: 0
+    },
+    color: {
+        type: String,
+        default: ''
     },
     link: {
-      type: String,
-      required: true,
-    },
-    meta: {
-      type: String,
-      default: "",
-    },
-  },
-  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
-);
+        type: String,
+        default: ''
+    }
+}, {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
 
-module.exports = mongoose.model("OrderItem", orderItemSchema, 'orderItems');
+// Add indexes
+orderItemSchema.index({ order_id: 1, product_id: 1 });
+
+module.exports = mongoose.model("OrderItem", orderItemSchema);

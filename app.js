@@ -4,28 +4,47 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();  // Để sử dụng biến môi trường từ .env
-const { cleanupUnusedImages } = require('./utils/cleanupImages');
+require('dotenv').config(); 
+// const { cleanupUnusedImages } = require('./utils/cleanupImages');
+const jwt = require('jsonwebtoken');
+const adminAuthMiddleware = require('./middleware/admin/adminAuthMiddleware');
 
+//User routes
 const usersRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const newsEventRoutes = require('./routes/newsEventsRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const productRoutes = require('./routes/productRoutes');
+const favoriteRoutes = require('./routes/favoriteRoutes');
+const addressRoutes = require('./routes/addressRoutes');
+const comparisonRoutes = require('./routes/comparisonRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const voucherRoutes = require('./routes/voucherRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+
+//Admin routes
+
+const adminRoutes = require('./routes/admin/adminRoutes');
+const newsRoutes = require('./routes/admin/newsRoutes');
+const adminvoucherRoutes = require('./routes/admin/voucherRoutes');
+const customerRoutes = require('./routes/admin/customerRoutes');
+const adminProductRoutes = require('./routes/admin/productRoutes');
+const adminOrderRoutes = require('./routes/admin/orderRoutes');
+
+// const productDetailsRouter = require('./routes/productDetails');
+
+// const deliveryServicesRouter = require('./routes/deliveryServices');
+// const shipmentsRouter = require('./routes/shipments');
+// const shipmentLogsRouter = require('./routes/shipmentLogs');
+// const orderItemsRouter = require('./routes/orderItems');
+// const promotionsRouter = require('./routes/promotions');
+// const transactionsRouter = require('./routes/transactions');
+// const staffsRouter = require('./routes/staffs');
+// const reportsRouter = require('./routes/reports');
+// const logsRouter = require('./routes/logs');
 
 
-const productsRouter = require('./routes/products');
-const productDetailsRouter = require('./routes/productDetails');
-
-const deliveryServicesRouter = require('./routes/deliveryServices');
-const shipmentsRouter = require('./routes/shipments');
-const shipmentLogsRouter = require('./routes/shipmentLogs');
-const ordersRouter = require('./routes/orders');
-const orderItemsRouter = require('./routes/orderItems');
-const promotionsRouter = require('./routes/promotions');
-const transactionsRouter = require('./routes/transactions');
-const staffsRouter = require('./routes/staffs');
-const reportsRouter = require('./routes/reports');
-const logsRouter = require('./routes/logs');
 
 var app = express();
 
@@ -38,40 +57,99 @@ mongoose.connect(dbURI)
   .catch((err) => console.log('MongoDB connection error: ', err));
 
 // Các middleware
+
 // Cấu hình phục vụ hình ảnh từ thư mục public/images
-app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
+// app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use('/images', express.static('public/images'));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true
 }));
+
+// Các route
+app.use('/api/compare', comparisonRoutes);
+app.use('/api/products', productRoutes);
+
+// Authentication middleware
+app.use((req, res, next) => {
+  // Skip auth for certain routes
+  const publicPaths = [
+    '/api/auth/login', 
+    '/api/auth/register',
+    '/api/auth/verify',
+    '/images',
+    '/api/news',
+    '/api/auth/logout',
+    '/api/categories',
+    '/api/contacts',
+    '/api/products/hot',  
+    '/api/products',   
+    '/api/provinces',              
+    '/api/districts',              
+    '/api/wards',
+    '/api/products/by-brand',
+    '/api/products/brand',
+    '/api/products/filter',
+    '/api/products/hot',
+    '/api/products/detail',
+    '/api/auth/check-email',
+    '/api/auth/reset-password',
+    '/api/orders/user',
+    '/api/orders/detail',
+    '/api/users/profile',
+    '/api/vouchers',
+    '/api/admin/',
+  ];
+  
+  if (publicPaths.some(path => req.path.startsWith(path))) {
+    return next();
+  }
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({
+      success: false,
+      message: 'No token provided'
+    });
+  }
+
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: 'Invalid token'
+    });
+  }
+});
 // // Các route
-// app.use("/products", productsRouter);
-// app.use("/categories", categoryRouter);
-// app.use("/productDetails", productDetailsRouter);
-// app.use("/users", usersRouter);
-// app.use("/userProfiles", userProfilesRouter);
-// app.use("/deliveryServices", deliveryServicesRouter);
-// app.use("/shipments", shipmentsRouter);
-// app.use("/shipmentLogs", shipmentLogsRouter);
-// app.use("/orders", ordersRouter);
-// app.use("/orderItems", orderItemsRouter);
-// app.use("/promotions", promotionsRouter);
-// app.use("/transactions", transactionsRouter);
-// app.use("/staffs", staffsRouter);
-// app.use("/reports", reportsRouter);
-// app.use("/logs", logsRouter);
-// app.use("/newsEvents", newsEventsRouter);
-//app.use("/auth", usersRouter); // For auth routes like register
-// app.use("/", usersRouter); 
 app.use("/api/auth", usersRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/news', newsEventRoutes);
 app.use('/api/contacts', contactRoutes);
+app.use('/api/favorites', favoriteRoutes);
+app.use('/api', addressRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/vouchers', voucherRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/reviews', reviewRoutes);
+
+app.use('/api/admin', adminRoutes);
+app.use('/api/admin/news', newsRoutes);
+app.use('/api/admin/vouchers', adminvoucherRoutes);
+app.use('/api/admin/customers', customerRoutes);
+app.use('/api/admin/products', adminProductRoutes);
+app.use('/api/admin/orders', adminOrderRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -80,7 +158,7 @@ app.use((err, req, res, next) => {
 });
 
 // Schedule cleanup
-setInterval(cleanupUnusedImages, 24 * 60 * 60 * 1000);
-cleanupUnusedImages();
+// setInterval(cleanupUnusedImages, 24 * 60 * 60 * 1000);
+// cleanupUnusedImages();
 
 module.exports = app;

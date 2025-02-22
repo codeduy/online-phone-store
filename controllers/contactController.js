@@ -3,48 +3,38 @@ const Contact = require('../models/contactModel');
 const contactController = {
     createContact: async (req, res) => {
         try {
-            const { email, phone } = req.body;
+            const { name, email, phone, subject, message } = req.body;
 
-            // Check for existing active requests
-            const existingContact = await Contact.findOne({
-                $or: [
-                    { email: email.toLowerCase() },
-                    { phone: phone }
-                ],
-                status: {
-                    $in: ['pending', 'processing']
-                }
-            });
-
-            if (existingContact) {
+            // Validate required fields
+            if (!name || !email || !phone || !subject || !message) {
                 return res.status(400).json({
-                    message: 'Vui lòng chờ yêu cầu hỗ trợ trước đó hoàn thành'
+                    success: false,
+                    message: 'Vui lòng điền đầy đủ thông tin'
                 });
             }
 
-            // Create new contact if no active requests found
-            const newContact = new Contact(req.body);
-            await newContact.save();
+            // Create new contact
+            const contact = new Contact({
+                name,
+                email,
+                phone,
+                subject,
+                message,
+                status: 'pending'
+            });
+
+            await contact.save();
 
             res.status(201).json({
-                message: 'Gửi thông tin thành công',
-                contact: newContact
+                success: true,
+                message: 'Gửi thông tin thành công'
             });
-
         } catch (error) {
-            console.error('Error in createContact:', error);
+            console.error('Contact creation error:', error);
             res.status(500).json({
-                message: 'Có lỗi xảy ra, vui lòng thử lại'
+                success: false,
+                message: 'Có lỗi xảy ra, vui lòng thử lại sau'
             });
-        }
-    },
-
-    getAllContacts: async (req, res) => {
-        try {
-            const contacts = await Contact.find();
-            res.json(contacts);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
         }
     }
 };

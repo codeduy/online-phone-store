@@ -28,11 +28,14 @@ const newsEventSchema = new mongoose.Schema(
     },
     start_date: {
       type: Date,
-      default: null,
-    },
-    end_date: {
-      type: Date,
-      default: null,
+      validate: {
+        validator: function(value) {
+          if (!value) return true; // Allow null
+          return !isNaN(new Date(value).getTime()); // Only validate if it's a valid date
+        },
+        message: 'Ngày đăng bài không hợp lệ'
+      },
+      default: Date.now // Set default to current date if not provided
     },
     status: {
       type: String,
@@ -62,5 +65,19 @@ const newsEventSchema = new mongoose.Schema(
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
+
+newsEventSchema.pre('save', function(next) {
+  try {
+    if (this.start_date) {
+      const startDate = new Date(this.start_date);
+      if (!isNaN(startDate.getTime())) {
+        this.start_date = startDate;
+      }
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = mongoose.model("NewsEvent", newsEventSchema, 'newsEvents');
