@@ -10,6 +10,13 @@ import axios from 'axios';
 import { InputSwitch } from 'primereact/inputswitch';
 import { debounce } from 'lodash';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+
+interface DecodedToken {
+    exp: number;
+    role: string;
+}
 
 interface Customer {
     _id: string;
@@ -40,9 +47,55 @@ const AdminCustomers = () => {
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const verifyToken = useCallback(() => {
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+            navigate('/admin/login', { 
+                state: { message: 'Vui lòng đăng nhập để thao tác' } 
+            });
+            return false;
+        }
+
+        try {
+            const decoded = jwtDecode<DecodedToken>(token);
+            if (decoded.exp * 1000 < Date.now()) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
+                return false;
+            }
+
+            if (decoded.role !== 'admin') {
+                navigate('/admin/login', { 
+                    state: { message: 'Bạn không có quyền truy cập' } 
+                });
+                return false;
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Token verification error:', error);
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            navigate('/admin/login', { 
+                state: { message: 'Phiên đăng nhập không hợp lệ' } 
+            });
+            return false;
+        }
+    }, [navigate]);
+
+    // Add token check on component mount
+    useEffect(() => {
+        verifyToken();
+    }, [verifyToken]);
 
     const debouncedSearch = useCallback(
         debounce(async (searchValue: string) => {
+            if (!verifyToken()) return;
             try {
                 setLoading(true);
                 const token = localStorage.getItem('adminToken');
@@ -64,6 +117,11 @@ const AdminCustomers = () => {
                     setCustomers(response.data.data);
                 }
             } catch (error) {
+                if (axios.isAxiosError(error) && error.response?.status === 401) {
+                    navigate('/admin/login', { 
+                        state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                    });
+                }
                 console.error('Error searching customers:', error);
             } finally {
                 setLoading(false);
@@ -78,6 +136,7 @@ const AdminCustomers = () => {
     };
 
     const handleToggleStatus = async (customerId: string, currentStatus: string) => {
+        if (!verifyToken()) return;
         try {
             const token = localStorage.getItem('adminToken');
             const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
@@ -93,6 +152,11 @@ const AdminCustomers = () => {
             // Refresh danh sách khách hàng
             fetchCustomers();
         } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
+            }
             console.error('Error toggling customer status:', error);
         }
     };
@@ -102,6 +166,7 @@ const AdminCustomers = () => {
     }, []);
 
     const fetchCustomers = async () => {
+        if (!verifyToken()) return;
         try {
             setLoading(true);
             const token = localStorage.getItem('adminToken');
@@ -115,6 +180,11 @@ const AdminCustomers = () => {
                 console.error('Failed to fetch customers:', response.data.message);
             }
         } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
+            }
             console.error('Error fetching customers:', error);
         } finally {
             setLoading(false);
@@ -142,6 +212,7 @@ const AdminCustomers = () => {
     };
 
     const handleSaveCustomer = async () => {
+        if (!verifyToken()) return;
         try {
             if (!selectedCustomer) return;
     
@@ -170,6 +241,11 @@ const AdminCustomers = () => {
             setShowEditDialog(false);
             setPassword('');
         } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
+            }
             console.error('Error updating customer:', error);
         }
     };
@@ -189,7 +265,7 @@ const AdminCustomers = () => {
                         placeholder="Tìm kiếm theo tên, email..." 
                         className="w-full lg:w-96 px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
                     />
-                    <i className="pi pi-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    {/* <i className="pi pi-search absolute left-51 top-1/2 transform -translate-y-1/2 text-gray-400" /> */}
                 </div>
             </div>
 

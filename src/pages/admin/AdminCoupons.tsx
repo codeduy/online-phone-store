@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -11,6 +11,14 @@ import { Toast } from 'primereact/toast';
 import { InputNumber } from 'primereact/inputnumber';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+import { ConfirmDialog } from 'primereact/confirmdialog';
+
+interface DecodedToken {
+  exp: number;
+  role: string;
+}
 
 interface CouponData {
   id: string | null;
@@ -54,7 +62,55 @@ const AdminCoupons = () => {
   const [valueUnit, setValueUnit] = useState<string>('');
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const navigate = useNavigate();
   const toast = useRef<Toast>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const [couponToDelete, setCouponToDelete] = useState<string | null>(null);
+
+  const verifyToken = useCallback(() => {
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+            navigate('/admin/login', { 
+                state: { message: 'Vui lòng đăng nhập để thao tác' } 
+            });
+            return false;
+        }
+
+        try {
+            const decoded = jwtDecode<DecodedToken>(token);
+            if (decoded.exp * 1000 < Date.now()) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
+                return false;
+            }
+
+            if (decoded.role !== 'admin') {
+                navigate('/admin/login', { 
+                    state: { message: 'Bạn không có quyền truy cập' } 
+                });
+                return false;
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Token verification error:', error);
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            navigate('/admin/login', { 
+                state: { message: 'Phiên đăng nhập không hợp lệ' } 
+            });
+            return false;
+        }
+    }, [navigate]);
+
+    // Add token check on component mount
+    useEffect(() => {
+        verifyToken();
+    }, [verifyToken]);
 
   const couponTypes = [
     { label: 'Giảm tuyệt đối', value: 'Giảm tuyệt đối' },
@@ -66,7 +122,9 @@ const AdminCoupons = () => {
   }, []);
 
   const fetchCoupons = async () => {
+    if (!verifyToken()) return;
     try {
+      setLoading(true);
       const token = localStorage.getItem('adminToken');
       const response = await axios.get('http://localhost:3000/api/admin/vouchers', {
         headers: { Authorization: `Bearer ${token}` }
@@ -75,12 +133,20 @@ const AdminCoupons = () => {
         setCoupons(response.data.data);
       }
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+          navigate('/admin/login', { 
+              state: { message: 'Phiên đăng nhập đã hết hạn' } 
+          });
+          return;
+      }
       console.error('Error fetching coupons:', error);
       toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to fetch coupons'
+          severity: 'error',
+          summary: 'Lỗi',
+          detail: 'Không thể tải danh sách mã giảm giá'
       });
+    } finally {
+        setLoading(false);
     }
   };
 
@@ -127,6 +193,7 @@ const AdminCoupons = () => {
   };
 
   const handleSaveCoupon = async () => {
+    if (!verifyToken()) return;
     try {
       // Validate required fields
       if (!couponData.name || !couponData.code || !startDate || !endDate) {
@@ -227,11 +294,17 @@ const AdminCoupons = () => {
         });
       }
     } catch (error: any) {
-      console.error('Error saving coupon:', error.response?.data || error);
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+          navigate('/admin/login', { 
+              state: { message: 'Phiên đăng nhập đã hết hạn' } 
+          });
+          return;
+      }
+      console.error('Error saving coupon:', error);
       toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: error.response?.data?.message || 'Lỗi khi lưu mã giảm giá'
+          severity: 'error',
+          summary: 'Lỗi',
+          detail: error.response?.data?.message || 'Lỗi khi lưu mã giảm giá'
       });
     }
   };
@@ -275,6 +348,7 @@ const AdminCoupons = () => {
   };
 
   const handleSwitchChange = async (e: any, couponId: string) => {
+    if (!verifyToken()) return;
     try {
       const token = localStorage.getItem('adminToken');
       const response = await axios.patch(
@@ -297,35 +371,57 @@ const AdminCoupons = () => {
         });
       }
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+          navigate('/admin/login', { 
+              state: { message: 'Phiên đăng nhập đã hết hạn' } 
+          });
+          return;
+      }
       console.error('Error toggling voucher status:', error);
       toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to update voucher status'
+          severity: 'error',
+          summary: 'Lỗi',
+          detail: 'Không thể cập nhật trạng thái mã giảm giá'
       });
     }
   };
 
-  const handleDeleteCoupon = async (couponId: string) => {
-    try {
-      const token = localStorage.getItem('adminToken');
-      await axios.delete(`http://localhost:3000/api/admin/vouchers/${couponId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      fetchCoupons();
-      toast.current?.show({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Coupon deleted successfully'
-      });
-    } catch (error) {
-      console.error('Error deleting coupon:', error);
-      toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to delete coupon'
-      });
-    }
+  const confirmDelete = (couponId: string) => {
+    setCouponToDelete(couponId);
+    setShowDeleteDialog(true);
+  };
+
+  const handleDeleteCoupon = async () => {
+      if (!verifyToken() || !couponToDelete) return;
+      
+      try {
+          const token = localStorage.getItem('adminToken');
+          await axios.delete(`http://localhost:3000/api/admin/vouchers/${couponToDelete}`, {
+              headers: { Authorization: `Bearer ${token}` }
+          });
+          fetchCoupons();
+          toast.current?.show({
+              severity: 'success',
+              summary: 'Thành công',
+              detail: 'Đã xóa mã giảm giá'
+          });
+      } catch (error) {
+          if (axios.isAxiosError(error) && error.response?.status === 401) {
+              navigate('/admin/login', { 
+                  state: { message: 'Phiên đăng nhập đã hết hạn' } 
+              });
+              return;
+          }
+          console.error('Error deleting coupon:', error);
+          toast.current?.show({
+              severity: 'error',
+              summary: 'Lỗi',
+              detail: 'Không thể xóa mã giảm giá'
+          });
+      } finally {
+          setShowDeleteDialog(false);
+          setCouponToDelete(null);
+      }
   };
 
   const sortedCoupons = [...coupons].sort((a, b) => {
@@ -444,7 +540,7 @@ const AdminCoupons = () => {
       </Dialog>
   
       <div className="grid grid-cols-1 gap-4">
-        <DataTable value={sortedCoupons} className="shadow-md rounded-lg">
+        <DataTable value={sortedCoupons} loading={loading} className="shadow-md rounded-lg">
           <Column field="_id" header="ID mã giảm giá" />
           <Column field="name" header="Tên mã giảm giá" />
           <Column field="code" header="Mã giảm giá" />
@@ -488,13 +584,34 @@ const AdminCoupons = () => {
                 <Button
                   icon="pi pi-trash"
                   className="p-button-rounded p-button-danger shadow-md hover:text-red-600 hover:bg-red-50 text-red-500"
-                  onClick={() => handleDeleteCoupon(rowData._id)}
+                  onClick={() => confirmDelete(rowData._id)}
                   tooltip='Xóa'
                 />
               </div>
             )}
           />
         </DataTable>
+
+        <ConfirmDialog
+          visible={showDeleteDialog}
+          onHide={() => setShowDeleteDialog(false)}
+          message="Bạn có chắc chắn muốn xóa mã giảm giá này?"
+          header="Xác nhận xóa"
+          icon="pi pi-exclamation-triangle"
+          acceptClassName="p-button-danger text-red-500 border border-red-300 bg-white hover:bg-red-50 hover:text-red-600 transition-all duration-200 rounded-md p-2"
+          rejectClassName="p-button-text bg-white text-gray-700 border border-gray-300 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 rounded-md p-2"
+          accept={handleDeleteCoupon}
+          reject={() => setShowDeleteDialog(false)}
+          acceptLabel="Xóa"
+          rejectLabel="Hủy"
+          pt={{
+              root: { className: 'border rounded-lg shadow-lg' },
+              header: { className: 'text-xl font-semibold text-gray-800' },
+              content: { className: 'p-4' },
+              footer: { className: 'flex gap-2 justify-end p-4 bg-gray-50' },
+              icon: { className: 'text-yellow-500' }
+          }}
+        />
       </div>
     </div>
   );
@@ -502,3 +619,7 @@ const AdminCoupons = () => {
 };
 
 export default AdminCoupons;
+
+function setLoading(arg0: boolean) {
+  throw new Error('Function not implemented.');
+}

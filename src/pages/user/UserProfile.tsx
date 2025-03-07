@@ -148,6 +148,16 @@ const UserProfile = () => {
                 setDialogVisible(true);
                 return;
             }
+
+            if (profile.phone && profile.phone.trim() !== '') {
+                // Check if phone contains only digits
+                const phoneRegex = /^\d{10}$/;
+                if (!phoneRegex.test(profile.phone)) {
+                    setDialogMessage('Số điện thoại phải có đúng 10 chữ số');
+                    setDialogVisible(true);
+                    return;
+                }
+            }
     
             const formData = new FormData();
             formData.append('fullName', profile.fullName);
@@ -311,7 +321,8 @@ const UserProfile = () => {
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
                         />
                         <label className="absolute -top-2 left-4 bg-white px-1 text-xs text-blue-600">
-                            Địa chỉ <span className="text-red-500">*</span>
+                            Địa chỉ 
+                            {/* <span className="text-red-500">*</span> */}
                         </label>
                     </div>
     
@@ -325,7 +336,8 @@ const UserProfile = () => {
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200"
                         />
                         <label className="absolute -top-2 left-4 bg-white px-1 text-xs text-blue-600">
-                            Số điện thoại <span className="text-red-500">*</span>
+                            Số điện thoại 
+                            {/* <span className="text-red-500">*</span> */}
                         </label>
                     </div>
     

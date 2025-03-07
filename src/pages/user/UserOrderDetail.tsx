@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode, useRef } from 'react';
 import { Steps } from 'primereact/steps';
 import { Card } from 'primereact/card';
 import { Tag } from 'primereact/tag';
@@ -7,6 +7,8 @@ import { AiOutlineUser, AiOutlinePhone, AiOutlineEnvironment } from 'react-icons
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
+import { Toast } from 'primereact/toast';
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
 const API_URL = 'http://localhost:3000/api';
 
@@ -19,14 +21,22 @@ interface OrderItem {
     image: string;
     color: string;
     product_id: {
-        trademark: any;
-        baseProductName: any;
+        category_id: {
+            _id: string;
+            name: string;
+            description?: string;
+            parent_category_id?: string | null;
+            link?: string;
+            meta?: string;
+            logo_url?: string;
+        };
         name: string;
         images: string[];
         price: number;
         warranty: string;
-        ram?: string;   
-        storage?: string; 
+        ram?: string;
+        storage?: string;
+        baseProductName?: string;
     };
 }
 
@@ -68,6 +78,63 @@ const UserOrderDetail: React.FC = () => {
     const [order, setOrder] = useState<Order | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const toast = useRef<Toast>(null);
+
+    const handleCancelOrder = async () => {
+        if (!order) {
+            return;
+        }
+        confirmDialog({
+            message: 'Bạn có chắc chắn muốn hủy đơn hàng này không?',
+            header: 'Xác nhận hủy đơn hàng',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Hủy đơn hàng',
+            rejectLabel: 'Không',
+            acceptClassName: 'px-4 py-2 bg-white text-red-600 border border-red-300 rounded-lg hover:bg-red-50 hover:border-red-400 transition-colors duration-200',
+            rejectClassName: 'px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 transition-colors duration-200',
+            pt: {
+                root: { className: 'border rounded-lg shadow-lg' },
+                header: { className: 'text-xl font-semibold text-gray-800 p-4 border-b bg-gray-50' },
+                content: { className: 'p-6 flex flex-col items-center gap-4' },
+                icon: { className: 'text-yellow-500 text-3xl' },
+                message: { className: 'text-gray-600 text-center' },
+                footer: { className: 'flex justify-end gap-3 p-4 bg-gray-50 border-t' }
+            },
+            accept: async () => {
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await axios.put(
+                        `${API_URL}/orders/${orderId}/status`,
+                        { status: 'cancelled' },
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        }
+                    );
+    
+                    if (response.data.success) {
+                        // Update local order state
+                        setOrder(prev => prev ? { ...prev, status: 'cancelled' } : null);
+                        
+                        toast.current?.show({
+                            severity: 'success',
+                            summary: 'Thành công',
+                            detail: 'Đã hủy đơn hàng'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Cancel order error:', error);
+                    toast.current?.show({
+                        severity: 'error',
+                        summary: 'Lỗi',
+                        detail: 'Không thể hủy đơn hàng'
+                    });
+                }
+            }
+        });
+    };
 
     // Fetch order details
     useEffect(() => {
@@ -111,14 +178,15 @@ const UserOrderDetail: React.FC = () => {
                         price: item.price,
                         quantity: item.quantity,
                         warranty: item.product_id.warranty || '12 tháng',
-                        color: '', // Thêm color
-                        product_id: {      // Thêm product_id object với ram và storage
+                        color: '', 
+                        product_id: {     
                             name: item.product_id.name,
                             images: item.product_id.images,
                             price: item.product_id.price,
                             warranty: item.product_id.warranty,
                             ram: item.product_id.ram,
-                            storage: item.product_id.storage
+                            storage: item.product_id.storage,
+                            category_id: item.product_id.category_id,
                         }
                     }));
 
@@ -259,51 +327,111 @@ const UserOrderDetail: React.FC = () => {
     };
 
     const getImageUrl = (item: OrderItem): string => {
-        console.log('Processing image for item:', {
-            itemId: item.id,
-            name: item.name,
-            image: item.image,
-            productId: item.product_id
+        // Debug log
+        console.log('Processing item:', {
+            name: item.product_id.name,
+            category: item.product_id.category_id,
+            images: item.product_id.images
         });
     
-        if (!item.product_id.images?.[0]) {
-            console.warn('No image found for product:', item.product_id.name);
-            return '/fallback-image.jpg';
-        }
+        // if (!item.product_id.images?.[0]) {
+        //     console.warn('No image found for product:', item.product_id.name);
+        //     return '/fallback-image.jpg';
+        // }
     
         const baseUrl = API_URL.replace('/api', '');
     
-        // If image path is already complete
-        if (item.product_id.images[0].startsWith('/images/')) {
-            const fullUrl = `${baseUrl}${item.product_id.images[0]}`;
-            console.log('Using existing image path:', fullUrl);
-            return fullUrl;
+        // Get trademark from category_id
+        let trademark = 'UNKNOWN';
+        
+        // Kiểm tra và lấy tên thương hiệu từ category_id
+        if (item.product_id.category_id && 'name' in item.product_id.category_id) {
+            trademark = item.product_id.category_id.name.toUpperCase();
+            console.log('Found trademark from category:', trademark);
         }
     
-        // Get trademark from product_id
-        const trademark = item.product_id.trademark?.toUpperCase() || 
-                         (item.product_id.name.toLowerCase().includes('iphone') ? 'APPLE' : 
-                         item.product_id.name.toLowerCase().includes('samsung') ? 'SAMSUNG' : 'UNKNOWN');
+        // Fallback nếu không tìm thấy trademark
+        // if (trademark === 'UNKNOWN') {
+        //     const productName = item.product_id.name.toLowerCase();
+        //     if (productName.includes('iphone')) {
+        //         trademark = 'APPLE';
+        //     } else if (productName.includes('samsung')) {
+        //         trademark = 'SAMSUNG';
+        //     } else if (productName.includes('xiaomi')) {
+        //         trademark = 'XIAOMI';
+        //     }
+        //     console.log('Using fallback trademark:', trademark);
+        // }
     
-        // Get baseProductName or format name
+        // Get product name and clean it
         const productName = item.product_id.baseProductName?.replace(/\s+/g, '') || 
-                           item.product_id.name.replace(/\s+/g, '');
+                           item.product_id.name.replace(/[^a-zA-Z0-9]/g, '');
     
-        const fullPath = `/images/phone/${trademark}/${productName}/${item.product_id.images[0]}`;
+        // Construct the full path
+        const imageName = item.product_id.images[0];
+        const fullPath = `/images/phone/${trademark}/${productName}/${imageName}`;
         
-        console.log('Generated image path:', {
+        console.log('Image path details:', {
             baseUrl,
             trademark,
             productName,
-            imageName: item.product_id.images[0],
-            fullPath
+            imageName,
+            fullPath,
+            categoryDetails: item.product_id.category_id
         });
     
         return `${baseUrl}${fullPath}`;
     };
+    
+    const handlePayment = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                toast.current?.show({
+                    severity: 'error',
+                    summary: 'Lỗi',
+                    detail: 'Vui lòng đăng nhập để thanh toán'
+                });
+                return;
+            }
+    
+            // Tạo URL thanh toán VNPay mới
+            const vnpayResponse = await axios.post(
+                `${API_URL}/vnpay/create_payment_url`,
+                {
+                    amount: order.total.final,
+                    orderId: order.id
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+    
+            if (vnpayResponse.data.code === '00') {
+                window.location.href = vnpayResponse.data.data;
+            } else {
+                toast.current?.show({
+                    severity: 'error',
+                    summary: 'Lỗi',
+                    detail: 'Không thể tạo liên kết thanh toán'
+                });
+            }
+        } catch (error) {
+            console.error('Payment error:', error);
+            toast.current?.show({
+                severity: 'error',
+                summary: 'Lỗi',
+                detail: 'Không thể kết nối đến cổng thanh toán'
+            });
+        }
+    };
 
     return (
         <div className="p-4 max-w-5xl mx-auto">
+            <Toast ref={toast} />
             <Helmet>
                 <title>Chi tiết đơn hàng</title>
                 <link rel="icon" href="../../src/assets/img/phone.ico" />
@@ -316,7 +444,17 @@ const UserOrderDetail: React.FC = () => {
                         className="p-button-text mb-2"
                         onClick={() => navigate('/orders')}
                     />
-                    <h2 className="text-2xl font-bold">Đơn hàng #{order.id}</h2>
+                    <div className="flex items-center justify-between gap-4">
+                        <h2 className="text-2xl font-bold">Đơn hàng #{order.id}</h2>
+                        {order.status === 'pending' && (
+                            <Button
+                                label="Hủy đơn hàng"
+                                icon="pi pi-times"
+                                className="px-4 py-2 bg-white text-red-600 border border-red-300 rounded-lg hover:bg-red-50 hover:border-red-400 transition-colors duration-200"
+                                onClick={handleCancelOrder}
+                            />
+                        )}
+                    </div>                  
                     <p className="text-gray-600">
                         Đặt ngày {new Date(order.date).toLocaleDateString('vi-VN')} lúc{' '}
                         {new Date(order.date).toLocaleTimeString('vi-VN')}
@@ -328,6 +466,7 @@ const UserOrderDetail: React.FC = () => {
                     className={getStatusConfig(order.status).className}
                 />
             </div>
+            <ConfirmDialog />
 
             {/* Products */}
             <Card className="mb-6">
@@ -403,7 +542,7 @@ const UserOrderDetail: React.FC = () => {
                     </div>
                     
                     <div>Phương thức thanh toán:</div>
-                    <div className="text-right">{order.payment.method}</div>
+                    <div className="text-right">{order.payment.method.toUpperCase()}</div>
                     
                     <div>Trạng thái thanh toán:</div>
                     <div className="text-right">
@@ -412,6 +551,20 @@ const UserOrderDetail: React.FC = () => {
                             value={getPaymentStatus(order.status).label}
                         />
                     </div>
+
+                    {order.status === 'pending' && order.payment.method === 'vnpay' && (
+                        <>
+                            <div></div>
+                            <div className="text-right">
+                                <Button
+                                    label="Đến trang thanh toán"
+                                    icon="pi pi-credit-card"
+                                    onClick={handlePayment}
+                                    className="p-button-success"
+                                />
+                            </div>
+                        </>
+                    )}
                 </div>
             </Card>
 

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 
     interface CartContextType {
         cartItems: CartItem[];
@@ -290,25 +291,31 @@ import axios from 'axios';
         };
 
         return (
-            <CartContext.Provider value={{
-                cartItems,
-                setCartItems,
-                cartCount,
-                loading,
-                error,
-                addToCart,
-                removeFromCart,
-                updateQuantity,
-                fetchCart,
-                total,
-                appliedVoucher,
-                discountAmount,
-                finalAmount,
-                applyVoucher,
-                removeVoucher
-            }}>
-                {children}
-            </CartContext.Provider>
+            <div>
+                {/* <Helmet>
+                    <title>Giỏ hàng</title>
+                </Helmet> */}
+                <CartContext.Provider value={{
+                    cartItems,
+                    setCartItems,
+                    cartCount,
+                    loading,
+                    error,
+                    addToCart,
+                    removeFromCart,
+                    updateQuantity,
+                    fetchCart,
+                    total,
+                    appliedVoucher,
+                    discountAmount,
+                    finalAmount,
+                    applyVoucher,
+                    removeVoucher
+                }}>
+                    {children}
+                </CartContext.Provider>
+            </div>
+            
         );
     };
     

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { Toast } from 'primereact/toast';
 import { useRef } from 'react';
+import { Helmet } from 'react-helmet';
 
 // Định nghĩa kiểu dữ liệu cho form đăng nhập
 interface LoginFormData {
@@ -120,6 +121,9 @@ const LoginPage = () => {
 
   return (
     <div className="login-container min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Helmet>
+          <title>Đăng nhập</title>
+      </Helmet>
       {/* <Toast ref={toast} /> */}
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         {/* Header */}

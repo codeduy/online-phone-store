@@ -13,6 +13,8 @@ import { Card } from 'primereact/card';
 import axios from 'axios';
 import { debounce } from 'lodash';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 interface NewsEvent {
     _id: string;
@@ -50,9 +52,56 @@ const AdminNews = () => {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [newsToDelete, setNewsToDelete] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const verifyToken = useCallback(() => {
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+            navigate('/admin/login', { 
+                state: { message: 'Vui lòng đăng nhập để thao tác' } 
+            });
+            return false;
+        }
+
+        try {
+            const decoded = jwtDecode<DecodedToken>(token);
+            if (decoded.exp * 1000 < Date.now()) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
+                return false;
+            }
+
+            if (decoded.role !== 'admin') {
+                navigate('/admin/login', { 
+                    state: { message: 'Bạn không có quyền truy cập' } 
+                });
+                return false;
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Token verification error:', error);
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            navigate('/admin/login', { 
+                state: { message: 'Phiên đăng nhập không hợp lệ' } 
+            });
+            return false;
+        }
+    }, [navigate]);
+
+    // Add token check on component mount
+    useEffect(() => {
+        verifyToken();
+    }, [verifyToken]);
+
 
     const debouncedSearch = useCallback(
         debounce(async (searchValue: string) => {
+            if (!verifyToken()) return;
             try {
                 setLoading(true);
                 const token = localStorage.getItem('adminToken');
@@ -74,10 +123,14 @@ const AdminNews = () => {
                     setSearchTerm(searchValue);
                 }
             } catch (error) {
+                if (axios.isAxiosError(error) && error.response?.status === 401) {
+                    navigate('/admin/login', { 
+                        state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                    });
+                }
                 console.error('Error searching news:', error);
-                setFilteredNews([]);
             } finally {
-                setLoading(false); 
+                setLoading(false);
             }
         }, 1000),
         []
@@ -93,6 +146,7 @@ const AdminNews = () => {
     }, []);
 
     const fetchNews = async () => {
+        if (!verifyToken()) return;
         try {
             setLoading(true);
             const token = localStorage.getItem('adminToken');
@@ -129,14 +183,14 @@ const AdminNews = () => {
             setNewsList(formattedNews);
     
         } catch (error) {
-            console.error('Error fetching news:', error);
-            if (axios.isAxiosError(error)) {
-                console.log('Error Response:', error.response?.data);
-                console.log('Error Status:', error.response?.status);
-                console.log('Error Headers:', error.response?.headers);
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
             }
+            console.error('Error fetching news:', error);
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
@@ -188,6 +242,7 @@ const AdminNews = () => {
     };
 
     const handleFileUpload = async (event: any) => {
+        if (!verifyToken()) return;
         try {
             const token = localStorage.getItem('adminToken');
             const file = event.files[0];
@@ -208,6 +263,7 @@ const AdminNews = () => {
     };
 
     const handleSaveNews = async () => {
+        if (!verifyToken()) return;
         try {
             const token = localStorage.getItem('adminToken');
             if (!token) {
@@ -259,16 +315,17 @@ const AdminNews = () => {
                 alert('Lưu tin tức thành công');
             }
         } catch (error) {
-            console.error('Error saving news:', error);
-            if (axios.isAxiosError(error)) {
-                console.log('Error Response:', error.response?.data);
-                // Show error message
-                alert(error.response?.data?.message || 'Có lỗi xảy ra khi lưu tin tức');
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
             }
+            console.error('Error saving news:', error);
         }
     };
 
     const handleDeleteNews = async (id: string) => {
+        if (!verifyToken()) return;
         setNewsToDelete(id);
         setShowDeleteDialog(true);
     };
@@ -486,13 +543,34 @@ const AdminNews = () => {
                             label="Hủy" 
                             icon="pi pi-times" 
                             onClick={() => setShowDeleteDialog(false)} 
-                            className="p-button-text" 
-                        />
+                            className="p-button-text 
+                                bg-white
+                                text-gray-700 
+                                border 
+                                border-gray-300
+                                hover:bg-blue-50 
+                                hover:text-blue-600 
+                                transition-all 
+                                duration-200 
+                                rounded-md
+                                p-2" 
+                        /> &nbsp;
                         <Button 
                             label="Xóa" 
                             icon="pi pi-trash" 
                             onClick={confirmDelete} 
-                            style={{ backgroundColor: '#f44336', color: '#fff' }}
+                            // style={{ backgroundColor: '#f44336', color: '#fff' }}
+                            className='p-button-danger 
+                                text-red-500 
+                                border
+                                border-red-300
+                                bg-white 
+                                hover:bg-red-50 
+                                hover:text-red-600 
+                                transition-all 
+                                duration-200 
+                                rounded-md 
+                                p-2'
                         />
                     </div>
                 }

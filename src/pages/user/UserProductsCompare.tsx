@@ -12,6 +12,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { useCallback } from 'react';
 import { debounce } from 'lodash';
+import { Helmet } from 'react-helmet';
 
 interface Product {
     productDetails: any;
@@ -773,6 +774,10 @@ const UserProductsCompare = () => {
 
     return (        
         <div className="p-4 bg-gray-50 min-h-screen">
+            <Helmet>
+                <title>So sánh sản phẩm</title>
+                <link rel="icon" href="../../src/assets/img/phone.ico" />
+            </Helmet>
             <Toast ref={toast} className="z-50"/>
             <div className="flex flex-col gap-8">
                 {/* Row 1: Title and Product Cards */}

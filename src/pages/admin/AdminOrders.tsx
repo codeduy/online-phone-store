@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
@@ -20,6 +20,13 @@ import { Dropdown } from 'primereact/dropdown';
 import { addLocale } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+
+interface DecodedToken {
+    exp: number;
+    role: string;
+}
 
 const AdminOrders = () => {
     const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
@@ -31,8 +38,54 @@ const AdminOrders = () => {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+    const navigate = useNavigate();
+
+    const verifyToken = useCallback(() => {
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+            navigate('/admin/login', { 
+                state: { message: 'Vui lòng đăng nhập để thao tác' } 
+            });
+            return false;
+        }
+
+        try {
+            const decoded = jwtDecode<DecodedToken>(token);
+            if (decoded.exp * 1000 < Date.now()) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
+                return false;
+            }
+
+            if (decoded.role !== 'admin') {
+                navigate('/admin/login', { 
+                    state: { message: 'Bạn không có quyền truy cập' } 
+                });
+                return false;
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Token verification error:', error);
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            navigate('/admin/login', { 
+                state: { message: 'Phiên đăng nhập không hợp lệ' } 
+            });
+            return false;
+        }
+    }, [navigate]);
+
+    // Add token check on component mount
+    useEffect(() => {
+        verifyToken();
+    }, [verifyToken]);
 
     const filterOrdersByDate = async (start: Date, end: Date) => {
+        if (!verifyToken()) return;
         try {
             setLoading(true);
             const token = localStorage.getItem('adminToken');
@@ -58,13 +111,17 @@ const AdminOrders = () => {
                 throw new Error('Failed to filter orders');
             }
         } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
+            }
             console.error('Error filtering orders:', error);
             toast.current?.show({
                 severity: 'error',
                 summary: 'Lỗi',
                 detail: 'Không thể lọc danh sách đơn hàng'
             });
-            setFilteredOrders(orders); // Reset to all orders on error
         } finally {
             setLoading(false);
         }
@@ -77,6 +134,7 @@ const AdminOrders = () => {
     }, [startDate, endDate]);
 
     const handleStatusChange = async (orderId: string, newStatus: string) => {
+        if (!verifyToken()) return;
         try {
             const token = localStorage.getItem('adminToken');
             const response = await axios.put(
@@ -108,6 +166,11 @@ const AdminOrders = () => {
                 });
             }
         } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
+            }
             console.error('Error updating order status:', error);
             toast.current?.show({
                 severity: 'error',
@@ -224,6 +287,7 @@ const AdminOrders = () => {
     };
     
     const fetchOrders = async () => {
+        if (!verifyToken()) return;
         try {
             setLoading(true);
             const token = localStorage.getItem('adminToken');
@@ -236,6 +300,11 @@ const AdminOrders = () => {
                 setFilteredOrders(response.data.data);
             }
         } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                navigate('/admin/login', { 
+                    state: { message: 'Phiên đăng nhập đã hết hạn' } 
+                });
+            }
             console.error('Error fetching orders:', error);
             toast.current?.show({
                 severity: 'error',

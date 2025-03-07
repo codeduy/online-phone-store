@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -24,6 +24,13 @@ import axios from 'axios';
 import { Toast } from 'primereact/toast';
 import { debounce } from 'lodash';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+
+interface DecodedToken {
+    exp: number;
+    role: string;
+}
 
 interface ProductSpec {
   color_options: never[];
@@ -184,6 +191,50 @@ const AdminProducts = () => {
 
   const [showDeleteCategoryConfirm, setShowDeleteCategoryConfirm] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const verifyToken = useCallback(() => {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+        navigate('/admin/login', { 
+            state: { message: 'Vui lòng đăng nhập để thao tác' } 
+        });
+        return false;
+    }
+
+    try {
+        const decoded = jwtDecode<DecodedToken>(token);
+        if (decoded.exp * 1000 < Date.now()) {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            navigate('/admin/login', { 
+                state: { message: 'Phiên đăng nhập đã hết hạn' } 
+            });
+            return false;
+        }
+
+        if (decoded.role !== 'admin') {
+            navigate('/admin/login', { 
+                state: { message: 'Bạn không có quyền truy cập' } 
+            });
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Token verification error:', error);
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        navigate('/admin/login', { 
+            state: { message: 'Phiên đăng nhập không hợp lệ' } 
+        });
+        return false;
+    }
+}, [navigate]);
+
+useEffect(() => {
+    verifyToken();
+}, [verifyToken]);
 
   const handleLogoUpload = (event: any) => {
     if (event.files && event.files.length > 0) {
@@ -393,6 +444,7 @@ const AdminProducts = () => {
   };
 
   const handleSearch = debounce(async (text: string) => {
+    if (!verifyToken()) return;
     if (!text.trim()) {
       fetchProducts();
       return;
@@ -536,6 +588,7 @@ const handleSpecialFeaturesChange = (e: any) => {
   });
 
   const handleDeleteProduct = async (productId: string) => {
+    if (!verifyToken()) return;
     try {
         const token = localStorage.getItem('adminToken');
         const response = await axios.delete(
@@ -596,6 +649,7 @@ const handleDeleteCategory = async (categoryId: string) => {
 };
 
   const fetchProducts = async () => {
+    if (!verifyToken()) return;
     try {
         setLoading(true);
         const token = localStorage.getItem('adminToken');
@@ -607,6 +661,11 @@ const handleDeleteCategory = async (categoryId: string) => {
             setProducts(response.data.data);
         }
     } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+            navigate('/admin/login', { 
+                state: { message: 'Phiên đăng nhập đã hết hạn' } 
+            });
+        }
         console.error('Error fetching products:', error);
         toast.current?.show({
             severity: 'error',
@@ -641,6 +700,7 @@ useEffect(() => {
 
 
   const handleEditSave = async () => {
+    if (!verifyToken()) return;
     try {
         if (!selectedProduct || !selectedBrand?._id) {
             toast.current?.show({
@@ -715,6 +775,7 @@ useEffect(() => {
 };
 
   const handleSaveProduct = async () => {
+    if (!verifyToken()) return;
     try {
         // Validate required fields
         if (!selectedBrand || !productName || !price || !selectedInternalStorage || stock < 0) {
@@ -780,6 +841,7 @@ useEffect(() => {
             setShowAddProduct(false);
             resetForm();
             fetchProducts();
+            window.location.reload();
         }
     } catch (error: any) {
         console.error('Error creating product:', error);
@@ -1851,7 +1913,7 @@ const specialFeatureItemTemplate = (option: any) => {
               closeButton: { 
                   className: 'hover:bg-gray-100 rounded-full p-2 transition-colors duration-200' 
               },
-              closeIcon: { 
+              closeButtonIcon: { 
                   className: 'text-gray-500 hover:text-gray-700' 
               }
           }}

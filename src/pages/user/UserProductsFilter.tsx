@@ -13,6 +13,7 @@ import ComparisonBar from '../../components/user/ComparisonBar';
 import { useComparison } from '../../components/user/ComparisonContext';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 interface Product {
   id: string;
@@ -308,6 +309,10 @@ const UserProductsFilter = () => {
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
         <Toast ref={toast} className="z-50" />
+        <Helmet>
+            <title>Lọc sản phẩm</title>
+            <link rel="icon" href="../../src/assets/img/phone.ico" />
+        </Helmet>
         
         {/* Filter Section */}
         <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 mb-6">

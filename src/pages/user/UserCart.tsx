@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import { Toast } from 'primereact/toast';
 import { useLocation, useNavigate  } from 'react-router-dom';
+import moment from 'moment';
 
 const API_URL = 'http://localhost:3000/api';
 
@@ -74,7 +75,7 @@ const UserCart = () => {
   const [showDeliveryDialog, setShowDeliveryDialog] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [discountCode, setDiscountCode] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('bank');
+  const [paymentMethod, setPaymentMethod] = useState('vnpay');
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -153,6 +154,61 @@ const handleCreateOrder = async () => {
           final_amount: finalAmount,
           payment_method: paymentMethod
       };
+
+      if (paymentMethod === 'vnpay') {
+        try {
+            // 1. Tạo đơn hàng trước
+            const orderResponse = await axios.post(
+                `${API_URL}/orders/create`,
+                orderData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+    
+            if (orderResponse.data.success) {
+                const orderId = orderResponse.data.data.id;
+                
+                // 2. Tạo URL thanh toán VNPay
+                const vnpayResponse = await axios.post(
+                    `${API_URL}/vnpay/create_payment_url`,
+                    {
+                        amount: finalAmount,
+                        orderId: orderId // Truyền orderId
+                    },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+    
+                if (vnpayResponse.data.code === '00') {
+                    // Clear cart ngay sau khi tạo đơn hàng thành công
+                    await setCartItems([]);
+                    if (appliedVoucher) {
+                        await removeVoucher();
+                    }
+                    
+                    // 3. Chuyển hướng đến trang thanh toán VNPay
+                    window.location.href = vnpayResponse.data.data;
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('VNPay payment error:', error);
+            toast.current?.show({
+                severity: 'error',
+                summary: 'Lỗi',
+                detail: 'Không thể kết nối đến cổng thanh toán'
+            });
+            return;
+        }
+    }
 
       const response = await axios.post(
           `${API_URL}/orders/create`,
@@ -881,18 +937,18 @@ const handleCreateOrder = async () => {
             <div className="flex flex-col md:flex-row gap-6">
               <div className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
                 <RadioButton 
-                  inputId="bank" 
+                  inputId="vnpay" 
                   name="paymentMethod" 
-                  value="bank" 
+                  value="vnpay" 
                   onChange={(e) => setPaymentMethod(e.value)} 
-                  checked={paymentMethod === 'bank'} 
+                  checked={paymentMethod === 'vnpay'} 
                   className={
-                    paymentMethod === 'bank'
+                    paymentMethod === 'vnpay'
                       ? "border-none"     
                       : "border border-gray-400 rounded-lg" 
                   }
                 />
-                <label htmlFor="bank" className="hover:cursor-pointer ml-2 font-medium text-gray-700">Chuyển khoản ngân hàng</label>
+                <label htmlFor="vnpay" className="hover:cursor-pointer ml-2 font-medium text-gray-700">Thanh toán VNPay</label>
               </div>
               <div className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
                 <RadioButton 

@@ -660,7 +660,7 @@ const handleAddToComparison = (product: Product) => {
         {Object.entries(bestSellingProductsByBrand).map(([brand, products]) => (
             <div key={brand} className="mb-12">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                    Sản phẩm nổi bật của {brand}
+                    Sản phẩm bán chạy của {brand}
                 </h2>
                 <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

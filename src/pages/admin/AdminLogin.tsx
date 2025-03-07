@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
@@ -6,6 +6,7 @@ import { Toast } from 'primereact/toast';
 import { Password } from 'primereact/password';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
+import { jwtDecode } from "jwt-decode";
 
 const AdminLogin = () => {
     const [username, setUsername] = useState('');
@@ -14,6 +15,73 @@ const AdminLogin = () => {
     const toast = useRef<Toast>(null);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+
+    const handleLogout = async () => {
+        try {
+            const token = localStorage.getItem('adminToken');
+            if (token) {
+                await axios.post('http://localhost:3000/api/admin/logout', {}, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+        } finally {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            navigate('/admin/login');
+        }
+    };
+
+    // Add axios interceptor to handle token expiration
+    useEffect(() => {
+        const interceptor = axios.interceptors.response.use(
+            response => response,
+            error => {
+                if (error.response?.status === 401 && 
+                    error.response?.data?.message?.toLowerCase().includes('token')) {
+                    // Token is expired or invalid
+                    toast.current?.show({
+                        severity: 'warn',
+                        summary: 'Phiên đăng nhập hết hạn',
+                        detail: 'Vui lòng đăng nhập lại',
+                        life: 3000
+                    });
+                    handleLogout();
+                }
+                return Promise.reject(error);
+            }
+        );
+
+        // Cleanup interceptor on component unmount
+        return () => {
+            axios.interceptors.response.eject(interceptor);
+        };
+    }, []);
+
+    // Add token expiration check on mount
+    useEffect(() => {
+        const token = localStorage.getItem('adminToken');
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token) as { exp?: number };
+                if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
+                    toast.current?.show({
+                        severity: 'warn',
+                        summary: 'Phiên đăng nhập hết hạn',
+                        detail: 'Vui lòng đăng nhập lại',
+                        life: 3000
+                    });
+                    handleLogout();
+                }
+            } catch (error) {
+                console.error('Token decode error:', error);
+                handleLogout();
+            }
+        }
+    }, []);
 
     const handleLogin = async () => {
         try {
@@ -173,3 +241,7 @@ const AdminLogin = () => {
 };
 
 export default AdminLogin;
+
+function jwt_decode(token: string) {
+    throw new Error('Function not implemented.');
+}

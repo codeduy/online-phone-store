@@ -3,6 +3,7 @@ import { Carousel } from 'primereact/carousel';
 import { Card } from 'primereact/card';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 
 interface NewsEvent {
     _id: string;
@@ -90,6 +91,10 @@ const UserNews: React.FC = () => {
 
     return (
         <div className="p-4">
+            <Helmet>
+                <title>Tin tức & sự kiện</title>
+                <link rel="icon" href="../../src/assets/img/phone.ico" />
+            </Helmet>
             <div className="grid grid-cols-5 gap-6">
                 {/* Promotions Section */}
                 <div className="col-span-3">

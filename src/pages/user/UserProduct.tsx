@@ -226,7 +226,7 @@ const UserProduct = () => {
     : '/fallback-image.jpg';
 
     return (
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 h-[480px] flex flex-col mr-3">
+      <div className="w-[320px] bg-white rounded-lg shadow-lg border border-gray-200 p-6 h-[480px] flex flex-col ">
           {/* Image section */}
           <div className="relative group h-48 w-48 mx-auto mb-6">
               <img 
@@ -501,44 +501,46 @@ const UserProduct = () => {
                         </Link>
                     </div>
                     <Carousel 
-                        value={products} 
-                        itemTemplate={productTemplate} 
-                        numVisible={4}
-                        numScroll={1}
-                        circular={true}
-                        autoplayInterval={5000}
-                        className="p-2"
-                        pt={{
-                            content: { className: 'px-2' },
-                            previousButton: { 
-                                className: 'bg-white text-gray-700 hover:bg-gray-100 transition-colors duration-200' 
-                            },
-                            nextButton: { 
-                                className: 'bg-white text-gray-700 hover:bg-gray-100 transition-colors duration-200' 
-                            }
-                        }}
-                        responsiveOptions={[
-                            {
-                                breakpoint: '1400px',
-                                numVisible: 4,
-                                numScroll: 1
-                            },
-                            {
-                                breakpoint: '1024px',
-                                numVisible: 3,
-                                numScroll: 1
-                            },
-                            {
-                                breakpoint: '768px',
-                                numVisible: 2,
-                                numScroll: 1
-                            },
-                            {
-                                breakpoint: '560px',
-                                numVisible: 1,
-                                numScroll: 1
-                            }
-                        ]}
+                      value={products} 
+                      itemTemplate={productTemplate} 
+                      numVisible={4}
+                      numScroll={1}
+                      circular={true}
+                      autoplayInterval={5000}
+                      className="p-2"
+                      pt={{
+                          root: { className: 'overflow-hidden' },
+                          content: { className: 'flex items-stretch' },
+                          container: { className: 'flex items-stretch gap-3' },
+                          previousButton: { 
+                              className: 'bg-white text-gray-700 hover:bg-gray-100 transition-colors duration-200' 
+                          },
+                          nextButton: { 
+                              className: 'bg-white text-gray-700 hover:bg-gray-100 transition-colors duration-200' 
+                          }
+                      }}
+                      responsiveOptions={[
+                          {
+                              breakpoint: '1400px',
+                              numVisible: 4,
+                              numScroll: 1
+                          },
+                          {
+                              breakpoint: '1024px',
+                              numVisible: 3,
+                              numScroll: 1
+                          },
+                          {
+                              breakpoint: '768px',
+                              numVisible: 2,
+                              numScroll: 1
+                          },
+                          {
+                              breakpoint: '560px',
+                              numVisible: 1,
+                              numScroll: 1
+                          }
+                      ]}
                     />
                 </div>
             ))

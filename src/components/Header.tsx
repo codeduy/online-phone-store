@@ -6,16 +6,30 @@ import { Menu } from 'primereact/menu';
 import { useNavigate } from 'react-router-dom';
 import '/src/styles/tailwind.css';
 import '/src/styles/darkmode.css';
+import axios from 'axios';
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(false);
   const menuRef = useRef<Menu>(null);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminUser');
-    navigate('/admin/login');
+  const handleLogout = async () => {
+    try {
+        const token = localStorage.getItem('adminToken');
+        if (token) {
+            await axios.post('http://localhost:3000/api/admin/logout', {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Logout error:', error);
+    } finally {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        navigate('/admin/login');
+    }
   };
 
   useEffect(() => {
@@ -31,6 +45,11 @@ export default function Header() {
       label: 'Thông tin người dùng',
       icon: 'pi pi-user',
       command: () => navigate('/admin/profile'),
+    },
+    {
+      label: 'Lịch sử hoạt động',
+      icon: 'pi pi-history',
+      command: () => navigate('/admin/logs'),
     },
     {
       label: 'Đăng xuất',

@@ -18,7 +18,10 @@ interface OrderItem {
     image: string;
     color: string;
     product_id: {
-        trademark?: string;
+        category_id?: {
+            _id: string;
+            name: string;
+        } | string;  
         ram?: string;
         storage?: string;
         baseProductName?: string;
@@ -301,13 +304,18 @@ const UserOrders: React.FC = () => {
     
         // Get trademark from product name
         let trademark = 'UNKNOWN';
-        if (item.name.toLowerCase().includes('iphone')) {
-            trademark = 'APPLE';
-        } else if (item.name.toLowerCase().includes('samsung')) {
-            trademark = 'SAMSUNG';
-        } else if (item.product_id.trademark) {
-            trademark = item.product_id.trademark.toUpperCase();
-        }
+        if (item.product_id.category_id && 
+            typeof item.product_id.category_id === 'object' && 
+            'name' in item.product_id.category_id) {
+            trademark = item.product_id.category_id.name.toUpperCase();
+        } 
+        // else if (item.name.toLowerCase().includes('iphone')) {
+        //     trademark = 'APPLE';
+        // } else if (item.name.toLowerCase().includes('samsung')) {
+        //     trademark = 'SAMSUNG';
+        // } else if (typeof item.product_id.category_id === 'string') {
+        //     trademark = item.product_id.category_id.toUpperCase();
+        // }
     
         // Get product name
         const productName = item.product_id.baseProductName?.replace(/\s+/g, '') || 

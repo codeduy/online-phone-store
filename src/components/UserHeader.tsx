@@ -188,7 +188,7 @@ export default function UserHeader() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/categories');
+        const response = await axios.get('http://localhost:3000/api/categories/active');
         if (response.data && Array.isArray(response.data)) {
           setCategories(response.data);
         } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -342,17 +342,42 @@ export default function UserHeader() {
         className="p-button-rounded p-button-text hover:bg-gray-100"
       /> */}
 
+    <div style={{ position: 'relative' }}>
       <Button
         icon="pi pi-shopping-cart"
-        className="p-button-rounded p-button-text hover:bg-gray-100 relative"
+        className="cart-icon-button
+                  p-button-rounded 
+                  p-button-danger 
+                  p-button-text 
+                  text-green-500 
+                  hover:text-red-600 
+                  hover:bg-red-50
+                  transition-all 
+                  duration-200   
+                  border"
         onClick={() => navigate('/cart')}
-      >
-        {cartCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {cartCount}
-          </span>
-        )}
-      </Button>
+      />
+      {cartCount > 0 && (
+        <span
+          style={{
+            position: 'absolute',
+            top: '-5px',
+            right: '-5px',
+            backgroundColor: '#f44336',
+            color: 'white',
+            fontSize: '10px',
+            width: '18px',
+            height: '18px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+          }}
+        >
+          {cartCount}
+        </span>
+      )}
+    </div>
 
       <Menu model={userMenuItems} popup ref={menuRef} className="shadow-lg" />
       <Button

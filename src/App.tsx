@@ -49,9 +49,12 @@ import UserOrderDetail from "./pages/user/UserOrderDetail.tsx";
 import UserFavorites from "./pages/user/UserFavorites.tsx";
 import UserContact from "./pages/user/UserContact.tsx";
 import UserNews from "./pages/user/UserNews.tsx";
+import AdminLogs from './pages/admin/AdminLogs';
 
 import { ComparisonProvider } from "./components/user/ComparisonContext.tsx";
 import { FilterProvider } from "./components/user/FilterContext.tsx";
+
+import PaymentResult from './pages/user/PaymentResult.tsx';
 
 
 axios.defaults.baseURL = "http://localhost:3000/api";
@@ -78,6 +81,7 @@ const App = () => {
                   <Route path="settings" element={<AdminSettings />} />
                   <Route path="coupons" element={<AdminCoupons />} />
                   <Route path="/admin/orders/:id" element={<AdminOrderDetails/>} />
+                  <Route path="logs" element={<AdminLogs />} />
                   {/* Admin routes */}
               </Route>
               <Route path="/admin/logout" element={<Navigate to="/admin/login" />} />
@@ -110,7 +114,7 @@ const App = () => {
                 <Route path="products/:brand" element={<UserProductsByBrand />} />
                 <Route path="user-products-filter" element={<UserProductsFilter />} />
                 <Route path="/products/detail/:link" element={<UserProductDetail/>} />
-                <Route path="/products/detail/:link" element={<UserProductReview/>} />
+                <Route path="/products/:productId/reviews" element={<UserProductReview/>} />
                 <Route path="/products/compare/:comparisonUrl" element={<UserProductsCompare />} />
                 <Route path="/product/compare/:comparisonUrl" element={<UserProductsCompare />} />
                 <Route path="/orders" element={<UserOrders/>}/> 
@@ -118,6 +122,7 @@ const App = () => {
                 <Route path="/favorites" element={<UserFavorites />}/>
                 <Route path="/contact" element={<UserContact />}/>
                 <Route path="/news" element={<UserNews />}/>
+                <Route path="/payment-result" element={<PaymentResult />} />
                 {/* User routes */}
               </Route>
               <Route path="logout" element={<Navigate to="/login" />} />
