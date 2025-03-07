@@ -1,6 +1,6 @@
 {
-  "vnp_TmnCode":"",
-  "vnp_HashSecret":"",
+  "vnp_TmnCode":"V1NZAH7F",
+  "vnp_HashSecret":"NSFN5F18QP69E778WY7PLUT2X59X6QLO",
   "vnp_Url":"https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
   "vnp_Api":"https://sandbox.vnpayment.vn/merchant_webapi/api/transaction",
   "vnp_ReturnUrl": "http://localhost:8888/order/vnpay_return"

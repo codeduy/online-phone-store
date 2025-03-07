@@ -1,6 +1,7 @@
 const NewsEvent = require('../../models/newsEventModel');
 const multer = require('multer');
 const path = require('path');
+const logger = require('../../middleware/loggerMiddleware');
 
 // Configure multer for image upload
 const storage = multer.diskStorage({
@@ -64,6 +65,15 @@ const newsController = {
     
             const news = new NewsEvent(newsData);
             await news.save();
+
+            // Log the create action
+            await logger(
+                req.user.userId,
+                'CREATE',
+                'NEWS',
+                `Tạo tin tức mới: ${news.title}`,
+                req
+            );
             
             res.status(201).json({ 
                 success: true, 
@@ -111,6 +121,15 @@ const newsController = {
                     message: 'Không tìm thấy tin tức'
                 });
             }
+
+             // Log the update action
+             await logger(
+                req.user.userId,
+                'UPDATE',
+                'NEWS',
+                `Cập nhật tin tức: ${news.title}`,
+                req
+            );
             
             res.json({ success: true, data: news });
         } catch (error) {
@@ -131,6 +150,17 @@ const newsController = {
             if (!news) {
                 return res.status(404).json({ success: false, message: 'News not found' });
             }
+
+            await NewsEvent.findByIdAndDelete(req.params.id);
+
+            // Log the delete action
+            await logger(
+                req.user.userId,
+                'DELETE',
+                'NEWS',
+                `Xóa tin tức: ${news.title}`,
+                req
+            );
             
             res.json({ success: true, message: 'News deleted successfully' });
         } catch (error) {

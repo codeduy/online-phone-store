@@ -58,8 +58,13 @@ const handleLogout = (req, res) => {
 
 const auth = (req, res, next) => {
     try {
+        // Log để debug
+        console.log('Auth headers:', req.headers);
+        console.log('Authorization header:', req.headers.authorization);
+
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            console.log('No valid auth header found');
             return res.status(401).json({
                 success: false,
                 message: 'No token provided'
@@ -67,20 +72,41 @@ const auth = (req, res, next) => {
         }
 
         const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
-        // Add user info to request
-        req.user = {
-            id: decoded.userId, 
-            userId: decoded.userId,
-            role: decoded.role
-        };
-        next();
+        console.log('Token extracted:', token);
+
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            console.log('Decoded token:', decoded);
+
+            // Add user info to request
+            req.user = {
+                id: decoded.userId,
+                userId: decoded.userId,
+                role: decoded.role
+            };
+
+            console.log('User added to request:', req.user);
+            next();
+        } catch (jwtError) {
+            console.error('JWT verification error:', jwtError);
+            
+            if (jwtError.name === 'TokenExpiredError') {
+                return res.status(401).json({
+                    success: false,
+                    message: 'Token has expired'
+                });
+            }
+
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid token'
+            });
+        }
     } catch (error) {
         console.error('Auth middleware error:', error);
         return res.status(401).json({
             success: false,
-            message: 'Invalid token'
+            message: 'Authentication failed'
         });
     }
 };

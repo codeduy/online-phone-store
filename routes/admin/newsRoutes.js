@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const newsController = require('../../controllers/admin/newsController');
-const adminAuthMiddleware = require('../../middleware/admin/adminAuthMiddleware');
+const { adminAuthMiddleware } = require('../../middleware/admin/adminAuthMiddleware');
 
 // Apply admin auth middleware to all routes
 router.use(adminAuthMiddleware);

@@ -1,89 +1,148 @@
 const Review = require('../models/reviewModel');
-const Product = require('../models/productModel');
+const Order = require('../models/orderModel');
+const OrderItem = require('../models/orderItemModel');
+const mongoose = require('mongoose');
 
 const reviewController = {
-    // Get reviews for a product
-    getProductReviews: async (req, res) => {
+    // Check if user can review
+    canUserReview: async (req, res) => {
         try {
             const { productId } = req.params;
-            
-            // Get reviews
-            const reviews = await Review.find({ product_id: productId })
-                .populate('user_id', 'name')
-                .sort({ createdAt: -1 })
-                .limit(2);
+            const userId = req.user.id;
 
-            // Calculate stats
-            const allReviews = await Review.find({ product_id: productId });
-            const stats = {
-                1: 0, 2: 0, 3: 0, 4: 0, 5: 0,
-                total: allReviews.length,
-                average: 0
-            };
+            console.log('Checking review permission:', { productId, userId });
 
-            // Count ratings
-            allReviews.forEach(review => {
-                stats[review.rating] = (stats[review.rating] || 0) + 1;
+            // Check if user has already reviewed
+            const existingReview = await Review.findOne({
+                product_id: productId,
+                user_id: userId,
+                parent_id: null
             });
 
-            // Calculate average
-            const totalRating = allReviews.reduce((sum, review) => sum + review.rating, 0);
-            stats.average = stats.total > 0 ? totalRating / stats.total : 0;
+            if (existingReview) {
+                return res.json({
+                    success: true,
+                    canReview: false,
+                    message: 'Bạn đã đánh giá sản phẩm này'
+                });
+            }
 
-            res.json({
+            // Verify purchase
+            const hasPurchased = await OrderItem.verifyPurchase(productId, userId);
+
+            return res.json({
                 success: true,
-                data: {
-                    reviews,
-                    stats
-                }
+                canReview: hasPurchased,
+                message: hasPurchased ? 
+                    'Bạn có thể đánh giá sản phẩm này' : 
+                    'Bạn cần mua sản phẩm để đánh giá'
             });
+
         } catch (error) {
-            res.status(500).json({
+            console.error('Error checking review permission:', error);
+            return res.status(500).json({
                 success: false,
                 message: error.message
             });
         }
     },
+    
 
-    // Get review statistics
-    getReviewStats: async (req, res) => {
+    // Get reviews with pagination and stats
+    getProductReviews: async (req, res) => {
         try {
             const { productId } = req.params;
+            const { page = 1, limit = 10, sort = 'newest' } = req.query;
+            
+            console.log('Getting reviews for product:', { productId, page, limit, sort });
+            
+            const productObjectId = new mongoose.Types.ObjectId(productId);
+            
+            // Build sort options
+            let sortOption = {};
+            switch (sort) {
+                case 'newest':
+                    sortOption = { createdAt: -1 };
+                    break;
+                case 'oldest':
+                    sortOption = { createdAt: 1 };
+                    break;
+                case 'highest':
+                    sortOption = { rating: -1 };
+                    break;
+                case 'lowest':
+                    sortOption = { rating: 1 };
+                    break;
+                default:
+                    sortOption = { createdAt: -1 };
+            }
+
+            // Get paginated reviews
+            const reviews = await Review.find({ 
+                product_id: productObjectId,
+                parent_id: null,
+                status: 'approved'
+            })
+            .populate('user_id', 'name')
+            .sort(sortOption)
+            .skip((page - 1) * limit)
+            .limit(Number(limit))
+            .lean();
+
+            // Get total count
+            const totalReviews = await Review.countDocuments({
+                product_id: productObjectId,
+                parent_id: null,
+                status: 'approved'
+            });
+
+            // Calculate stats
             const stats = await Review.aggregate([
-                { $match: { product_id: productId } },
+                { 
+                    $match: { 
+                        product_id: productObjectId,
+                        parent_id: null,
+                        status: 'approved'
+                    } 
+                },
                 {
                     $group: {
-                        _id: '$rating',
-                        count: { $sum: 1 }
+                        _id: null,
+                        average: { $avg: '$rating' },
+                        total: { $sum: 1 },
+                        five: { $sum: { $cond: [{ $eq: ['$rating', 5] }, 1, 0] } },
+                        four: { $sum: { $cond: [{ $eq: ['$rating', 4] }, 1, 0] } },
+                        three: { $sum: { $cond: [{ $eq: ['$rating', 3] }, 1, 0] } },
+                        two: { $sum: { $cond: [{ $eq: ['$rating', 2] }, 1, 0] } },
+                        one: { $sum: { $cond: [{ $eq: ['$rating', 1] }, 1, 0] } }
                     }
                 }
             ]);
 
             res.json({
                 success: true,
-                data: stats
+                data: {
+                    reviews,
+                    stats: stats[0] || {
+                        average: 0,
+                        total: 0,
+                        five: 0,
+                        four: 0,
+                        three: 0,
+                        two: 0,
+                        one: 0
+                    },
+                    pagination: {
+                        currentPage: Number(page),
+                        totalPages: Math.ceil(totalReviews / limit),
+                        totalReviews,
+                        limit: Number(limit)
+                    }
+                }
             });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: error.message
-            });
-        }
-    },
 
-    // Get user's reviews
-    getUserReviews: async (req, res) => {
-        try {
-            const userId = req.user.id;
-            const reviews = await Review.find({ user_id: userId })
-                .populate('product_id', 'name')
-                .sort({ createdAt: -1 });
-
-            res.json({
-                success: true,
-                data: reviews
-            });
         } catch (error) {
+            console.error('Error getting product reviews:', error);
             res.status(500).json({
                 success: false,
                 message: error.message
@@ -96,73 +155,99 @@ const reviewController = {
         try {
             const { productId } = req.params;
             const userId = req.user.id;
-            const { rating, comment, images } = req.body;
+            const { rating, comment } = req.body;
 
+            // Check existing review first
+            const existingReview = await Review.findOne({
+                product_id: productId,
+                user_id: userId,
+                parent_id: null
+            });
+
+            if (existingReview) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Bạn đã đánh giá sản phẩm này'
+                });
+            }
+
+            // Verify purchase
+            const hasPurchased = await OrderItem.verifyPurchase(productId, userId);
+            if (!hasPurchased) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Bạn cần mua sản phẩm trước khi đánh giá'
+                });
+            }
+
+            // Handle uploaded files
+            const images = req.files ? req.files.map(file => `/uploads/reviews/${file.filename}`) : [];
+
+            // Create review
             const review = await Review.create({
                 product_id: productId,
                 user_id: userId,
                 rating,
                 comment,
                 images,
-                is_verified_purchase: true
+                is_verified_purchase: true,
+                status: 'approved'
             });
 
-            res.json({
+            // Return populated review
+            const populatedReview = await Review.findById(review._id)
+                .populate('user_id', 'name');
+
+            return res.json({
                 success: true,
-                data: review
+                data: populatedReview
             });
+
         } catch (error) {
-            res.status(500).json({
+            console.error('Add review error:', error);
+            return res.status(500).json({
                 success: false,
                 message: error.message
             });
         }
     },
 
-    // Add reply to review
-    addReply: async (req, res) => {
-        try {
-            const { reviewId } = req.params;
-            const { comment } = req.body;
-
-            const review = req.review; // From middleware
-            const reply = await Review.create({
-                product_id: review.product_id,
-                user_id: req.user.id,
-                comment,
-                parent_id: reviewId,
-                is_verified_purchase: true
-            });
-
-            res.json({
-                success: true,
-                data: reply
-            });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: error.message
-            });
-        }
-    },
-
-    // Delete review
     deleteReview: async (req, res) => {
         try {
-            const review = req.review; // From middleware
-            await review.remove();
-
-            res.json({
+            const { reviewId, productId } = req.params;
+            const userId = req.user.id;
+    
+            // Kiểm tra review tồn tại và thuộc về user
+            const review = await Review.findOne({
+                _id: reviewId,
+                product_id: productId,
+                user_id: userId
+            });
+    
+            if (!review) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Không tìm thấy đánh giá hoặc bạn không có quyền xóa'
+                });
+            }
+    
+            // Xóa review
+            await Review.findByIdAndDelete(reviewId);
+    
+            return res.json({
                 success: true,
                 message: 'Đã xóa đánh giá thành công'
             });
+    
         } catch (error) {
-            res.status(500).json({
+            console.error('Delete review error:', error);
+            return res.status(500).json({
                 success: false,
                 message: error.message
             });
         }
     }
+    
 };
 
 module.exports = reviewController;

@@ -33,6 +33,20 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserProfile'
     },  
+    purchased_products: [{
+        product_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+        },
+        purchase_date: {
+            type: Date,
+            default: Date.now
+        },
+        order_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Order'
+        }
+    }],
 }, { timestamps: true });
 
 // Methods để quản lý sản phẩm yêu thích
@@ -54,6 +68,33 @@ userSchema.methods.isFavorite = function(productId) {
     return this.favorite_products.some(id => 
         id.toString() === productId.toString()
     );
+};
+
+userSchema.methods.addPurchasedProduct = async function(productId, orderId) {
+    try {
+        console.log('Adding purchased product:', { productId, orderId });
+        
+        // Check if product already exists in purchased_products
+        const exists = this.purchased_products.some(item => 
+            item.product_id.toString() === productId.toString()
+        );
+
+        if (!exists) {
+            console.log('Product not found in purchased products, adding it');
+            this.purchased_products.push({
+                product_id: productId,
+                purchase_date: new Date(),
+                order_id: orderId
+            });
+            await this.save();
+            console.log('Successfully added product to purchased products');
+        } else {
+            console.log('Product already exists in purchased products');
+        }
+    } catch (error) {
+        console.error('Error adding purchased product:', error);
+        throw error;
+    }
 };
 
 const User = mongoose.model('User', userSchema, 'users');

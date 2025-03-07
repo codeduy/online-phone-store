@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
+const logger = require('../../middleware/loggerMiddleware');
+
 
 const storage = multer.diskStorage({
     destination: './public/uploads/admin',
@@ -78,6 +80,16 @@ const adminController = {
                     success: false,
                     message: 'Mật khẩu không chính xác'
                 });
+            }
+
+            if (isValidPassword) {
+                await logger(
+                    admin._id,
+                    'LOGIN',
+                    'AUTH',
+                    `Admin ${admin.name} đăng nhập thành công`,
+                    req
+                );
             }
 
             // Generate JWT token
@@ -273,6 +285,32 @@ const adminController = {
             res.status(500).json({
                 success: false,
                 message: 'Error changing password'
+            });
+        }
+    },
+
+    logout: async (req, res) => {
+        try {
+            const adminId = req.user.userId;
+
+            // Log logout
+            await logger(
+                adminId,
+                'LOGOUT',
+                'AUTH',
+                'Đăng xuất thành công',
+                req
+            );
+
+            res.json({
+                success: true,
+                message: 'Đăng xuất thành công'
+            });
+        } catch (error) {
+            console.error('Logout error:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Lỗi server'
             });
         }
     }

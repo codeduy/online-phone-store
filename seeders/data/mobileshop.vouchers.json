@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "67b1fab68630a36bac089250"
+  },
+  "name": "Giảm 50K cho đơn từ 500K",
+  "code": "WELCOME40K",
+  "discountType": "FIXED",
+  "discountValue": 50000,
+  "minOrderValue": 500000,
+  "startDate": {
+    "$date": "2025-02-16T17:00:00.000Z"
+  },
+  "endDate": {
+    "$date": "2025-03-20T16:59:59.999Z"
+  },
+  "isActive": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-16T14:48:22.058Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-20T04:50:16.020Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b1fab68630a36bac089251"
+  },
+  "name": "Giảm 10% cho đơn từ 1 triệu",
+  "code": "SAVE10PCT",
+  "discountType": "PERCENTAGE",
+  "discountValue": 10,
+  "minOrderValue": 1000000,
+  "startDate": {
+    "$date": "2025-02-16T17:00:00.000Z"
+  },
+  "endDate": {
+    "$date": "2025-03-03T17:00:00.000Z"
+  },
+  "isActive": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-16T14:48:22.058Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-20T04:40:29.980Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b1fab68630a36bac089252"
+  },
+  "name": "Giảm 200K cho đơn từ 2 triệu",
+  "code": "SUPER200K",
+  "discountType": "FIXED",
+  "discountValue": 200000,
+  "minOrderValue": 2000000,
+  "startDate": {
+    "$date": "2025-02-16T17:00:00.000Z"
+  },
+  "endDate": {
+    "$date": "2025-02-23T17:00:00.000Z"
+  },
+  "isActive": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-16T14:48:22.058Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-16T14:48:22.058Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b1fab68630a36bac089253"
+  },
+  "name": "Giảm 15% cho đơn từ 5 triệu",
+  "code": "MEGA15PCT",
+  "discountType": "PERCENTAGE",
+  "discountValue": 15,
+  "minOrderValue": 5000000,
+  "startDate": {
+    "$date": "2025-02-16T17:00:00.000Z"
+  },
+  "endDate": {
+    "$date": "2025-02-26T17:00:00.000Z"
+  },
+  "isActive": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-16T14:48:22.058Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-16T14:48:22.058Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b1fab68630a36bac089254"
+  },
+  "name": "Giảm 5 triệu cho đơn từ 50 triệu",
+  "code": "VIP5M",
+  "discountType": "FIXED",
+  "discountValue": 5000000,
+  "minOrderValue": 50000000,
+  "startDate": {
+    "$date": "2025-02-15T17:00:00.000Z"
+  },
+  "endDate": {
+    "$date": "2025-03-18T17:00:00.000Z"
+  },
+  "isActive": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-15T14:48:22.058Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-16T14:48:22.058Z"
+  }
+}]

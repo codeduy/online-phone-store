@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../../controllers/admin/productController');
-const adminAuthMiddleware = require('../../middleware/admin/adminAuthMiddleware');
+const { adminAuthMiddleware } = require('../../middleware/admin/adminAuthMiddleware');
 const upload = require('../../middleware/admin/logoUploadMiddleware');
 
 // Product management routes

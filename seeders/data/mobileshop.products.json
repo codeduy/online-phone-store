@@ -1,0 +1,559 @@
+[{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063100"
+  },
+  "name": "iPhone 16 Pro Max",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063001"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg",
+    "3.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "256GB",
+  "price": 33990000,
+  "stock": 0,
+  "needs": [
+    "Chơi game/Cấu hình cao",
+    "Chụp ảnh, quay phim"
+  ],
+  "special_features": [
+    "Kháng nước, bụi",
+    "Hỗ trợ 5G",
+    "Bảo mật khuôn mặt 3D",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "iphone-16-pro-max-256gb",
+  "meta": "iPhone 16 Pro Max 256GB",
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-15T04:39:45.419Z"
+  },
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063001"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063101"
+  },
+  "name": "iPhone 16 Pro Max",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063001"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg",
+    "3.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "512GB",
+  "price": 37990000,
+  "stock": 50,
+  "needs": [
+    "Chơi game/Cấu hình cao",
+    "Chụp ảnh, quay phim"
+  ],
+  "special_features": [
+    "Kháng nước, bụi",
+    "Hỗ trợ 5G",
+    "Bảo mật khuôn mặt 3D",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "iphone-16-pro-max-512gb",
+  "meta": "iPhone 16 Pro Max 512GB",
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-15T04:39:45.419Z"
+  },
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063001"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063102"
+  },
+  "name": "iPhone 16 Pro Max",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063001"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg",
+    "3.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "1TB",
+  "price": 43990000,
+  "stock": 25,
+  "needs": [
+    "Chơi game/Cấu hình cao",
+    "Chụp ảnh, quay phim"
+  ],
+  "special_features": [
+    "Kháng nước, bụi",
+    "Hỗ trợ 5G",
+    "Bảo mật khuôn mặt 3D",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "iphone-16-pro-max-1tb",
+  "meta": "iPhone 16 Pro Max 1TB",
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-15T04:39:45.419Z"
+  },
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063001"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063110"
+  },
+  "name": "iPhone 16 Pro",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063001"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg",
+    "3.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "128GB",
+  "price": 27490000,
+  "stock": 100,
+  "needs": [
+    "Chơi game/Cấu hình cao",
+    "Chụp ảnh, quay phim"
+  ],
+  "special_features": [
+    "Kháng nước, bụi",
+    "Hỗ trợ 5G",
+    "Bảo mật khuôn mặt 3D",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "iphone-16-pro-128gb",
+  "meta": "iPhone 16 Pro 128GB",
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-15T04:39:45.419Z"
+  },
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063001"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063111"
+  },
+  "name": "iPhone 16 Pro",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063001"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg",
+    "3.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "256GB",
+  "price": 30490000,
+  "stock": 75,
+  "needs": [
+    "Chơi game/Cấu hình cao",
+    "Chụp ảnh, quay phim"
+  ],
+  "special_features": [
+    "Kháng nước, bụi",
+    "Hỗ trợ 5G",
+    "Bảo mật khuôn mặt 3D",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "iphone-16-pro-256gb",
+  "meta": "iPhone 16 Pro 256GB",
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-15T04:39:45.419Z"
+  },
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063001"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063112"
+  },
+  "name": "iPhone 16 Pro",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063001"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg",
+    "3.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "512GB",
+  "price": 34490000,
+  "stock": 50,
+  "needs": [
+    "Chơi game/Cấu hình cao",
+    "Chụp ảnh, quay phim"
+  ],
+  "special_features": [
+    "Kháng nước, bụi",
+    "Hỗ trợ 5G",
+    "Bảo mật khuôn mặt 3D",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "iphone-16-pro-512gb",
+  "meta": "iPhone 16 Pro 512GB",
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-15T04:39:45.419Z"
+  },
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063001"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063113"
+  },
+  "name": "iPhone 16 Pro",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063001"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg",
+    "3.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "1TB",
+  "price": 39990000,
+  "stock": 25,
+  "needs": [
+    "Chơi game/Cấu hình cao",
+    "Chụp ảnh, quay phim"
+  ],
+  "special_features": [
+    "Kháng nước, bụi",
+    "Hỗ trợ 5G",
+    "Bảo mật khuôn mặt 3D",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "iphone-16-pro-1tb",
+  "meta": "iPhone 16 Pro 1TB",
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-15T04:39:45.419Z"
+  },
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063001"
+  }
+},
+{
+  "_id": {
+    "$oid": "67aca68b35c28c91eb056dbd"
+  },
+  "name": "Samsung Galaxy S24 Ultra 5G",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063002"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg",
+    "3.jpg"
+  ],
+  "ram": "12GB",
+  "storage": "256GB",
+  "price": 23490000,
+  "stock": 100,
+  "needs": [
+    "Chơi game/Cấu hình cao",
+    "Chụp ảnh, quay phim",
+    "Pin khủng trên 5000mAh"
+  ],
+  "special_features": [
+    "Kháng nước, bụi",
+    "Hỗ trợ 5G",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "samsung-galaxy-s24-ultra-5g-12gb-256gb",
+  "meta": "Samsung Galaxy S24 Ultra 5G 256GB",
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": {
+    "$date": "2025-02-15T04:39:45.450Z"
+  },
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063002"
+  }
+},
+{
+  "_id": {
+    "$oid": "67aca68b35c28c91eb056dbe"
+  },
+  "name": "Samsung Galaxy S24 Ultra 5G",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063002"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg",
+    "2.jpg"
+  ],
+  "ram": "12GB",
+  "storage": "512GB",
+  "price": 26990000,
+  "stock": 100,
+  "needs": [
+    "Chơi game/Cấu hình cao",
+    "Chụp ảnh, quay phim",
+    "Pin khủng trên 5000mAh"
+  ],
+  "special_features": [
+    "Kháng nước, bụi",
+    "Hỗ trợ 5G",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "samsung-galaxy-s24-ultra-5g-12gb-512gb",
+  "meta": "Samsung Galaxy S24 Ultra 5G 512GB",
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": {
+    "$date": "2025-02-15T04:39:45.450Z"
+  },
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063002"
+  }
+},
+{
+  "_id": {
+    "$oid": "67aca68b35c28c91eb056dbf"
+  },
+  "name": "Samsung Galaxy A16",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063002"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "128GB",
+  "price": 5890000,
+  "stock": 100,
+  "needs": [
+    "Pin khủng trên 5000mAh"
+  ],
+  "special_features": [
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "samsung-galaxy-a16-8gb-128gb",
+  "meta": "Samsung Galaxy A16 128GB",
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": "2024-02-09T00:00:00.000Z",
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063002"
+  }
+},
+{
+  "_id": {
+    "$oid": "67aca68b35c28c91eb056dc0"
+  },
+  "name": "Samsung Galaxy A16",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063002"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "256GB",
+  "price": 6490000,
+  "stock": 100,
+  "needs": [
+    "Pin khủng trên 5000mAh"
+  ],
+  "special_features": [
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "samsung-galaxy-a16-8gb-256gb",
+  "meta": "Samsung Galaxy A16 256GB",
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": "2024-02-09T00:00:00.000Z",
+  "release_year": 2024,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063002"
+  }
+},
+{
+  "_id": {
+    "$oid": "67aca68b35c28c91eb056dc1"
+  },
+  "name": "Samsung Galaxy A16 5G",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063002"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "128GB",
+  "price": 6990000,
+  "stock": 100,
+  "needs": [
+    "Pin khủng trên 5000mAh"
+  ],
+  "special_features": [
+    "Hỗ trợ 5G",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "samsung-galaxy-a16-5g-8gb-128gb",
+  "meta": "Samsung Galaxy A16 5G 128GB",
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": {
+    "$date": "2025-02-21T09:10:54.362Z"
+  },
+  "release_year": 2023,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063002"
+  }
+},
+{
+  "_id": {
+    "$oid": "67aca68b35c28c91eb056dc2"
+  },
+  "name": "Samsung Galaxy A16 5G",
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063002"
+  },
+  "images": [
+    "main.jpg",
+    "1.jpg",
+    "2.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "256GB",
+  "price": 7590000,
+  "stock": 100,
+  "needs": [
+    "Pin khủng trên 5000mAh"
+  ],
+  "special_features": [
+    "Hỗ trợ 5G",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "samsung-galaxy-a16-5g-8gb-256gb",
+  "meta": "Samsung Galaxy A16 5G 256GB",
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": {
+    "$date": "2025-02-21T09:05:44.146Z"
+  },
+  "release_year": 2023,
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063002"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b940f8d43f562254eb4e20"
+  },
+  "name": "Xiaomi Redmi Note 13 Pro",
+  "release_year": 2022,
+  "category_id": {
+    "$oid": "65c4e8150d64b5348c063005"
+  },
+  "trademark": {
+    "$oid": "65c4e8150d64b5348c063005"
+  },
+  "images": [
+    "1740194040742-main.jpg",
+    "1740194040743-1.jpg",
+    "1740194040759-2.jpg",
+    "1740194040760-3.jpg",
+    "1740194040761-4.jpg",
+    "1740194040762-5.jpg"
+  ],
+  "ram": "8GB",
+  "storage": "512GB",
+  "price": 7000000,
+  "stock": 10,
+  "needs": [
+    "Chơi game/Cấu hình cao",
+    "Pin khủng trên 5000mAh",
+    "Chụp ảnh, quay phim",
+    "Mỏng nhẹ"
+  ],
+  "special_features": [
+    "Kháng nước, bụi",
+    "Hỗ trợ 5G",
+    "Bảo mật khuôn mặt 3D",
+    "Công nghệ NFC"
+  ],
+  "rating": 0,
+  "link": "xiaomi-redmi-note-13-pro-8gb-512gb",
+  "meta": "",
+  "created_at": {
+    "$date": "2025-02-22T03:14:00.766Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-22T03:37:54.936Z"
+  },
+  "__v": 0
+}]

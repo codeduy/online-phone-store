@@ -1,0 +1,166 @@
+[{
+  "_id": {
+    "$oid": "67b59f00ec36642bffed564f"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "items": [
+    {
+      "$oid": "67b59f00ec36642bffed5651"
+    },
+    {
+      "$oid": "67b59f00ec36642bffed5652"
+    }
+  ],
+  "total_amount": 77470000,
+  "shipping_fee": 0,
+  "discount": 0,
+  "final_amount": 77470000,
+  "status": "paid",
+  "payment_method": "bank",
+  "payment_status": "pending",
+  "user_profile": {
+    "fullName": "Di",
+    "phone": "0147814523",
+    "address": "Quan 7"
+  },
+  "createdAt": {
+    "$date": "2025-02-19T09:06:08.937Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T01:32:14.770Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "67b5b2fcbdc17ea1003df444"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "items": [
+    {
+      "$oid": "67b5b2fcbdc17ea1003df446"
+    }
+  ],
+  "total_amount": 37990000,
+  "shipping_fee": 0,
+  "discount": 0,
+  "final_amount": 37990000,
+  "status": "pending",
+  "payment_method": "bank",
+  "payment_status": "pending",
+  "user_profile": {
+    "fullName": "Di",
+    "phone": "0147814523",
+    "address": "Quan 7"
+  },
+  "createdAt": {
+    "$date": "2025-02-19T10:31:24.359Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-19T10:31:24.387Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "67b5b382bdc17ea1003df5a3"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "items": [
+    {
+      "$oid": "67b5b382bdc17ea1003df5a5"
+    }
+  ],
+  "total_amount": 19470000,
+  "shipping_fee": 0,
+  "discount": 50000,
+  "final_amount": 19420000,
+  "status": "cancelled",
+  "payment_method": "bank",
+  "payment_status": "pending",
+  "user_profile": {
+    "fullName": "Di",
+    "phone": "0147814523",
+    "address": "Quan 7"
+  },
+  "createdAt": {
+    "$date": "2025-02-19T10:33:38.893Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T03:20:20.573Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "67b5bfc1b33c1b380772023d"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "items": [
+    {
+      "$oid": "67b5bfc1b33c1b380772023f"
+    }
+  ],
+  "total_amount": 5890000,
+  "shipping_fee": 0,
+  "discount": 0,
+  "final_amount": 5890000,
+  "status": "pending",
+  "payment_method": "cod",
+  "payment_status": "pending",
+  "user_profile": {
+    "fullName": "Di",
+    "phone": "0147814523",
+    "address": "Quan 7"
+  },
+  "createdAt": {
+    "$date": "2025-02-19T11:25:53.286Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T03:20:14.122Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "67b9ac5c39aee3a85f6c34bf"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "items": [
+    {
+      "$oid": "67b9ac5c39aee3a85f6c34c1"
+    },
+    {
+      "$oid": "67b9ac5c39aee3a85f6c34c2"
+    }
+  ],
+  "total_amount": 197940000,
+  "shipping_fee": 0,
+  "discount": 0,
+  "final_amount": 197940000,
+  "status": "pending",
+  "payment_method": "bank",
+  "payment_status": "pending",
+  "user_profile": {
+    "fullName": "Duy",
+    "phone": "0147814523",
+    "address": "Quan 7"
+  },
+  "createdAt": {
+    "$date": "2025-02-22T10:52:12.949Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T10:52:12.972Z"
+  },
+  "__v": 1
+}]

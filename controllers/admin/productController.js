@@ -3,6 +3,7 @@ const { ProductDetail } = require('../../models/productDetailModel');
 const Category = require('../../models/categoryModel');
 const fs = require('fs').promises;
 const path = require('path');
+const logger = require('../../middleware/loggerMiddleware');
 
 const productController = {
     getAllProducts: async (req, res) => {
@@ -263,6 +264,15 @@ const productController = {
 
             await productDetail.save();
 
+            // Log product creation
+            await logger(
+                req.user.userId,
+                'CREATE',
+                'PRODUCTS',
+                `Thêm sản phẩm mới: ${product.name} (${product.storage}${product.ram ? `, ${product.ram}` : ''})`,
+                req
+            );
+
             res.json({
                 success: true,
                 message: 'Product created successfully',
@@ -293,6 +303,15 @@ const productController = {
         try {
             const { id } = req.params;
             const updateData = req.body;
+
+            // Get original product for logging changes
+            const originalProduct = await Product.findById(id);
+            if (!originalProduct) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Product not found'
+                });
+            }
             
             // Parse details from form data
             const details = updateData.details ? JSON.parse(updateData.details) : null;
@@ -369,6 +388,27 @@ const productController = {
                     { new: true, upsert: true }
                 );
             }
+
+            // Prepare changes log
+            const changes = [];
+            if (updateData.price !== originalProduct.price) {
+                changes.push(`Giá: ${originalProduct.price.toLocaleString('vi-VN')}đ → ${updateData.price.toLocaleString('vi-VN')}đ`);
+            }
+            if (updateData.stock !== originalProduct.stock) {
+                changes.push(`Tồn kho: ${originalProduct.stock} → ${updateData.stock}`);
+            }
+            if (updateData.discount !== originalProduct.discount) {
+                changes.push(`Giảm giá: ${originalProduct.discount}% → ${updateData.discount}%`);
+            }
+
+            // Log product update
+            await logger(
+                req.user.userId,
+                'UPDATE',
+                'PRODUCTS',
+                `Cập nhật sản phẩm ${originalProduct.name}: ${changes.join(', ')}`,
+                req
+            );
     
             res.json({
                 success: true,
@@ -387,9 +427,9 @@ const productController = {
 
     deleteProduct: async (req, res) => {
         try {
-            const { id } = req.params;
-            
+            const { id } = req.params;            
             const product = await Product.findById(id).populate('trademark');
+
             if (!product) {
                 return res.status(404).json({
                     success: false,
@@ -416,6 +456,15 @@ const productController = {
     
             // Delete product
             await Product.findByIdAndDelete(id);
+
+            // Log product deletion
+            await logger(
+                req.user.userId,
+                'DELETE',
+                'PRODUCTS',
+                `Xóa sản phẩm: ${product.name}`,
+                req
+            );
     
             res.json({
                 success: true,
@@ -462,6 +511,15 @@ const productController = {
 
             await category.save();
 
+            // Log category creation
+            await logger(
+                req.user.userId,
+                'CREATE',
+                'PRODUCTS',
+                `Thêm danh mục mới: ${category.name}`,
+                req
+            );
+
             res.json({
                 success: true,
                 message: 'Category created successfully',
@@ -498,6 +556,15 @@ const productController = {
             }
 
             await Category.findByIdAndDelete(id);
+
+            // Log category deletion
+            await logger(
+                req.user.userId,
+                'DELETE',
+                'PRODUCTS',
+                `Xóa danh mục: ${category.name}`,
+                req
+            );
 
             res.json({
                 success: true,
@@ -563,6 +630,8 @@ const productController = {
         try {
             const { id } = req.params;
             const { name, description, link } = req.body;
+
+            const originalCategory = await Category.findById(id);
     
             // Tìm category hiện tại
             const category = await Category.findById(id);
@@ -593,6 +662,26 @@ const productController = {
     
             // Lưu thay đổi
             const updatedCategory = await category.save();
+
+            // Log category update
+            const changes = [];
+            if (updatedCategory.name !== originalCategory.name) {
+                changes.push(`Tên: ${originalCategory.name} → ${name}`);
+            }
+            if (updatedCategory.description !== originalCategory.description) {
+                changes.push('Cập nhật mô tả');
+            }
+            if (req.file) {
+                changes.push('Cập nhật logo');
+            }
+
+            await logger(
+                req.user.userId,
+                'UPDATE',
+                'PRODUCTS',
+                `Cập nhật danh mục ${originalCategory.name}: ${changes.join(', ')}`,
+                req
+            );
     
             res.json({
                 success: true,

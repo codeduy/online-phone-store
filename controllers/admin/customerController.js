@@ -1,6 +1,7 @@
 const User = require('../../models/userModel');
 const UserProfile = require('../../models/userProfileModel');
 const bcrypt = require('bcrypt');
+const logger = require('../../middleware/loggerMiddleware');
 
 const customerController = {
     // Get all customers
@@ -63,6 +64,13 @@ const customerController = {
                 });
             }
 
+            // Store old values for logging
+            const oldValues = {
+                email: user.email,
+                status: user.status,
+                profile: await UserProfile.findOne({ user_id: user._id })
+            };
+
             // Update user information
             user.email = email || user.email;
             user.status = status || user.status;
@@ -96,6 +104,36 @@ const customerController = {
                 profile.address = address || profile.address;
                 await profile.save();
             }
+
+            // Prepare log details
+            let changes = [];
+            if (email !== oldValues.email) {
+                changes.push(`Email: ${oldValues.email} → ${email}`);
+            }
+            if (status !== oldValues.status) {
+                changes.push(`Trạng thái: ${oldValues.status} → ${status}`);
+            }
+            if (full_name !== oldValues.profile?.full_name) {
+                changes.push(`Họ tên: ${oldValues.profile?.full_name || 'N/A'} → ${full_name}`);
+            }
+            if (phone !== oldValues.profile?.phone_number) {
+                changes.push(`SĐT: ${oldValues.profile?.phone_number || 'N/A'} → ${phone}`);
+            }
+            if (address !== oldValues.profile?.address) {
+                changes.push(`Địa chỉ: ${oldValues.profile?.address || 'N/A'} → ${address}`);
+            }
+            if (password) {
+                changes.push('Đã cập nhật mật khẩu');
+            }
+
+            // Log the update action
+            await logger(
+                req.user.userId,
+                'UPDATE',
+                'CUSTOMERS',
+                `Cập nhật thông tin khách hàng ${user.name}: ${changes.join(', ')}`,
+                req
+            );
 
             // Get updated data
             const updatedCustomer = {

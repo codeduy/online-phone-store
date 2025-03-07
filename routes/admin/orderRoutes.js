@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const orderController = require('../../controllers/admin/orderController');
-const adminAuthMiddleware = require('../../middleware/admin/adminAuthMiddleware');
+const { adminAuthMiddleware } = require('../../middleware/admin/adminAuthMiddleware');
 
 router.get('/filter/date', adminAuthMiddleware, orderController.filterOrdersByDate);
 

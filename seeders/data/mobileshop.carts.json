@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "67b5e1e029afd6f3197fdd91"
+  },
+  "user_id": {
+    "$oid": "67b5d3ae4eb9cd075ae02d9a"
+  },
+  "total_amount": 0,
+  "discount_amount": 0,
+  "final_amount": 0,
+  "applied_voucher": null,
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-02-19T13:51:28.919Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-19T13:51:28.919Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b6f3545d250820dd6c470d"
+  },
+  "user_id": {
+    "$oid": "67b063d025be5fe64e69a8c8"
+  },
+  "total_amount": 0,
+  "discount_amount": 0,
+  "final_amount": 0,
+  "applied_voucher": null,
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-02-20T09:18:12.672Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-20T09:18:12.672Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b9b87da9c10d4d5ce006f7"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "total_amount": 0,
+  "discount_amount": 0,
+  "final_amount": 0,
+  "applied_voucher": null,
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-02-22T11:43:57.764Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T11:43:57.764Z"
+  },
+  "__v": 0
+}]

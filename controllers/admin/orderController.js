@@ -1,5 +1,6 @@
 const Order = require('../../models/orderModel');
 const OrderItem = require('../../models/orderItemModel');
+const logger = require('../../middleware/loggerMiddleware');
 
 exports.getOrders = async (req, res) => {
     try {
@@ -50,61 +51,79 @@ exports.getOrders = async (req, res) => {
 exports.getOrderDetails = async (req, res) => {
     try {
         const orderId = req.params.id;
+        console.log('Fetching order details for ID:', orderId); // Debug log
 
         const order = await Order.findById(orderId)
-            .populate('user_id', 'username email')
             .populate({
                 path: 'items',
-                populate: {
-                    path: 'product_id',
-                    select: 'name images price warranty'
-                }
-            });
+                populate: [
+                    {
+                        path: 'product_id',
+                        select: 'name images price warranty ram storage baseProductName',
+                        populate: {
+                            path: 'category_id',
+                            select: 'name'
+                        }
+                    }
+                ]
+            })
+            .lean(); // Use lean() for better performance
 
         if (!order) {
+            console.log('Order not found:', orderId); // Debug log
             return res.status(404).json({
                 success: false,
                 message: 'Order not found'
             });
         }
 
+        // Debug log
+        console.log('Raw order data:', JSON.stringify(order, null, 2));
+
         const orderDetails = {
             id: order._id,
             status: order.status,
             orderDate: order.createdAt,
-            products: order.items.map(item => ({
-                image: item.link,
-                name: item.product_id.name,
-                warranty: item.product_id.warranty || '12 tháng',
-                quantity: item.quantity,
+            items: order.items.map(item => ({
+                _id: item._id,
+                product_id: {
+                    ...item.product_id,
+                    category_id: item.product_id.category_id || null
+                },
                 price: item.price,
-                color: item.color
+                quantity: item.quantity,
+                color: item.color || '',
+                warranty: item.product_id.warranty || '12 tháng'
             })),
             paymentInfo: {
                 totalAmount: order.total_amount,
-                discount: order.discount,
-                shippingFee: order.shipping_fee,
+                discount: order.discount || 0,
+                shippingFee: order.shipping_fee || 0,
                 amountToPay: order.final_amount,
                 amountPaid: order.payment_status === 'paid' ? order.final_amount : 0,
                 paymentMethod: order.payment_method,
                 paymentStatus: order.payment_status
             },
             customerInfo: {
-                fullName: order.user_profile.fullName,
-                phoneNumber: order.user_profile.phone,
-                address: order.user_profile.address
+                fullName: order.user_profile?.fullName || '',
+                phoneNumber: order.user_profile?.phone || '',
+                address: order.user_profile?.address || ''
             }
         };
+
+        // Debug log
+        console.log('Formatted order details:', JSON.stringify(orderDetails, null, 2));
 
         res.json({
             success: true,
             data: orderDetails
         });
     } catch (error) {
-        console.error('Error fetching order details:', error);
+        console.error('Error fetching order details:', error); // Error log
         res.status(500).json({
             success: false,
-            message: 'Error fetching order details'
+            message: 'Error fetching order details',
+            error: error.message // Include error message in development
         });
     }
 };
@@ -119,6 +138,15 @@ exports.updateOrderStatus = async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: 'Invalid status'
+            });
+        }
+
+        // Find order before update to get old status
+        const oldOrder = await Order.findById(orderId);
+        if (!oldOrder) {
+            return res.status(404).json({
+                success: false,
+                message: 'Order not found'
             });
         }
 
@@ -141,6 +169,25 @@ exports.updateOrderStatus = async (req, res) => {
                 message: 'Order not found'
             });
         }
+
+        
+        // Prepare status text for logging
+        const statusText = {
+            pending: 'Đang xử lý',
+            paid: 'Đã thanh toán',
+            shipping: 'Đang vận chuyển',
+            delivered: 'Hoàn thành',
+            cancelled: 'Đã hủy'
+        };
+
+        // Log the status change
+        await logger(
+            req.user.userId,
+            'UPDATE',
+            'ORDERS',
+            `Cập nhật trạng thái đơn hàng #${orderId} từ "${statusText[oldOrder.status]}" thành "${statusText[status]}"`,
+            req
+        );
 
         // Format the response data to match getOrderDetails format
         const formattedOrder = {

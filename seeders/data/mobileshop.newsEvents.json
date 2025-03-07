@@ -1,0 +1,92 @@
+[{
+  "_id": {
+    "$oid": "67a5b45b2da6b81da98aa154"
+  },
+  "title": "Ngày cuối đặt trước Galaxy S25 series",
+  "sub_title": "Nhận bộ quà tặng cực xịn, dự kiến giao máy ngày 08/02",
+  "image": "/images/news/image-1739976729198-193240595.jpg",
+  "type": "promotion",
+  "staff_id": {
+    "$oid": "65c4e8150d64b5348c0630f1"
+  },
+  "start_date": {
+    "$date": "2024-02-01T00:00:00.000Z"
+  },
+  "end_date": null,
+  "status": "true",
+  "link": "https://www.thegioididong.com/tin-tuc/dat-truoc-galaxy-s25-series-1574411",
+  "is_external_link": true,
+  "meta": "Samsung Galaxy S25, Khuyến mãi, Đặt trước",
+  "updated_at": {
+    "$date": "2025-02-19T14:52:10.199Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67a5b45b2da6b81da98aa155"
+  },
+  "title": "Lên đời điện thoại - nhận ngay ưu đãi",
+  "sub_title": "Lên đời điện thoại cao cấp, nhận ngay 3 khuyến mãi khủng nhất đầu năm",
+  "image": "/images/promotions/nangcap-promo.jpg",
+  "type": "promotion",
+  "staff_id": {
+    "$oid": "65c4e8150d64b5348c0630f2"
+  },
+  "start_date": {
+    "$date": "2024-02-05T00:00:00.000Z"
+  },
+  "end_date": null,
+  "status": "true",
+  "link": "https://www.thegioididong.com/tin-tuc/len-doi-dien-thoai-cao-cap-nhan-ngay-3-khuyen-mai-khung-1573973",
+  "is_external_link": true,
+  "meta": "Lên đời điện thoại",
+  "updated_at": {
+    "$date": "2025-02-20T08:11:25.584Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67a5b45b2da6b81da98aa156"
+  },
+  "title": "Đánh giá hiệu năng TECNO PHANTOM V Flip2",
+  "sub_title": "Chip MediaTek Dimensity 8020 cho điểm hiệu năng ổn",
+  "image": "/images/news/technophantomvflip2-tech.jpg",
+  "type": "tech",
+  "staff_id": {
+    "$oid": "65c4e8150d64b5348c0630f3"
+  },
+  "start_date": {
+    "$date": "2024-02-10T00:00:00.000Z"
+  },
+  "end_date": {
+    "$date": "2025-02-15T17:00:00.000Z"
+  },
+  "status": "true",
+  "link": "https://www.thegioididong.com/tin-tuc/danh-gja-hieu-nang-tecno-phamtom-v-flip2-1573684",
+  "is_external_link": false,
+  "meta": "TECHNO PHANTOM V Flip2",
+  "updated_at": {
+    "$date": "2025-02-20T08:11:52.428Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67a5b45b2da6b81da98aa157"
+  },
+  "title": "Trên tay OPPO Reno13 F",
+  "sub_title": "Thiết kế thời thượng, trang bị Helio G100, pin 5.800 mAh",
+  "image": "/images/news/reno13f-review.jpg",
+  "type": "tech",
+  "staff_id": "65c4e8150d64b5348c0630f4",
+  "start_date": {
+    "$date": "2025-02-20T08:21:51.672Z"
+  },
+  "end_date": null,
+  "status": "true",
+  "link": "https://www.thegioididong.com/tin-tuc/tren-tay-oppo-reno13-f-1574495",
+  "is_external_link": true,
+  "meta": "Oppo, Oppo Reno 13 F, Review",
+  "updated_at": {
+    "$date": "2025-02-20T08:21:51.687Z"
+  }
+}]

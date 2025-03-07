@@ -1,72 +1,52 @@
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
-    product_id: { 
-        type: mongoose.Schema.Types.ObjectId, 
+    product_id: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
-        required: true 
+        required: true
     },
-    user_id: { 
-        type: mongoose.Schema.Types.ObjectId, 
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true 
+        required: true
     },
-    rating: { 
-        type: Number, 
+    rating: {
+        type: Number,
         required: true,
         min: 1,
-        max: 5 
+        max: 5
     },
-    comment: { 
-        type: String, 
+    comment: {
+        type: String,
         required: true,
-        trim: true 
+        trim: true
     },
-    images: [{ 
+    images: [{
         type: String
     }],
-    replies: [{
-        user_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true
-        },
-        comment: {
-            type: String,
-            required: true
-        },
-        created_at: {
-            type: Date,
-            default: Date.now
-        }
-    }],
+    parent_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review',
+        default: null
+    },
     is_verified_purchase: {
         type: Boolean,
         default: false
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'approved'
     }
 }, {
     timestamps: true
 });
 
-// Index để tối ưu query
-reviewSchema.index({ product_id: 1, created_at: -1 });
-reviewSchema.index({ user_id: 1, created_at: -1 });
+// Thêm index cho các trường thường query
+reviewSchema.index({ product_id: 1, status: 1 });
+reviewSchema.index({ user_id: 1 });
+reviewSchema.index({ parent_id: 1 });
 
-reviewSchema.post('save', async function() {
-    if (this.parent_id === null) { // Only update for parent reviews
-        const Product = mongoose.model('Product');
-        await Product.calculateAverageRating(this.product_id);
-    }
-});
-
-reviewSchema.post(['updateOne', 'deleteOne'], async function() {
-    const review = await this.findOne();
-    if (review && review.parent_id === null) {
-        const Product = mongoose.model('Product');
-        await Product.calculateAverageRating(review.product_id);
-    }
-});
-
-const Review = mongoose.model('Review', reviewSchema, 'reviews');
-
+const Review = mongoose.model('Review', reviewSchema);
 module.exports = Review;

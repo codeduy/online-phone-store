@@ -1,0 +1,504 @@
+[{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063201"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063100"
+  },
+  "trademark": "Apple",
+  "os": "iOS 18",
+  "cpu": "Apple A18 Pro 6 nhân",
+  "gpu": "Apple GPU 6 nhân",
+  "camera": {
+    "main": "Chính 48 MP & Phụ 48 MP, 12 MP",
+    "front": "12 MP"
+  },
+  "display": {
+    "type": "OLED",
+    "size": "6.9\"",
+    "refresh_rate": "120Hz",
+    "brightness": "2000nits"
+  },
+  "battery": {
+    "capacity": "33h",
+    "charging": "20W"
+  },
+  "color_options": [
+    "Titan Sa Mạc",
+    "Titan Trắng",
+    "Titan đen",
+    "Titan tự nhiên"
+  ],
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063202"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063101"
+  },
+  "trademark": "Apple",
+  "os": "iOS 18",
+  "cpu": "Apple A18 Pro 6 nhân",
+  "gpu": "Apple GPU 6 nhân",
+  "camera": {
+    "main": "Chính 48 MP & Phụ 48 MP, 12 MP",
+    "front": "12 MP"
+  },
+  "display": {
+    "type": "OLED",
+    "size": "6.9\"",
+    "refresh_rate": "120Hz",
+    "brightness": "2000nits"
+  },
+  "battery": {
+    "capacity": "33h",
+    "charging": "20W"
+  },
+  "color_options": [
+    "Titan Sa Mạc",
+    "Titan Trắng",
+    "Titan đen",
+    "Titan tự nhiên"
+  ],
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063203"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063102"
+  },
+  "trademark": "Apple",
+  "os": "iOS 18",
+  "cpu": "Apple A18 Pro 6 nhân",
+  "gpu": "Apple GPU 6 nhân",
+  "camera": {
+    "main": "Chính 48 MP & Phụ 48 MP, 12 MP",
+    "front": "12 MP"
+  },
+  "display": {
+    "type": "OLED",
+    "size": "6.9\"",
+    "refresh_rate": "120Hz",
+    "brightness": "2000nits"
+  },
+  "battery": {
+    "capacity": "33h",
+    "charging": "20W"
+  },
+  "color_options": [
+    "Titan Sa Mạc",
+    "Titan Trắng",
+    "Titan đen",
+    "Titan tự nhiên"
+  ],
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063211"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063110"
+  },
+  "trademark": "Apple",
+  "os": "iOS 18",
+  "cpu": "Apple A18 Pro 6 nhân",
+  "gpu": "Apple GPU 6 nhân",
+  "camera": {
+    "main": "Chính 48 MP & Phụ 48 MP, 12 MP",
+    "front": "12 MP"
+  },
+  "display": {
+    "type": "OLED",
+    "size": "6.3\"",
+    "refresh_rate": "120Hz",
+    "brightness": "2000nits"
+  },
+  "battery": {
+    "capacity": "27h",
+    "charging": "20W"
+  },
+  "color_options": [
+    "Titan Sa Mạc",
+    "Titan Trắng",
+    "Titan đen",
+    "Titan tự nhiên"
+  ],
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063212"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063111"
+  },
+  "trademark": "Apple",
+  "os": "iOS 18",
+  "cpu": "Apple A18 Pro 6 nhân",
+  "gpu": "Apple GPU 6 nhân",
+  "camera": {
+    "main": "Chính 48 MP & Phụ 48 MP, 12 MP",
+    "front": "12 MP"
+  },
+  "display": {
+    "type": "OLED",
+    "size": "6.3\"",
+    "refresh_rate": "120Hz",
+    "brightness": "2000nits"
+  },
+  "battery": {
+    "capacity": "27h",
+    "charging": "20W"
+  },
+  "color_options": [
+    "Titan Sa Mạc",
+    "Titan Trắng",
+    "Titan đen",
+    "Titan tự nhiên"
+  ],
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063213"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063112"
+  },
+  "trademark": "Apple",
+  "os": "iOS 18",
+  "cpu": "Apple A18 Pro 6 nhân",
+  "gpu": "Apple GPU 6 nhân",
+  "camera": {
+    "main": "Chính 48 MP & Phụ 48 MP, 12 MP",
+    "front": "12 MP"
+  },
+  "display": {
+    "type": "OLED",
+    "size": "6.3\"",
+    "refresh_rate": "120Hz",
+    "brightness": "2000nits"
+  },
+  "battery": {
+    "capacity": "27h",
+    "charging": "20W"
+  },
+  "color_options": [
+    "Titan Sa Mạc",
+    "Titan Trắng",
+    "Titan đen",
+    "Titan tự nhiên"
+  ],
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063214"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063113"
+  },
+  "trademark": "Apple",
+  "os": "iOS 18",
+  "cpu": "Apple A18 Pro 6 nhân",
+  "gpu": "Apple GPU 6 nhân",
+  "camera": {
+    "main": "Chính 48 MP & Phụ 48 MP, 12 MP",
+    "front": "12 MP"
+  },
+  "display": {
+    "type": "OLED",
+    "size": "6.3\"",
+    "refresh_rate": "120Hz",
+    "brightness": "2000nits"
+  },
+  "battery": {
+    "capacity": "27h",
+    "charging": "20W"
+  },
+  "color_options": [
+    "Titan Sa Mạc",
+    "Titan Trắng",
+    "Titan đen",
+    "Titan tự nhiên"
+  ],
+  "created_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-02-09T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67aca89c35c28c91eb056dc6"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dbd"
+  },
+  "trademark": "SAMSUNG",
+  "os": "Android 14",
+  "cpu": "Snapdragon 8 Gen 3 for Galaxy",
+  "gpu": "Adreno 750",
+  "camera": {
+    "main": "Chính 200 MP & Phụ 50 MP, 12 MP, 10 MP",
+    "front": "12MP"
+  },
+  "display": {
+    "type": "Dynamic AMOLED 2X",
+    "size": "6.8 inches",
+    "refresh_rate": "120Hz",
+    "brightness": "2600 nits"
+  },
+  "battery": {
+    "capacity": "5000mAh",
+    "charging": "45W"
+  },
+  "color_options": [
+    "Xám",
+    "Tím",
+    "Đen",
+    "Vàng"
+  ],
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": "2024-02-09T00:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "67aca89c35c28c91eb056dc7"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dbe"
+  },
+  "trademark": "SAMSUNG",
+  "os": "Android 14",
+  "cpu": "Snapdragon 8 Gen 3 for Galaxy",
+  "gpu": "Adreno 750",
+  "camera": {
+    "main": "Chính 200 MP & Phụ 50 MP, 12 MP, 10 MP",
+    "front": "12MP"
+  },
+  "display": {
+    "type": "Dynamic AMOLED 2X",
+    "size": "6.8 inches",
+    "refresh_rate": "120Hz",
+    "brightness": "2600 nits"
+  },
+  "battery": {
+    "capacity": "5000mAh",
+    "charging": "45W"
+  },
+  "color_options": [
+    "Xám",
+    "Tím",
+    "Đen",
+    "Vàng"
+  ],
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": "2024-02-09T00:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "67aca9b135c28c91eb056dca"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dbf"
+  },
+  "trademark": "SAMSUNG",
+  "os": "Android 14",
+  "cpu": "MediaTek Helio G99",
+  "gpu": "Mali-G57",
+  "camera": {
+    "main": "Chính 50 MP & Phụ 5 MP, 2 MP",
+    "front": "13MP"
+  },
+  "display": {
+    "type": "Super AMOLED",
+    "size": "6.7 inches",
+    "refresh_rate": "90Hz",
+    "brightness": "800 nits"
+  },
+  "battery": {
+    "capacity": "5000mAh",
+    "charging": "25W"
+  },
+  "color_options": [
+    "Xanh lá",
+    "Xám",
+    "Đen"
+  ],
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": "2024-02-09T00:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "67aca9b135c28c91eb056dcb"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dc0"
+  },
+  "trademark": "SAMSUNG",
+  "os": "Android 14",
+  "cpu": "MediaTek Helio G99",
+  "gpu": "Mali-G57",
+  "camera": {
+    "main": "Chính 50 MP & Phụ 5 MP, 2 MP",
+    "front": "13MP"
+  },
+  "display": {
+    "type": "Super AMOLED",
+    "size": "6.7 inches",
+    "refresh_rate": "90Hz",
+    "brightness": "800 nits"
+  },
+  "battery": {
+    "capacity": "5000mAh",
+    "charging": "25W"
+  },
+  "color_options": [
+    "Xanh lá",
+    "Xám",
+    "Đen"
+  ],
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": "2024-02-09T00:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "67acaa6435c28c91eb056dcd"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dc1"
+  },
+  "trademark": "SAMSUNG",
+  "os": "Android 14",
+  "cpu": "MediaTek Dimensity 6300 5G",
+  "gpu": "Mali-G57",
+  "camera": {
+    "main": "Chính 50 MP & Phụ 5 MP, 2 MP",
+    "front": "13MP"
+  },
+  "display": {
+    "type": "Super AMOLED",
+    "size": "6.7 inches",
+    "refresh_rate": "90Hz",
+    "brightness": "800 nits"
+  },
+  "battery": {
+    "capacity": "5000mAh",
+    "charging": "25W"
+  },
+  "color_options": [
+    "Xanh lá",
+    "Vàng",
+    "Đen"
+  ],
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": "2024-02-09T00:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "67acaa6435c28c91eb056dce"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dc2"
+  },
+  "trademark": "SAMSUNG",
+  "os": "Android 14",
+  "cpu": "MediaTek Dimensity 6300 5G",
+  "gpu": "Mali-G57",
+  "camera": {
+    "main": "Chính 50 MP & Phụ 5 MP, 2 MP",
+    "front": "13MP"
+  },
+  "display": {
+    "type": "Super AMOLED",
+    "size": "6.7 inches",
+    "refresh_rate": "90Hz",
+    "brightness": "800 nits"
+  },
+  "battery": {
+    "capacity": "5000mAh",
+    "charging": "25W"
+  },
+  "color_options": [
+    "Xanh lá",
+    "Vàng",
+    "Đen"
+  ],
+  "created_at": "2024-02-09T00:00:00.000Z",
+  "updated_at": "2024-02-09T00:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "67b940f8d43f562254eb4e22"
+  },
+  "product_id": {
+    "$oid": "67b940f8d43f562254eb4e20"
+  },
+  "trademark": "Xiaomi",
+  "os": "Android",
+  "cpu": "snap",
+  "gpu": "nvidia",
+  "camera": {
+    "main": "120mp",
+    "front": "50mp"
+  },
+  "display": {
+    "type": "amoled",
+    "size": "6.5'",
+    "refresh_rate": "120hz",
+    "brightness": "1200nits"
+  },
+  "battery": {
+    "capacity": "5000mah",
+    "charging": "22h"
+  },
+  "color_options": [
+    "1",
+    "4",
+    "4"
+  ],
+  "created_at": {
+    "$date": "2025-02-22T03:14:00.773Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-22T03:37:54.945Z"
+  },
+  "__v": 0
+}]

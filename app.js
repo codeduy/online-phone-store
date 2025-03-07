@@ -22,6 +22,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const voucherRoutes = require('./routes/voucherRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const vnpayRoutes = require('./routes/vnpayRoutes');
 
 //Admin routes
 
@@ -31,6 +32,7 @@ const adminvoucherRoutes = require('./routes/admin/voucherRoutes');
 const customerRoutes = require('./routes/admin/customerRoutes');
 const adminProductRoutes = require('./routes/admin/productRoutes');
 const adminOrderRoutes = require('./routes/admin/orderRoutes');
+const logRoutes = require('./routes/admin/logRoutes');
 
 // const productDetailsRouter = require('./routes/productDetails');
 
@@ -105,6 +107,8 @@ app.use((req, res, next) => {
     '/api/users/profile',
     '/api/vouchers',
     '/api/admin/',
+    '/api/vnpay/payment/return',
+    '/api/reviews'
   ];
   
   if (publicPaths.some(path => req.path.startsWith(path))) {
@@ -143,6 +147,7 @@ app.use('/api/users', usersRoutes);
 app.use('/api/vouchers', voucherRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/vnpay', vnpayRoutes);
 
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/news', newsRoutes);
@@ -150,6 +155,7 @@ app.use('/api/admin/vouchers', adminvoucherRoutes);
 app.use('/api/admin/customers', customerRoutes);
 app.use('/api/admin/products', adminProductRoutes);
 app.use('/api/admin/orders', adminOrderRoutes);
+app.use('/api/admin', logRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

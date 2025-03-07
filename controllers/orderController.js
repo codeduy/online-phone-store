@@ -1,5 +1,8 @@
 const Order = require('../models/orderModel');
 const OrderItem = require('../models/orderItemModel');
+const Cart = require('../models/cartModel'); 
+const CartItem = require('../models/cartItemModel'); 
+const mongoose = require('mongoose');
 
 // Define controller functions
 const getUserOrders = async (req, res) => {
@@ -15,8 +18,13 @@ const getUserOrders = async (req, res) => {
             model: 'OrderItem',
             populate: {
                 path: 'product_id',
+                populate: {  
+                    path: 'category_id',
+                    model: 'Category',
+                    select: 'name'
+                },
                 model: 'Product',
-                select: 'name images ram storage trademark baseProductName price'
+                select: 'name images ram storage category_id baseProductName price'
             }
         })
         .sort({ createdAt: -1 });
@@ -40,7 +48,7 @@ const getUserOrders = async (req, res) => {
                     product_id: {
                         ram: item.product_id?.ram || '',
                         storage: item.product_id?.storage || '',
-                        trademark: item.product_id?.trademark || '',
+                        category_id: item.product_id?.category_id || '',
                         baseProductName: item.product_id?.baseProductName || ''
                     }
                 };
@@ -91,9 +99,20 @@ const getOrderDetail = async (req, res) => {
                 path: 'items',
                 populate: {
                     path: 'product_id',
-                    select: 'name images price warranty ram storage trademark baseProductName'
+                    populate: {  
+                        path: 'category_id',
+                        model: 'Category',
+                        select: 'name'
+                    },
+                    select: 'name images price warranty ram storage category_id baseProductName'
                 }
             });
+
+        console.log('Populated order items:', JSON.stringify(order.items.map(item => ({
+            productName: item.product_id.name,
+            categoryId: item.product_id.category_id,
+            categoryId_name: item.product_id.category_id.name
+        })), null, 2));
 
         if (!order) {
             return res.status(404).json({
@@ -117,7 +136,7 @@ const getOrderDetail = async (req, res) => {
                     warranty: item.product_id.warranty,
                     ram: item.product_id.ram,
                     storage: item.product_id.storage,
-                    trademark: item.product_id.trademark,
+                    category_id: item.product_id.category_id,
                     baseProductName: item.product_id.baseProductName
                 },
                 quantity: item.quantity,
@@ -216,11 +235,26 @@ const createOrder = async (req, res) => {
         console.log('Updated order with items:', order);
 
         // Clear user's cart
-        // Add any cart clearing logic here if needed
+
+        //Tìm và xóa giỏ hàng của user
+        const userCart = await Cart.findOne({ 
+            user_id: userId,
+            status: 'active'
+        });
+
+        if (userCart) {
+            // Xóa tất cả cart items trước
+            await CartItem.deleteMany({ cart_id: userCart._id });
+            console.log('Deleted all cart items');
+
+            // Sau đó xóa cart
+            await Cart.deleteOne({ _id: userCart._id });
+            console.log('Deleted cart');
+        }
 
         return res.status(201).json({
             success: true,
-            message: 'Order created successfully',
+            message: 'Order created successfully and cart cleared',
             data: {
                 id: order._id,
                 status: order.status
@@ -236,9 +270,68 @@ const createOrder = async (req, res) => {
     }
 };
 
+const updateOrderStatus = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const { status } = req.body;
+
+        console.log('Updating order status:', { orderId, status });
+
+        // Validate status
+        if (!['pending', 'paid', 'shipping', 'delivered', 'cancelled'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái không hợp lệ'
+            });
+        }
+
+        // Find order
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy đơn hàng'
+            });
+        }
+
+        // Only allow cancellation of pending orders
+        if (status === 'cancelled' && order.status !== 'pending') {
+            return res.status(400).json({
+                success: false,
+                message: 'Chỉ có thể hủy đơn hàng đang chờ thanh toán'
+            });
+        }
+
+        // Update status and timestamps
+        order.status = status;
+        order.payment_status = status === 'cancelled' ? 'failed' : order.payment_status;
+        
+        if (status === 'cancelled') {
+            order.cancelled_at = new Date();
+        }
+
+        await order.save();
+
+        // Return success response
+        return res.json({
+            success: true,
+            message: 'Đã hủy đơn hàng thành công',
+            data: order
+        });
+
+    } catch (error) {
+        console.error('Update order status error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi khi cập nhật trạng thái đơn hàng'
+        });
+    }
+};
+
 // Export as a module
 module.exports = {
     getUserOrders,
     getOrderDetail,
     createOrder,
+    updateOrderStatus
 };

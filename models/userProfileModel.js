@@ -4,7 +4,8 @@ const userProfileSchema = new mongoose.Schema({
   user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
+      unique: true
   },
   full_name: {
       type: String,
@@ -12,7 +13,8 @@ const userProfileSchema = new mongoose.Schema({
   },
   phone_number: {
       type: String,
-      default: null
+      default: null,
+      index: false
   },
   address: {
       type: String,
@@ -23,6 +25,7 @@ const userProfileSchema = new mongoose.Schema({
       default: null
   }
 }, { timestamps: true });
+
 
 const UserProfile = mongoose.model('UserProfile', userProfileSchema, 'userProfiles');
 

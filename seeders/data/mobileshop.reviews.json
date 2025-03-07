@@ -1,0 +1,538 @@
+[{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef829"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dc2"
+  },
+  "user_id": {
+    "$oid": "67b9802079a051966a67ab6d"
+  },
+  "rating": 3,
+  "comment": "Giá cả hợp lý, chất lượng tốt",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef82a"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063101"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "rating": 3,
+  "comment": "Giá cả hợp lý, chất lượng tốt",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef82b"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063111"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "rating": 5,
+  "comment": "Giao hàng nhanh, sản phẩm chất lượng",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef82c"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063102"
+  },
+  "user_id": {
+    "$oid": "67b063d025be5fe64e69a8c8"
+  },
+  "rating": 5,
+  "comment": "Pin dùng được 2 ngày, rất thích",
+  "images": [],
+  "replies": [
+    {
+      "user_id": {
+        "$oid": "67b980baa8136177539cae13"
+      },
+      "comment": "Cảm ơn bạn đã đánh giá sản phẩm!",
+      "created_at": {
+        "$date": "2025-02-22T09:59:28.027Z"
+      },
+      "_id": {
+        "$oid": "67b9a000fac3c62cf0aef82d"
+      }
+    }
+  ],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef82e"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dc1"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "rating": 2,
+  "comment": "Camera chụp đẹp, màn hình sắc nét",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef82f"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063102"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "rating": 5,
+  "comment": "Máy đẹp, chụp ảnh tốt",
+  "images": [],
+  "replies": [
+    {
+      "user_id": {
+        "$oid": "67a4965c4dbd1ab05b28961d"
+      },
+      "comment": "Cảm ơn bạn đã đánh giá sản phẩm!",
+      "created_at": {
+        "$date": "2025-02-22T09:59:28.027Z"
+      },
+      "_id": {
+        "$oid": "67b9a000fac3c62cf0aef830"
+      }
+    }
+  ],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef831"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dc2"
+  },
+  "user_id": {
+    "$oid": "67b9802079a051966a67ab6d"
+  },
+  "rating": 4,
+  "comment": "Pin dùng được 2 ngày, rất thích",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef832"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063100"
+  },
+  "user_id": {
+    "$oid": "67b063d025be5fe64e69a8c8"
+  },
+  "rating": 4,
+  "comment": "Máy đẹp, chụp ảnh tốt",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef833"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063100"
+  },
+  "user_id": {
+    "$oid": "67b063d025be5fe64e69a8c8"
+  },
+  "rating": 3,
+  "comment": "Pin dùng được 2 ngày, rất thích",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef834"
+  },
+  "product_id": {
+    "$oid": "67b940f8d43f562254eb4e20"
+  },
+  "user_id": {
+    "$oid": "67b980baa8136177539cae13"
+  },
+  "rating": 3,
+  "comment": "Pin dùng được 2 ngày, rất thích",
+  "images": [],
+  "replies": [
+    {
+      "user_id": {
+        "$oid": "67b9802079a051966a67ab6d"
+      },
+      "comment": "Cảm ơn bạn đã đánh giá sản phẩm!",
+      "created_at": {
+        "$date": "2025-02-22T09:59:28.028Z"
+      },
+      "_id": {
+        "$oid": "67b9a000fac3c62cf0aef835"
+      }
+    }
+  ],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef836"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063112"
+  },
+  "user_id": {
+    "$oid": "67b063d025be5fe64e69a8c8"
+  },
+  "rating": 5,
+  "comment": "Điện thoại chạy mượt, thiết kế đẹp",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef837"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063100"
+  },
+  "user_id": {
+    "$oid": "67b9802079a051966a67ab6d"
+  },
+  "rating": 4,
+  "comment": "Giá cả hợp lý, chất lượng tốt",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef838"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063113"
+  },
+  "user_id": {
+    "$oid": "67b980baa8136177539cae13"
+  },
+  "rating": 2,
+  "comment": "Camera chụp đẹp, màn hình sắc nét",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef839"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dbf"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "rating": 4,
+  "comment": "Giao hàng nhanh, sản phẩm chất lượng",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.039Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef83a"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063110"
+  },
+  "user_id": {
+    "$oid": "67b980baa8136177539cae13"
+  },
+  "rating": 2,
+  "comment": "Giá cả hợp lý, chất lượng tốt",
+  "images": [],
+  "replies": [
+    {
+      "user_id": {
+        "$oid": "67a4965c4dbd1ab05b28961d"
+      },
+      "comment": "Cảm ơn bạn đã đánh giá sản phẩm!",
+      "created_at": {
+        "$date": "2025-02-22T09:59:28.028Z"
+      },
+      "_id": {
+        "$oid": "67b9a000fac3c62cf0aef83b"
+      }
+    }
+  ],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef83c"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dbe"
+  },
+  "user_id": {
+    "$oid": "67b063d025be5fe64e69a8c8"
+  },
+  "rating": 3,
+  "comment": "Máy đẹp, chụp ảnh tốt",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef83d"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dbe"
+  },
+  "user_id": {
+    "$oid": "67b980baa8136177539cae13"
+  },
+  "rating": 5,
+  "comment": "Máy đẹp, chụp ảnh tốt",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef83e"
+  },
+  "product_id": {
+    "$oid": "65c4e8150d64b5348c063101"
+  },
+  "user_id": {
+    "$oid": "67b063d025be5fe64e69a8c8"
+  },
+  "rating": 3,
+  "comment": "Camera chụp đẹp, màn hình sắc nét",
+  "images": [],
+  "replies": [
+    {
+      "user_id": {
+        "$oid": "67b980baa8136177539cae13"
+      },
+      "comment": "Cảm ơn bạn đã đánh giá sản phẩm!",
+      "created_at": {
+        "$date": "2025-02-22T09:59:28.028Z"
+      },
+      "_id": {
+        "$oid": "67b9a000fac3c62cf0aef83f"
+      }
+    }
+  ],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef840"
+  },
+  "product_id": {
+    "$oid": "67b940f8d43f562254eb4e20"
+  },
+  "user_id": {
+    "$oid": "67b9802079a051966a67ab6d"
+  },
+  "rating": 5,
+  "comment": "Cấu hình mạnh mẽ, chơi game mượt",
+  "images": [],
+  "replies": [
+    {
+      "user_id": {
+        "$oid": "67b9802079a051966a67ab6d"
+      },
+      "comment": "Cảm ơn bạn đã đánh giá sản phẩm!",
+      "created_at": {
+        "$date": "2025-02-22T09:59:28.028Z"
+      },
+      "_id": {
+        "$oid": "67b9a000fac3c62cf0aef841"
+      }
+    }
+  ],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67b9a000fac3c62cf0aef842"
+  },
+  "product_id": {
+    "$oid": "67aca68b35c28c91eb056dc1"
+  },
+  "user_id": {
+    "$oid": "67b980baa8136177539cae13"
+  },
+  "rating": 3,
+  "comment": "Pin dùng được 2 ngày, rất thích",
+  "images": [],
+  "replies": [],
+  "is_verified_purchase": true,
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T09:59:28.040Z"
+  }
+}]

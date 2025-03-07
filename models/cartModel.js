@@ -4,7 +4,8 @@ const cartSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
+        unique: true
     },
     total_amount: {
         type: Number,
@@ -25,7 +26,7 @@ const cartSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'completed', 'abandoned'],
+        enum: ['pending', 'active', 'completed', 'abandoned'],
         default: 'active'
     }
 }, {
@@ -33,7 +34,7 @@ const cartSchema = new mongoose.Schema({
 });
 
 // Remove compound index and add single index on user_id
-cartSchema.index({ user_id: 1 });
+cartSchema.index({ user_id: 1 }, { unique: true });
 
 cartSchema.pre('save', function(next) {
     // Ensure amounts are not negative

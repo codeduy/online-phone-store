@@ -1,0 +1,97 @@
+[{
+  "_id": {
+    "$oid": "67aaffc93841006483700f5f"
+  },
+  "name": "Hồ Chí Minh",
+  "code": "hcm",
+  "districts": [
+    {
+      "name": "Quận 1",
+      "code": "q1",
+      "wards": [
+        {
+          "name": "Phường 1",
+          "code": "p1"
+        },
+        {
+          "name": "Phường 2",
+          "code": "p2"
+        }
+      ]
+    },
+    {
+      "name": "Quận 2",
+      "code": "q2",
+      "wards": [
+        {
+          "name": "Phường 3",
+          "code": "p3"
+        },
+        {
+          "name": "Phường 4",
+          "code": "p4"
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "67aaffc93841006483700f60"
+  },
+  "name": "Hà Nội",
+  "code": "hn",
+  "districts": [
+    {
+      "name": "Quận Ba Đình",
+      "code": "bd",
+      "wards": [
+        {
+          "name": "Phường 5",
+          "code": "p5"
+        },
+        {
+          "name": "Phường 6",
+          "code": "p6"
+        }
+      ]
+    },
+    {
+      "name": "Quận Hoàn Kiếm",
+      "code": "hk",
+      "wards": [
+        {
+          "name": "Phường 7",
+          "code": "p7"
+        },
+        {
+          "name": "Phường 8",
+          "code": "p8"
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "67aaffc93841006483700f61"
+  },
+  "name": "Đà Nẵng",
+  "code": "dn",
+  "districts": [
+    {
+      "name": "Quận Hải Châu",
+      "code": "hc",
+      "wards": [
+        {
+          "name": "Phường 9",
+          "code": "p9"
+        },
+        {
+          "name": "Phường 10",
+          "code": "p10"
+        }
+      ]
+    }
+  ]
+}]

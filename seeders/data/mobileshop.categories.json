@@ -1,0 +1,77 @@
+[{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063002"
+  },
+  "name": "Samsung",
+  "description": "Điện thoại Samsung chính hãng",
+  "parent_category_id": null,
+  "link": "/products/samsung",
+  "meta": "Samsung Galaxy S23, Galaxy Z Fold, Galaxy A Series",
+  "logo_url": "/images/brands/samsung-logo.png"
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063001"
+  },
+  "name": "Apple",
+  "description": "Điện thoại iPhone chính hãng từ Apple",
+  "parent_category_id": null,
+  "link": "/products/apple",
+  "meta": "iPhone 15 Pro Max, iPhone 14, iPhone 13",
+  "logo_url": "/images/brands/iphone-logo.png"
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063005"
+  },
+  "name": "Xiaomi",
+  "description": "Điện thoại Xiaomi chính hãng",
+  "parent_category_id": null,
+  "link": "/products/xiaomi",
+  "meta": "Xiaomi 13 Pro, Redmi Note 12",
+  "logo_url": "/images/brands/xiaomi-logo.png"
+},
+{
+  "_id": {
+    "$oid": "65c4e8150d64b5348c063004"
+  },
+  "name": "Realme",
+  "description": "Điện thoại Realme chính hãng",
+  "parent_category_id": null,
+  "link": "/products/realme",
+  "meta": "Realme 11 Pro+, GT Neo 5",
+  "logo_url": "/images/brands/realme-logo.png"
+},
+{
+  "_id": {
+    "$oid": "67a5702737816ad6c87a4a4f"
+  },
+  "name": "Vivo",
+  "description": "Điện thoại Vivo chính hãng",
+  "parent_category_id": null,
+  "link": "/products/vivo",
+  "meta": "Vivo X90 Pro, Vivo V27",
+  "logo_url": "/images/brands/vivo-logo.png"
+},
+{
+  "_id": {
+    "$oid": "67a5702737816ad6c87a4a50"
+  },
+  "name": "OnePlus",
+  "description": "Điện thoại OnePlus chính hãng",
+  "parent_category_id": null,
+  "link": "/products/oneplus",
+  "meta": "OnePlus 11, OnePlus Nord 3",
+  "logo_url": "/images/brands/oneplus-logo.png"
+},
+{
+  "_id": {
+    "$oid": "67a5702737816ad6c87a4a51"
+  },
+  "name": "Techno",
+  "description": "Điện thoại Techno chính hãng",
+  "parent_category_id": null,
+  "link": "/products/techno",
+  "meta": "Techno Phantom V Fold, Camon 20 Premier",
+  "logo_url": "/images/brands/techno-logo.png"
+}]

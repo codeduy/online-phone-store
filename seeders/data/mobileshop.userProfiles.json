@@ -1,0 +1,95 @@
+[{
+  "_id": {
+    "$oid": "67a4965c4dbd1ab05b28961f"
+  },
+  "user_id": {
+    "$oid": "67a4965c4dbd1ab05b28961d"
+  },
+  "full_name": "Duy",
+  "phone_number": "0147814523",
+  "address": "Quan 7",
+  "image_url": "/uploads/profile/1740210980768-.jpg",
+  "createdAt": {
+    "$date": "2025-02-06T11:00:44.894Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T07:56:20.779Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b063d025be5fe64e69a8ca"
+  },
+  "user_id": {
+    "$oid": "67b063d025be5fe64e69a8c8"
+  },
+  "full_name": "Nguyễn Thị Hoa",
+  "phone_number": "048579512",
+  "address": "quan 11",
+  "image_url": "",
+  "createdAt": {
+    "$date": "2025-02-15T09:52:16.139Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-15T09:52:16.139Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b5da184eb9cd075ae02da9"
+  },
+  "user_id": {
+    "$oid": "67b5d3ae4eb9cd075ae02d9a"
+  },
+  "full_name": "admin",
+  "phone_number": "0147852369",
+  "address": "Quan 7",
+  "image_url": "",
+  "createdAt": {
+    "$date": "2025-02-06T11:00:44.894Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-16T09:24:06.027Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b9802079a051966a67ab6f"
+  },
+  "user_id": {
+    "$oid": "67b9802079a051966a67ab6d"
+  },
+  "full_name": "Nguyễn Văn Test",
+  "phone_number": "0987654321",
+  "address": null,
+  "image_url": null,
+  "createdAt": {
+    "$date": "2025-02-22T07:43:28.158Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T07:43:28.158Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b980baa8136177539cae15"
+  },
+  "user_id": {
+    "$oid": "67b980baa8136177539cae13"
+  },
+  "full_name": "Tran",
+  "phone_number": null,
+  "address": null,
+  "image_url": null,
+  "createdAt": {
+    "$date": "2025-02-22T07:46:02.396Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-22T11:31:07.675Z"
+  },
+  "__v": 0
+}]
