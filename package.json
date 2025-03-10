@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "start": "node server.cjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -19,6 +20,7 @@
     "@types/quill": "^2.0.14",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
+    "express": "^4.21.2",
     "file-saver": "^2.0.5",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",

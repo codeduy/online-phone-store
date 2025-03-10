@@ -301,7 +301,7 @@ const UserFavorites: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-8 bg-gray-50 min-h-screen">
             <Helmet>
                 <title>Ưa thích</title>
-                <link rel="icon" href="../../src/assets/img/phone.ico" />
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
             <Toast ref={toast} />
             <ConfirmPopup />

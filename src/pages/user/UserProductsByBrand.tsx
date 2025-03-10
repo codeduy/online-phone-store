@@ -210,7 +210,7 @@ const handleAddToComparison = (product: Product) => {
     <div className="p-4 bg-gray-50 min-h-screen">
         <Helmet>
             <title>Sản phẩm thuộc {brand}</title>
-            <link rel="icon" href="../../src/assets/img/phone.ico" />
+            <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
         </Helmet>
         <Toast ref={toast} className="z-50" />
 

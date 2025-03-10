@@ -28,7 +28,7 @@ interface ProductData {
   [key: string]: Product;
 }
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 export default function UserHeader() {
   // const [darkMode, setDarkMode] = useState(false);
@@ -165,7 +165,7 @@ export default function UserHeader() {
     }
 
     try {
-      const response = await axios.get('http://localhost:3000/api/auth/verify', {
+      const response = await axios.get('/auth/verify', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -188,7 +188,7 @@ export default function UserHeader() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/categories/active');
+        const response = await axios.get('/categories/active');
         if (response.data && Array.isArray(response.data)) {
           setCategories(response.data);
         } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -217,7 +217,7 @@ export default function UserHeader() {
     try {
       const token = localStorage.getItem('token');
       
-      await axios.post('http://localhost:3000/api/auth/logout', {}, {
+      await axios.post('/auth/logout', {}, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -269,7 +269,8 @@ export default function UserHeader() {
   const startContent = (
     <div className="flex items-center gap-4">
       <img
-        src="/src/assets/img/logo.png"
+        // src="/src/assets/img/logo.png"
+        src={`${import.meta.env.VITE_IMAGE_URL}/images/logo/logo.png`}
         alt="Website Logo"
         className="h-12 w-auto cursor-pointer transition-transform hover:scale-105"
         onClick={() => navigate('/')}
@@ -290,7 +291,7 @@ export default function UserHeader() {
                 onClick={() => handleCategoryClick(category)}
               >
                 <img 
-                  src={`http://localhost:3000${category.logo_url}`}
+                  src={`${import.meta.env.VITE_IMAGE_URL}${category.logo_url}`}
                   alt={`${category.name} logo`}
                   className="w-10 h-10 object-contain rounded-lg"
                   onError={(e) => {

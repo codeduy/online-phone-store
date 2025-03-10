@@ -28,7 +28,7 @@ const AdminDashboard = () => {
     <div className="p-4">
       <Helmet>
         <title>Trang chủ</title>
-        <link rel="icon" href="../../src/assets/img/phone.ico" />
+        <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
       </Helmet>
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

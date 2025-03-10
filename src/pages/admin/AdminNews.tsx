@@ -357,7 +357,7 @@ const AdminNews = () => {
         <div style={{ padding: '1rem' }}>
             <Helmet>
                 <title>Quản lí tin tức và sự kiện</title>
-                <link rel="icon" href="../../src/assets/img/phone.ico" />
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
             <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-4">

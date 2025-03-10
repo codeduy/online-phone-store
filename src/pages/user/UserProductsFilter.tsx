@@ -314,7 +314,7 @@ const UserProductsFilter = () => {
         <Toast ref={toast} className="z-50" />
         <Helmet>
             <title>Lọc sản phẩm</title>
-            <link rel="icon" href="../../src/assets/img/phone.ico" />
+            <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
         </Helmet>
         
         {/* Filter Section */}

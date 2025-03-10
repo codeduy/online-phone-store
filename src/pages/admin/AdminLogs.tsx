@@ -70,7 +70,7 @@ const AdminLogs = () => {
             <Toast ref={toast} />
             <Helmet>
                 <title>Lịch sử hoạt động</title>
-                <link rel="icon" href="../../src/assets/img/phone.ico" />
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
             
             <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">

@@ -577,7 +577,7 @@ const handleCreateOrder = async () => {
     <div className="p-6 max-w-7xl mx-auto bg-gray-50 min-h-screen">
       <Helmet>
         <title>Giỏ hàng</title>
-        <link rel="icon" href="../../src/assets/img/phone.ico" />
+        <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
       </Helmet>
       <Toast ref={toast} />
       {/* Delivery Options */}

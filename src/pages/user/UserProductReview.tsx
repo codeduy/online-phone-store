@@ -277,6 +277,7 @@ const UserProductReview = () => {
             <Toast ref={toast} />
             <Helmet>
                 <title>Đánh giá sản phẩm</title>
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
 
             {/* Rating Overview */}

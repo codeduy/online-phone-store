@@ -254,7 +254,7 @@ const AdminCustomers = () => {
         <div className="p-4">
             <Helmet>
                 <title>Quản lí thông tin khách hàng</title>
-                <link rel="icon" href="../../src/assets/img/phone.ico" />
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
             {/* Search Section */}
             <div className="mb-6">

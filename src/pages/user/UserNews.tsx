@@ -93,7 +93,7 @@ const UserNews: React.FC = () => {
         <div className="p-4">
             <Helmet>
                 <title>Tin tức & sự kiện</title>
-                <link rel="icon" href="../../src/assets/img/phone.ico" />
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
             <div className="grid grid-cols-5 gap-6">
                 {/* Promotions Section */}

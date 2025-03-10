@@ -237,7 +237,7 @@ const AdminProfile = () => {
         <div className="p-4">
             <Helmet>
                 <title>Thông tin quản trị viên</title>
-                <link rel="icon" href="../../src/assets/img/phone.ico" />
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Column 1: Profile Image */}

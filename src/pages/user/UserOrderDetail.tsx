@@ -434,7 +434,7 @@ const UserOrderDetail: React.FC = () => {
             <Toast ref={toast} />
             <Helmet>
                 <title>Chi tiết đơn hàng</title>
-                <link rel="icon" href="../../src/assets/img/phone.ico" />
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
             {/* Header */}
             <div className="flex justify-between items-start mb-8">

@@ -101,9 +101,18 @@ interface BannerItem {
 }
 
 const bannerItems: BannerItem[] = [
-  { image: "../../public/images/banner1.jpg", alt: "Banner 1" },
-  { image: "../../public/images/banner2.jpg", alt: "Banner 2" },
-  { image: "../../public/images/banner3.jpg", alt: "Banner 3" }
+  { 
+    image: `${import.meta.env.VITE_IMAGE_URL}/images/banners/banner1.jpg`, 
+    alt: "Banner 1" 
+  },
+  { 
+    image: `${import.meta.env.VITE_IMAGE_URL}/images/banners/banner2.jpg`, 
+    alt: "Banner 2" 
+  },
+  { 
+    image: `${import.meta.env.VITE_IMAGE_URL}/images/banners/banner3.jpg`, 
+    alt: "Banner 3" 
+  }
 ];
 
 const bannerTemplate = (item: BannerItem): JSX.Element => {
@@ -588,7 +597,7 @@ const handleAddToComparison = (product: Product) => {
     <div className="p-4 bg-gray-50 min-h-screen">
         <Helmet>
             <title>Trang chủ</title>
-            <link rel="icon" href="../../src/assets/img/phone.ico" />
+            <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
         </Helmet>
         <Toast ref={toast} className="z-50" />
 

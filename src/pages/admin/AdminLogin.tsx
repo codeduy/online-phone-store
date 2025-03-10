@@ -158,7 +158,7 @@ const AdminLogin = () => {
 
             <Helmet>
                 <title>Đăng nhập trang quản lí</title>
-                <link rel="icon" href="../../src/assets/img/phone.ico" />
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
             
             <Toast ref={toast} className="z-50" />

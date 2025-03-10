@@ -1221,7 +1221,7 @@ const UserProductDetail = () => {
         <div className="p-4 bg-gray-50 min-h-screen">
             <Helmet>
                 <title>Chi tiết sản phẩm - {getFormattedProductName()}</title>
-                <link rel="icon" href="../../src/assets/img/phone.ico" />
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
             <Toast ref={toast} className="z-50"/>
             {/* Row 1 */}

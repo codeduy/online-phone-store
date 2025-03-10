@@ -90,6 +90,21 @@ const UserProfile = () => {
             }
     
             const file = e.files[0];
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                setDialogMessage('Vui lòng chọn file ảnh');
+                setDialogVisible(true);
+                return;
+            }
+    
+            // Validate file size (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                setDialogMessage('Kích thước ảnh tối đa là 2MB');
+                setDialogVisible(true);
+                return;
+            }
+    
             const formData = new FormData();
             formData.append('profileImage', file);
             formData.append('fullName', profile.fullName);
@@ -109,12 +124,13 @@ const UserProfile = () => {
     
             if (response.data.user) {
                 localStorage.setItem('user', JSON.stringify(response.data.user));
-                const reader = new FileReader();
-                reader.onload = (e: any) => {
-                    setProfileImage(e.target.result);
-                };
-                reader.readAsDataURL(file);
-                setDialogMessage('Tải lên ảnh đại diện thành công');
+                
+                // Update profile image using the URL from backend
+                if (response.data.user.profile.imageUrl) {
+                    setProfileImage(`${import.meta.env.VITE_IMAGE_URL}${response.data.user.profile.imageUrl}`);
+                }
+                
+                setDialogMessage('Cập nhật ảnh đại diện thành công');
                 setDialogVisible(true);
                 e.options.clear(); // Clear the FileUpload component
             }
@@ -242,18 +258,28 @@ const UserProfile = () => {
         <div className="p-4">
             <Helmet>
                 <title>Thông tin người dùng</title>
-                <link rel="icon" href="../../src/assets/img/phone.ico" />
+                <link rel="icon" href={`${import.meta.env.VITE_IMAGE_URL}/images/favicon/phone.ico`} />
             </Helmet>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Column 1: Profile Image */}
                 <div className="flex flex-col items-center space-y-6">
                     <div className="relative">
                         {profileImage ? (
-                            <img 
-                                src={profileImage as string} 
-                                alt="Profile" 
-                                className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
-                            />
+                            <div className="relative group">
+                                <img 
+                                    src={profileImage as string} 
+                                    alt="Profile" 
+                                    className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                                    onError={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        target.src = '/images/default-avatar.png'; // Fallback image
+                                        target.onerror = null; // Prevent infinite loop
+                                    }}
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                                    <i className="pi pi-camera text-white text-xl"></i>
+                                </div>
+                            </div>
                         ) : (
                             <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center border-4 border-white shadow-lg">
                                 <i className="pi pi-user text-4xl text-gray-400"></i>
