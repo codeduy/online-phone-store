@@ -625,10 +625,10 @@ const handleAddToComparison = (product: Product) => {
             </div>
             <div className="grid grid-rows-2 gap-6">
                 <Link to="/products" className="rounded-lg overflow-hidden shadow-lg border border-gray-200 transition-transform duration-300 hover:scale-[1.02]">
-                    <img src="../../public/images/banner2.jpg" alt="Banner 2" className="w-full h-32 object-cover" />
+                    <img src={`${import.meta.env.VITE_IMAGE_URL}/images/banners/banner2.jpg`} alt="Banner 2" className="w-full h-32 object-cover" />
                 </Link>
                 <Link to="/products" className="rounded-lg overflow-hidden shadow-lg border border-gray-200 transition-transform duration-300 hover:scale-[1.02]">
-                    <img src="/../../public/images/banner3.jpg" alt="Banner 3" className="w-full h-32 object-cover" />
+                    <img src={`${import.meta.env.VITE_IMAGE_URL}/images/banners/banner3.jpg`} alt="Banner 3" className="w-full h-32 object-cover" />
                 </Link>
             </div>
         </div>
