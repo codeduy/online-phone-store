@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { useParams,  Link } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { Rating } from 'primereact/rating';
@@ -17,35 +17,35 @@ const formatPrice = (price: number): string => {
 
 const UserProductsByBrand = () => {
   const { brand = '' } = useParams<{ brand: string }>();
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [favoriteProducts, setFavoriteProducts] = useState<string[]>([]);
   const [sortOption, setSortOption] = useState<string | null>(null);
   const { addProduct } = useComparison();
-  const [loadingStates, setLoadingStates] = useState<{[key: string]: boolean}>({});
+  const [, setLoadingStates] = useState<{[key: string]: boolean}>({});
 
-  const handleViewDetail = (productId: string) => {
-    try {
-        // Format URL dựa trên tên sản phẩm
-        const product = products.find(p => p.id === productId);
-        if (!product) return;
+//   const handleViewDetail = (productId: string) => {
+//     try {
+//         // Format URL dựa trên tên sản phẩm
+//         const product = products.find(p => p.id === productId);
+//         if (!product) return;
 
-        const formattedName = product.name.toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/[^a-z0-9-]/g, '');
+//         const formattedName = product.name.toLowerCase()
+//             .replace(/\s+/g, '-')
+//             .replace(/[^a-z0-9-]/g, '');
         
-        navigate(`/products/detail/${formattedName}`);
-    } catch (error) {
-        console.error('Navigation error:', error);
-        toast.current?.show({
-            severity: 'error',
-            summary: 'Lỗi',
-            detail: 'Không thể xem chi tiết sản phẩm'
-        });
-    }
-};
+//         navigate(`/products/detail/${formattedName}`);
+//     } catch (error) {
+//         console.error('Navigation error:', error);
+//         toast.current?.show({
+//             severity: 'error',
+//             summary: 'Lỗi',
+//             detail: 'Không thể xem chi tiết sản phẩm'
+//         });
+//     }
+// };
 
 const toggleFavorite = async (productId: string) => {
   try {
@@ -338,7 +338,7 @@ const handleAddToComparison = (product: Product) => {
 
         {/* Comparison Bar */}
         <div className="fixed bottom-0 left-0 right-0 z-50">
-            <ComparisonBar availableProducts={products} />
+            <ComparisonBar />
         </div>
     </div>
 );

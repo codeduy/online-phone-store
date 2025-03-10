@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-import { Password } from 'primereact/password';
+// import { Password } from 'primereact/password';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { jwtDecode } from "jwt-decode";
@@ -242,6 +242,6 @@ const AdminLogin = () => {
 
 export default AdminLogin;
 
-function jwt_decode(token: string) {
-    throw new Error('Function not implemented.');
-}
+// function jwt_decode(token: string) {
+//     throw new Error('Function not implemented.');
+// }

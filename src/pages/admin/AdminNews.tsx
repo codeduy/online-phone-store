@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
@@ -6,7 +6,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload } from 'primereact/fileupload';
-import { Calendar } from 'primereact/calendar';
+// import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Card } from 'primereact/card';
@@ -30,12 +30,19 @@ interface NewsEvent {
     meta: string;
 }
 
+interface DecodedToken {
+    exp: number;
+    role: string;
+    id?: string;
+    [key: string]: any;
+}
+
 const AdminNews = () => {
     const [newsList, setNewsList] = useState<NewsEvent[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredNews, setFilteredNews] = useState<NewsEvent[]>([]);
     const [showDialog, setShowDialog] = useState(false);
-    const [selectedType, setSelectedType] = useState<'promotion' | 'tech'>('promotion');
+    const [selectedType] = useState<'promotion' | 'tech'>('promotion');
     const [newNews, setNewNews] = useState<NewsEvent>({
         _id: '',
         title: '',

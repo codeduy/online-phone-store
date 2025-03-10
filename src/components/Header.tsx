@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
-import { ToggleButton } from 'primereact/togglebutton';
+// import { ToggleButton } from 'primereact/togglebutton';
 import { Menu } from 'primereact/menu';
 import { useNavigate } from 'react-router-dom';
 import '/src/styles/tailwind.css';
@@ -9,7 +9,7 @@ import '/src/styles/darkmode.css';
 import axios from 'axios';
 
 export default function Header() {
-  const [darkMode, setDarkMode] = useState(false);
+  // const [darkMode, setDarkMode] = useState(false);
   const menuRef = useRef<Menu>(null);
   const navigate = useNavigate();
 
@@ -32,13 +32,13 @@ export default function Header() {
     }
   };
 
-  useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
-  }, [darkMode]);
+  // useEffect(() => {
+  //   if (darkMode) {
+  //     document.body.classList.add('dark-mode');
+  //   } else {
+  //     document.body.classList.remove('dark-mode');
+  //   }
+  // }, [darkMode]);
 
   const userMenuItems = [
     {

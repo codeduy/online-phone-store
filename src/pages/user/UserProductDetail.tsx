@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Galleria } from 'primereact/galleria';
 import { Button } from 'primereact/button';
@@ -147,7 +147,7 @@ const UserProductDetail = () => {
     // 1. Router và Context Hooks
     const { link } = useParams();
     const navigate = useNavigate();
-    const { addToCart, fetchCart } = useCart();
+    const {  fetchCart } = useCart();
     // const { addProduct } = useComparison();
 
     // 2. Refs
@@ -161,8 +161,8 @@ const UserProductDetail = () => {
     const [selectedMemory, setSelectedMemory] = useState<string>('');
     const [currentPrice, setCurrentPrice] = useState<number>(0);
     const [originalPrice, setOriginalPrice] = useState<number>(0);
-    const [currentSpecs, setCurrentSpecs] = useState<ProductSpecs | null>(null);
-    const [availableProducts, setAvailableProducts] = useState<ComparisonProduct[]>([]);
+    const [, setCurrentSpecs] = useState<ProductSpecs | null>(null);
+    const [, setAvailableProducts] = useState<ComparisonProduct[]>([]);
     const [otherVersions, setOtherVersions] = useState<ProductData[]>([]);
 
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -207,11 +207,11 @@ const UserProductDetail = () => {
     // 5. Form States
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
+    // const [name, setName] = useState('');
+    // const [phone, setPhone] = useState('');
     const [files, setFiles] = useState<File[]>([]);
-    const [uploadError, setUploadError] = useState('');
-    const [showUploadError, setShowUploadError] = useState(false);
+    const [uploadError, ] = useState('');
+    const [showUploadError, ] = useState(false);
 
     // 6. Address States
     const [selectedProvince, setSelectedProvince] = useState<LocationOption | null>(null);
@@ -220,7 +220,7 @@ const UserProductDetail = () => {
     const [selectedWard, setSelectedWard] = useState<LocationOption | null>(null);
     const [filteredWards, setFilteredWards] = useState<LocationOption[]>([]);
     const [streetAddress, setStreetAddress] = useState('');
-    const [shippingAddress, setShippingAddress] = useState('');
+    const [, setShippingAddress] = useState('');
     const [provinces, setProvinces] = useState<LocationOption[]>([]);
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
@@ -721,7 +721,7 @@ const UserProductDetail = () => {
         }
     };
 
-    const handleBuyNow = async (product: Product) => {
+    const handleBuyNow = async (product: ProductData) => {
         try {
             await handleAddToCart(product);
             navigate('/cart', { state: { scrollToTop: true } });
@@ -982,17 +982,17 @@ const UserProductDetail = () => {
     }
 
     // Calculate average rating
-    const averageRating = product.reviews.length
-        ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
-        : 0;
+    // const averageRating = product.reviews.length
+    //     ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
+    //     : 0;
 
     // Calculate rating percentages
-    const totalReviews = product.reviews.length;
-    const ratingCounts = [5, 4, 3, 2, 1].map(star => ({
-        star,
-        count: product.reviews.filter(review => review.rating === star).length,
-        percentage: totalReviews ? (product.reviews.filter(review => review.rating === star).length / totalReviews) * 100 : 0,
-    }));
+    // const totalReviews = product.reviews.length;
+    // const ratingCounts = [5, 4, 3, 2, 1].map(star => ({
+    //     star,
+    //     count: product.reviews.filter(review => review.rating === star).length,
+    //     percentage: totalReviews ? (product.reviews.filter(review => review.rating === star).length / totalReviews) * 100 : 0,
+    // }));
 
     const handleFileSelect = (e: { files: File[] }) => {
         const maxImages = 3;
@@ -1012,9 +1012,12 @@ const UserProductDetail = () => {
             if (fileUploadRef.current) {
                 fileUploadRef.current.clear();
                 // Re-add only the first 3 images
-                limitedFiles.forEach(file => {
-                    fileUploadRef.current?.upload([file]);
-                });
+                // Reset the file upload reference
+                if (fileUploadRef.current) {
+                    fileUploadRef.current.clear();
+                    // Set the files directly
+                    setFiles(limitedFiles);
+                }
             }
             setFiles(limitedFiles);
         } else {
@@ -1033,7 +1036,7 @@ const UserProductDetail = () => {
         console.log('Review data in ReviewSection:', reviewData);
         console.log('Review count:', reviewData.reviews?.length || 0);
 
-        const userId = localStorage.getItem('userId');
+        // const userId = localStorage.getItem('userId');
     
         return (
             <div className="mt-8 bg-white p-6 rounded-lg shadow">
@@ -1065,14 +1068,14 @@ const UserProductDetail = () => {
                                 <div className="flex-1 h-2 bg-gray-200 rounded overflow-hidden">
                                     <div 
                                         className="h-full bg-yellow-400"
-                                        style={{
-                                            width: `${reviewData.stats.total ? (reviewData.stats[star as keyof typeof reviewData.stats.five]/reviewData.stats.total)*100 : 0}%`
-                                        }}
+                                        // style={{
+                                        //     width: `${reviewData.stats.total ? (reviewData.stats[star as keyof typeof reviewData.stats.five]/reviewData.stats.total)*100 : 0}%`
+                                        // }}
                                     />
                                 </div>
-                                <span className="w-12 text-sm text-right">
+                                {/* <span className="w-12 text-sm text-right">
                                     {reviewData.stats[star as keyof typeof reviewData.stats.five]}
-                                </span>
+                                </span> */}
                             </div>
                         ))}
                     </div>
@@ -1560,7 +1563,7 @@ const UserProductDetail = () => {
                                     Kéo thả hoặc click để chọn ảnh (tối đa 3 ảnh)
                                 </p>
                             }
-                            onError={(e) => {
+                            onError={(_e) => {
                                 toast.current?.show({
                                     severity: 'error',
                                     summary: 'Lỗi',
@@ -1756,7 +1759,7 @@ const UserProductDetail = () => {
             </Dialog>
 
             <div className="fixed bottom-0 left-0 right-0 z-50">
-                <ComparisonBar availableProducts={availableProducts} />
+                <ComparisonBar />
             </div>
         </div>  
     );

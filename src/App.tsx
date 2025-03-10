@@ -7,12 +7,12 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminCustomers from "./pages/admin/AdminCustomers";
-import AdminPayments from "./pages/admin/AdminPayments";
-import AdminStaffs from "./pages/admin/AdminStaffs";
+// import AdminPayments from "./pages/admin/AdminPayments";
+// import AdminStaffs from "./pages/admin/AdminStaffs";
 import AdminNews from "./pages/admin/AdminNews.tsx";
-import AdminStatistics from "./pages/admin/AdminStatistics";
+// import AdminStatistics from "./pages/admin/AdminStatistics";
 import AdminProfile from "./pages/admin/AdminProfile.tsx";
-import AdminSettings from "./pages/admin/AdminSettings";
+// import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminCoupons from "./pages/admin/AdminCoupons";
 import AdminOrderDetails from "./pages/admin/AdminOrderDetails";
@@ -52,7 +52,7 @@ import UserNews from "./pages/user/UserNews.tsx";
 import AdminLogs from './pages/admin/AdminLogs';
 
 import { ComparisonProvider } from "./components/user/ComparisonContext.tsx";
-import { FilterProvider } from "./components/user/FilterContext.tsx";
+// import { FilterProvider } from "./components/user/FilterContext.tsx";
 
 import PaymentResult from './pages/user/PaymentResult.tsx';
 
@@ -65,7 +65,7 @@ axios.defaults.withCredentials = true;
 
 const App = () => {
   return (
-    <FilterProvider>
+    // <FilterProvider>
         <CartProvider>      
         <BrowserRouter>        
           <ComparisonProvider>
@@ -76,12 +76,12 @@ const App = () => {
                   <Route path="products" element={<AdminProducts />} />
                   <Route path="orders" element={<AdminOrders />} />
                   <Route path="customers" element={<AdminCustomers />} />
-                  <Route path="payments" element={<AdminPayments />} />
-                  <Route path="staffs" element={<AdminStaffs />} />
+                  {/* <Route path="payments" element={<AdminPayments />} />
+                  <Route path="staffs" element={<AdminStaffs />} /> */}
                   <Route path="news" element={<AdminNews />} />
-                  <Route path="statistics" element={<AdminStatistics />} />
+                  {/* <Route path="statistics" element={<AdminStatistics />} /> */}
                   <Route path="profile" element={<AdminProfile />} />
-                  <Route path="settings" element={<AdminSettings />} />
+                  {/* <Route path="settings" element={<AdminSettings />} /> */}
                   <Route path="coupons" element={<AdminCoupons />} />
                   <Route path="/admin/orders/:id" element={<AdminOrderDetails/>} />
                   <Route path="logs" element={<AdminLogs />} />
@@ -138,7 +138,7 @@ const App = () => {
         </BrowserRouter>
     </CartProvider>
 
-    </FilterProvider>
+    // </FilterProvider>
 
     
     

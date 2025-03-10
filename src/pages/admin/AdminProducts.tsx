@@ -3,12 +3,12 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { DataTable } from 'primereact/datatable';
-import { InputTextarea } from 'primereact/inputtextarea';
+// import { InputTextarea } from 'primereact/inputtextarea';
 import { InputNumber } from 'primereact/inputnumber';
 import { Column } from 'primereact/column';
 import { FileUpload } from 'primereact/fileupload';
 import { Card } from 'primereact/card';
-import { InputSwitch } from 'primereact/inputswitch';
+// import { InputSwitch } from 'primereact/inputswitch';
 import { Dropdown } from 'primereact/dropdown';
 import 'react-quill/dist/quill.snow.css';
 import 'papaparse';
@@ -77,28 +77,28 @@ interface ProductData {
   specs?: ProductSpec;
 }
 
-interface Product {
-  id: string;
-  name: string;
-  baseProductName: string;
-  price: number;
-  originalPrice: number;
-  discountPrice: number;
-  discount: number;
-  category: string;
-  trademark: string;
-  images: string[];
-  ram: string;
-  storage: string;
-  stock: number;
-  status: string;
-  release_year: number;
-  needs: string[];
-  special_features: string[];
-  rating: number;
-  link: string;
-  specs?: ProductSpec;
-}
+// interface Product {
+//   id: string;
+//   name: string;
+//   baseProductName: string;
+//   price: number;
+//   originalPrice: number;
+//   discountPrice: number;
+//   discount: number;
+//   category: string;
+//   trademark: string;
+//   images: string[];
+//   ram: string;
+//   storage: string;
+//   stock: number;
+//   status: string;
+//   release_year: number;
+//   needs: string[];
+//   special_features: string[];
+//   rating: number;
+//   link: string;
+//   specs?: ProductSpec;
+// }
 
 interface Category {
   _id: string;
@@ -110,14 +110,14 @@ interface Category {
   logo_url: string;
 }
 
-interface CustomFile extends File {
-  objectURL?: string;
-}
+// interface CustomFile extends File {
+//   objectURL?: string;
+// }
 
-interface OptionType {
-  label: string;
-  value: string;
-}
+// interface OptionType {
+//   label: string;
+//   value: string;
+// }
 
 const AdminProducts = () => {
   const [showAddCategory, setShowAddCategory] = useState(false);
@@ -128,10 +128,10 @@ const AdminProducts = () => {
   const [productName, setProductName] = useState('');
   const [discount, setDiscount] = useState(0);
   const [price, setPrice] = useState(0);
-  const [productInfo, setProductInfo] = useState('');
+//   const [productInfo, setProductInfo] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<ProductData | null>(null);
-  const [switchValues, setSwitchValues] = useState<{ [key: number]: boolean }>({});
-  const [brands, setBrands] = useState<Array<{_id: string, name: string, logo_url: string}>>([]);
+//   const [switchValues, setSwitchValues] = useState<{ [key: number]: boolean }>({});
+//   const [brands, setBrands] = useState<Array<{_id: string, name: string, logo_url: string}>>([]);
   const [selectedBrand, setSelectedBrand] = useState<Category | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
@@ -141,12 +141,12 @@ const AdminProducts = () => {
   const [selectedReleaseYear, setSelectedReleaseYear] = useState('');
   const [selectedInternalStorage, setSelectedInternalStorage] = useState('');
   const [selectedRam, setSelectedRam] = useState('');
-  const [selectedScreen, setSelectedScreen] = useState('');
+//   const [selectedScreen, setSelectedScreen] = useState('');
   const [selectedSpecialFeatures, setSelectedSpecialFeatures] = useState<string[]>([]);
   const [selectedDemand, setSelectedDemand] = useState<string[]>([]);
   
 
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [products, setProducts] = useState<ProductData[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const toast = useRef<Toast>(null);
@@ -267,11 +267,11 @@ useEffect(() => {
         if (data.trademark) {
           // Nếu trademark là object
           if (typeof data.trademark === 'object') {
-            trademark = categories.find(cat => cat._id === data.trademark._id);
+            trademark = categories.find(cat => cat._id === data.trademark._id) || null;
           } 
           // Nếu trademark là string (ID)
           else if (typeof data.trademark === 'string') {
-            trademark = categories.find(cat => cat._id === data.trademark);
+            trademark = categories.find(cat => cat._id === data.trademark) || null;
           }
         }
         setSelectedBrand(trademark);
@@ -466,39 +466,39 @@ useEffect(() => {
     }
   }, 300);
 
-  const handleDemandChange = (e: any) => {
-    const newValue = Array.isArray(e.value) ? e.value : [];
-    if (newValue.length <= 4) {
-        setSelectedDemand(newValue);
-    }
-};
+//   const handleDemandChange = (e: any) => {
+//     const newValue = Array.isArray(e.value) ? e.value : [];
+//     if (newValue.length <= 4) {
+//         setSelectedDemand(newValue);
+//     }
+// };
 
-const handleSpecialFeaturesChange = (e: any) => {
-    const newValue = Array.isArray(e.value) ? e.value : [];
-    if (newValue.length <= 4) {
-        setSelectedSpecialFeatures(newValue);
-    }
-};
+// const handleSpecialFeaturesChange = (e: any) => {
+//     const newValue = Array.isArray(e.value) ? e.value : [];
+//     if (newValue.length <= 4) {
+//         setSelectedSpecialFeatures(newValue);
+//     }
+// };
 
-  const onMainImageUpload = (e: any) => {
-    if (e.files.length > 2) {
-        handleUploadError('Chỉ được phép tải lên tối đa 2 ảnh');
-        e.files.splice(2);
-        return;
-    }
-    setMainImages(e.files);
-    handleUploadSuccess();
-  };
+//   const onMainImageUpload = (e: any) => {
+//     if (e.files.length > 2) {
+//         handleUploadError('Chỉ được phép tải lên tối đa 2 ảnh');
+//         e.files.splice(2);
+//         return;
+//     }
+//     setMainImages(e.files);
+//     handleUploadSuccess();
+//   };
 
-  const onAdditionalImageUpload = (e: any) => {
-    if (e.files.length > 10) {
-        handleUploadError('Chỉ được phép tải lên tối đa 10 ảnh');
-        e.files.splice(10);
-        return;
-    }
-    setAdditionalImages(e.files);
-    handleUploadSuccess();
-  };
+//   const onAdditionalImageUpload = (e: any) => {
+//     if (e.files.length > 10) {
+//         handleUploadError('Chỉ được phép tải lên tối đa 10 ảnh');
+//         e.files.splice(10);
+//         return;
+//     }
+//     setAdditionalImages(e.files);
+//     handleUploadSuccess();
+//   };
   
 
   const token = localStorage.getItem('adminToken');
@@ -556,12 +556,12 @@ const handleSpecialFeaturesChange = (e: any) => {
     { label: '12GB', value: '12GB' }
   ];
   
-  const screens = [
-    { label: '60Hz', value: '60Hz' },
-    { label: '90Hz', value: '90Hz' },
-    { label: '120Hz', value: '120Hz' },
-    { label: '144Hz', value: '144Hz' }
-  ];
+//   const screens = [
+//     { label: '60Hz', value: '60Hz' },
+//     { label: '90Hz', value: '90Hz' },
+//     { label: '120Hz', value: '120Hz' },
+//     { label: '144Hz', value: '144Hz' }
+//   ];
   
   const demands = [
     { label: 'Chơi game/Cấu hình cao', value: 'Chơi game/Cấu hình cao' },
@@ -577,15 +577,15 @@ const handleSpecialFeaturesChange = (e: any) => {
     { label: 'Công nghệ NFC', value: 'Công nghệ NFC' }
   ];
 
-  const [productData, setProductData] = useState({
-    productName: '',
-    price: 0,
-    discount: 0,
-    brand: null,
-    mainImage: null,
-    additionalImages: [],
-    productInfo: ''
-  });
+//   const [productData, setProductData] = useState({
+//     productName: '',
+//     price: 0,
+//     discount: 0,
+//     brand: null,
+//     mainImage: null,
+//     additionalImages: [],
+//     productInfo: ''
+//   });
 
   const handleDeleteProduct = async (productId: string) => {
     if (!verifyToken()) return;
@@ -682,21 +682,21 @@ useEffect(() => {
     fetchProducts();
 }, []);
 
-  const handleInputChange = (e: any, field: string) => {
-    const value = e.target ? e.target.value : e.value;
-    setProductData({ ...productData, [field]: value });
-  };
+//   const handleInputChange = (e: any, field: string) => {
+//     const value = e.target ? e.target.value : e.value;
+//     setProductData({ ...productData, [field]: value });
+//   };
 
   const calculateDiscountedPrice = (price: number, discount: number): number => {
       return price - (price * discount / 100);
   };  
 
-  const handleSwitchChange = (id: number, value: boolean): void => {
-    setSwitchValues((prevValues) => ({
-      ...prevValues,
-      [id]: value,
-    }));
-  };
+//   const handleSwitchChange = (id: number, value: boolean): void => {
+//     setSwitchValues((prevValues) => ({
+//       ...prevValues,
+//       [id]: value,
+//     }));
+//   };
 
 
   const handleEditSave = async () => {
@@ -948,38 +948,38 @@ const resetForm = () => {
     });
   };
 
-  const demandItemTemplate = (option: any) => {
-    return (
-        <div className="flex align-items-center">
-            <div className="flex align-items-center gap-2">
-                <input
-                    type="checkbox"
-                    checked={selectedDemand.includes(option.value)}
-                    onChange={() => {}}
-                    className="cursor-pointer"
-                />
-                <span>{option.label}</span>
-            </div>
-        </div>
-    );
-};
+//   const demandItemTemplate = (option: any) => {
+//     return (
+//         <div className="flex align-items-center">
+//             <div className="flex align-items-center gap-2">
+//                 <input
+//                     type="checkbox"
+//                     checked={selectedDemand.includes(option.value)}
+//                     onChange={() => {}}
+//                     className="cursor-pointer"
+//                 />
+//                 <span>{option.label}</span>
+//             </div>
+//         </div>
+//     );
+// };
 
 // Thay đổi template item cho Dropdown specialFeatures
-const specialFeatureItemTemplate = (option: any) => {
-    return (
-        <div className="flex align-items-center">
-            <div className="flex align-items-center gap-2">
-                <input
-                    type="checkbox"
-                    checked={selectedSpecialFeatures.includes(option.value)}
-                    onChange={() => {}}
-                    className="cursor-pointer"
-                />
-                <span>{option.label}</span>
-            </div>
-        </div>
-    );
-};
+// const specialFeatureItemTemplate = (option: any) => {
+//     return (
+//         <div className="flex align-items-center">
+//             <div className="flex align-items-center gap-2">
+//                 <input
+//                     type="checkbox"
+//                     checked={selectedSpecialFeatures.includes(option.value)}
+//                     onChange={() => {}}
+//                     className="cursor-pointer"
+//                 />
+//                 <span>{option.label}</span>
+//             </div>
+//         </div>
+//     );
+// };
 
   return (
     <div className="p-4">

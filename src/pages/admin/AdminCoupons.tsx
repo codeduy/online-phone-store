@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -347,7 +347,7 @@ const AdminCoupons = () => {
     }
   };
 
-  const handleSwitchChange = async (e: any, couponId: string) => {
+  const handleSwitchChange = async (_e: any, couponId: string) => {
     if (!verifyToken()) return;
     try {
       const token = localStorage.getItem('adminToken');
@@ -620,6 +620,6 @@ const AdminCoupons = () => {
 
 export default AdminCoupons;
 
-function setLoading(arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
+// function setLoading(arg0: boolean) {
+//   throw new Error('Function not implemented.');
+// }

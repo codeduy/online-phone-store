@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Button } from 'primereact/button';
@@ -40,7 +40,7 @@ interface CustomerUpdateData {
 
 const AdminCustomers = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
+    const [filteredCustomers] = useState<Customer[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
     const [showDialog, setShowDialog] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);

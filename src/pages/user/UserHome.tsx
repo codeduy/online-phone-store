@@ -15,7 +15,10 @@ interface Product {
   name: string;
   baseProductName: string;
   trademark: string;
-  price: number | string;
+  price: number | string;  
+  originalPrice: number;
+  discountPrice: number;
+  discount: number;
   image?: string;  
   images?: string[];
   rating: {
@@ -52,42 +55,43 @@ interface Product {
   color_options?: string[];
 }
 
-interface ComparisonProduct {
-  id: string;
-  name: string;
-  baseProductName: string;
-  price: number;
-  images: string[];
-  trademark: string;
-  link: string;
-  originalPrice: number;
-  discountPrice: number;
-  discount: number;
-  meta: string;
-  variant?: {
-    storage: string;
-    ram: string;
-  };
-  specs?: {
-    os: string;
-    cpu: string;
-    gpu: string;
-    camera: {
-      main: string;
-      front: string;
-    };
-    display: {
-      type: string;
-      size: string;
-      refresh_rate: string;
-      brightness: string;
-    };
-    battery: {
-      capacity: string;
-      charging: string;
-    };
-  };
-}
+
+// interface ComparisonProduct {
+//   id: string;
+//   name: string;
+//   baseProductName: string;
+//   price: number;
+//   images: string[];
+//   trademark: string;
+//   link: string;
+//   originalPrice: number;
+//   discountPrice: number;
+//   discount: number;
+//   meta: string;
+//   variant?: {
+//     storage: string;
+//     ram: string;
+//   };
+//   specs?: {
+//     os: string;
+//     cpu: string;
+//     gpu: string;
+//     camera: {
+//       main: string;
+//       front: string;
+//     };
+//     display: {
+//       type: string;
+//       size: string;
+//       refresh_rate: string;
+//       brightness: string;
+//     };
+//     battery: {
+//       capacity: string;
+//       charging: string;
+//     };
+//   };
+// }
 
 const API_URL = `${import.meta.env.VITE_API_URL}`;
 
@@ -114,9 +118,9 @@ const bannerTemplate = (item: BannerItem): JSX.Element => {
   );
 };
 
-interface BrandProducts {
-  [key: string]: Product[];
-}
+// interface BrandProducts {
+//   [key: string]: Product[];
+// }
 
 // const bestSellingProductsByBrand: BrandProducts = {
 //   Samsung: [
@@ -142,11 +146,11 @@ interface BrandProducts {
 // ];
 
 const UserHome = () => {
-  const [favoriteProducts, setFavoriteProducts] = useState<string[]>([]);
+  // const [favoriteProducts, setFavoriteProducts] = useState<string[]>([]);
   // const [comparisonProducts, setComparisonProducts] = useState<Product[]>([]);
   const toast = useRef<Toast>(null);
   const { addProduct, getComparisonProducts } = useComparison();
-  const [currentUser, setCurrentUser] = useState(null);
+  // const [currentUser, setCurrentUser] = useState(null);
   const [userFavorites, setUserFavorites] = useState<string[]>([]);
 
   const [hotProducts, setHotProducts] = useState<Product[]>([]);
@@ -166,7 +170,7 @@ const UserHome = () => {
           {
             maxRetries: 3,
             retryDelay: 1000,
-            onRetry: (retryCount, error) => {
+            onRetry: (retryCount) => {
               console.log(`Retrying hot products fetch (${retryCount}/3)...`);
               toast.current?.show({
                 severity: 'info',
@@ -208,7 +212,7 @@ const UserHome = () => {
           {
             maxRetries: 3,
             retryDelay: 1000,
-            onRetry: (retryCount, error) => {
+            onRetry: (retryCount) => {
               console.log(`Retrying products by brand fetch (${retryCount}/3)...`);
               toast.current?.show({
                 severity: 'info',
@@ -303,8 +307,8 @@ const handleAddToComparison = (product: Product) => {
       ? parseFloat(product.price.replace(/[^0-9.-]+/g, ''))
       : product.price;
 
-    // Convert Product to ComparisonProduct with all required fields
-    const comparisonProduct: ComparisonProduct = {
+    // Convert Product to the format expected by addProduct
+    const transformedProduct = {
       id: product.id,
       name: product.name,
       baseProductName: product.baseProductName,
@@ -317,15 +321,29 @@ const handleAddToComparison = (product: Product) => {
       discount: 0, // Default discount
       meta: product.meta,
       variant: product.variant || undefined,
-      specs: product.specs || undefined
+      specs: product.specs ? {
+        os: product.specs.os,
+        cpu: product.specs.cpu,
+        gpu: product.specs.gpu,
+        ram: product.variant?.ram || '',
+        storage: product.variant?.storage || '',
+        rearCamera: product.specs.camera?.main || '',
+        frontCamera: product.specs.camera?.front || '',
+        displayType: product.specs.display?.type || '',
+        displaySize: product.specs.display?.size || '',
+        refreshRate: product.specs.display?.refresh_rate || '',
+        brightness: product.specs.display?.brightness || '',
+        batteryCapacity: product.specs.battery?.capacity || '',
+        charging: product.specs.battery?.charging || ''
+      } : undefined
     };
 
     // Validate required fields
-    if (!comparisonProduct.id || !comparisonProduct.name || !comparisonProduct.price) {
+    if (!transformedProduct.id || !transformedProduct.name || !transformedProduct.price) {
       throw new Error('Invalid product data for comparison');
     }
 
-    addProduct(comparisonProduct);
+    addProduct(transformedProduct);
     
     toast.current?.show({
       severity: 'success',
@@ -673,21 +691,23 @@ const handleAddToComparison = (product: Product) => {
         {/* Comparison Bar */}
         <div className="fixed bottom-0 left-0 right-0 z-50">
             <ComparisonBar
-                availableProducts={hotProducts}
-                onCompare={(products) => {
-                    if (products.length < 2) {
-                        toast.current?.show({
-                            severity: 'warn',
-                            summary: 'Chưa đủ sản phẩm',
-                            detail: 'Vui lòng chọn ít nhất 2 sản phẩm để so sánh',
-                            life: 3000
-                        });
-                        return;
-                    }
-                    console.log('Products to compare:', products);
-                }}
+                // availableProducts={hotProducts}
+                // onCompare={(products: string | any[]) => {
+                //     if (products.length < 2) {
+                //         toast.current?.show({
+                //             severity: 'warn',
+                //             summary: 'Chưa đủ sản phẩm',
+                //             detail: 'Vui lòng chọn ít nhất 2 sản phẩm để so sánh',
+                //             life: 3000
+                //         });
+                //         return;
+                //     }
+                //     console.log('Products to compare:', products);
+                // }}
             />
         </div>
+
+        
     </div>
 );
 };

@@ -6,52 +6,53 @@ import { Checkbox } from 'primereact/checkbox';
 import { Toast } from 'primereact/toast';
 import { Slider } from 'primereact/slider';
 import { OverlayPanel } from 'primereact/overlaypanel';
-import { Dialog } from 'primereact/dialog';
-import { InputText } from 'primereact/inputtext';
+// import { Dialog } from 'primereact/dialog';
+// import { InputText } from 'primereact/inputtext';
 import ComparisonBar from '../../components/user/ComparisonBar';
 // import { Product } from '../user/types/product';
 import { useComparison } from '../../components/user/ComparisonContext';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { Product } from './types/product';
 
-interface Product {
-  id: string;
-  name: string;
-  baseProductName: string;
-  images: string[];
-  trademark: string;
-  price: number;
-  originalPrice: number;
-  discountPrice: number;
-  discount: number; // Make sure discount is always a number
-  rating: {
-    average: number;
-    count: number;
-  };
-  specs: {
-    os: string;
-    cpu: string;
-    gpu: string;
-    ram: string;
-    storage: string;
-    screenTech: string;
-    screenSize: string;
-    refreshRate: string;
-    rearCamera: string;
-    frontCamera: string;
-    battery: string;
-    charging: string;
-  };
-  variant: {
-    ram: string;
-    storage: string;
-  };
-  link: string;
-  meta: string;
-  needs: string[];
-  special_features: string[];
-}
+// interface Product {
+//   id: string;
+//   name: string;
+//   baseProductName: string;
+//   images: string[];
+//   trademark: string;
+//   price: number;
+//   originalPrice: number;
+//   discountPrice: number;
+//   discount: number; // Make sure discount is always a number
+//   rating: {
+//     average: number;
+//     count: number;
+//   };
+//   specs: {
+//     os: string;
+//     cpu: string;
+//     gpu: string;
+//     ram: string;
+//     storage: string;
+//     screenTech: string;
+//     screenSize: string;
+//     refreshRate: string;
+//     rearCamera: string;
+//     frontCamera: string;
+//     battery: string;
+//     charging: string;
+//   };
+//   variant: {
+//     ram: string;
+//     storage: string;
+//   };
+//   link: string;
+//   meta: string;
+//   needs: string[];
+//   special_features: string[];
+// }
 
 const API_URL = `${import.meta.env.VITE_API_URL}`;
 
@@ -253,7 +254,7 @@ const UserProductsFilter = () => {
     }
   };
 
-  const handleFilter = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleFilter = (_e: React.MouseEvent<HTMLButtonElement>) => {
     const selectedBrandsQuery = selectedBrands.join(',');
     const priceRangeQuery = `${priceRange[0]}-${priceRange[1]}`;
     const selectedScreenQuery = selectedScreen.join(',');
@@ -289,7 +290,9 @@ const UserProductsFilter = () => {
   
     // Build image URL
     const baseUrl = API_URL.replace('/api', '');
-    const formattedTrademark = product.trademark.toUpperCase();
+    const formattedTrademark = typeof product.trademark === 'string' 
+      ? product.trademark.toUpperCase() 
+      : product.trademark.name.toUpperCase();
     const formattedName = product.baseProductName.replace(/\s+/g, '');
     const imagePath = product.images[0];
     
@@ -359,7 +362,7 @@ const UserProductsFilter = () => {
                                             <Checkbox 
                                                 inputId={option} 
                                                 value={option} 
-                                                onChange={(e) => handleCheckboxChange(
+                                                onChange={(_e) => handleCheckboxChange(
                                                     filter.label === "Hãng" ? selectedBrands :
                                                     filter.label === "Năm ra mắt" ? selectedYears :
                                                     filter.label === "Bộ nhớ trong" ? selectedMemory :
@@ -533,7 +536,7 @@ const UserProductsFilter = () => {
 
         {/* Comparison Bar */}
         <div className="fixed bottom-0 left-0 right-0 z-50">
-            <ComparisonBar availableProducts={sortedProducts} />
+            <ComparisonBar />
         </div>
     </div>
 );

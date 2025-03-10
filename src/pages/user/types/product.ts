@@ -83,7 +83,10 @@ export interface Product {
     screenSize?: string;
     refreshRate?: string;
     brightness?: string;
-    battery?: string;
+    battery: {
+      capacity: string;
+      charging: string;
+    };
     charging?: string;
   };
   variant?: {

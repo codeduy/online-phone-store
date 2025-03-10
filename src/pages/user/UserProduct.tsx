@@ -304,11 +304,11 @@ const UserProduct = () => {
     );
   };
 
-  const generateSlug = (name: string) => {
-    return name.toLowerCase().replace(/ /g, '-');
-  };
+  // const generateSlug = (name: string) => {
+  //   return name.toLowerCase().replace(/ /g, '-');
+  // };
 
-  const handleFilter = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleFilter = (_e: React.MouseEvent<HTMLButtonElement>) => {
     // Build query parameters
     const queryParams = {
       hang: selectedBrands.length ? selectedBrands.join(',') : undefined,
@@ -368,7 +368,7 @@ const UserProduct = () => {
               <OverlayPanel ref={brandOverlayRef} className="w-64 shadow-lg rounded-lg">
                 {brands.map((brand) => (
                   <div key={brand} className="p-field-checkbox p-2 cursor-pointer">
-                    <Checkbox className='border rounded' inputId={brand} value={brand} onChange={(e) => handleCheckboxChange(selectedBrands, setSelectedBrands, brand)} checked={selectedBrands.includes(brand)} />
+                    <Checkbox className='border rounded' inputId={brand} value={brand} onChange={(_e) => handleCheckboxChange(selectedBrands, setSelectedBrands, brand)} checked={selectedBrands.includes(brand)} />
                     <label htmlFor={brand} className="ml-2 cursor-pointer text-gray-700">{brand}</label>
                   </div>
                 ))}
@@ -400,7 +400,7 @@ const UserProduct = () => {
               <OverlayPanel ref={yearOverlayRef} className="w-64 shadow-lg rounded-lg">
                 {releaseYears.map((year) => (
                   <div key={year} className="p-2 hover:bg-gray-50 cursor-pointer">
-                    <Checkbox className='border rounded' inputId={year} value={year} onChange={(e) => handleCheckboxChange(selectedYears, setSelectedYears, year)} checked={selectedYears.includes(year)} />
+                    <Checkbox className='border rounded' inputId={year} value={year} onChange={(_e) => handleCheckboxChange(selectedYears, setSelectedYears, year)} checked={selectedYears.includes(year)} />
                     <label htmlFor={year} className="ml-2 cursor-pointer text-gray-700">{year}</label>
                   </div>
                 ))}
@@ -412,7 +412,7 @@ const UserProduct = () => {
               <OverlayPanel ref={memoryOverlayRef} className="w-64 shadow-lg rounded-lg">
                 {memoryOptions.map((memory) => (
                   <div key={memory} className="p-2 hover:bg-gray-50 cursor-pointer">
-                    <Checkbox className='border rounded' inputId={memory} value={memory} onChange={(e) => handleCheckboxChange(selectedMemory, setSelectedMemory, memory)} checked={selectedMemory.includes(memory)} />
+                    <Checkbox className='border rounded' inputId={memory} value={memory} onChange={(_e) => handleCheckboxChange(selectedMemory, setSelectedMemory, memory)} checked={selectedMemory.includes(memory)} />
                     <label htmlFor={memory} className="ml-2 cursor-pointer text-gray-700">{memory}</label>
                   </div>
                 ))}
@@ -424,7 +424,7 @@ const UserProduct = () => {
               <OverlayPanel ref={ramOverlayRef} className="w-64 shadow-lg rounded-lg">
                 {ramOptions.map((ram) => (
                   <div key={ram} className="p-2 hover:bg-gray-50 cursor-pointer">
-                    <Checkbox className='border rounded' inputId={ram} value={ram} onChange={(e) => handleCheckboxChange(selectedRam, setSelectedRam, ram)} checked={selectedRam.includes(ram)} />
+                    <Checkbox className='border rounded' inputId={ram} value={ram} onChange={(_e) => handleCheckboxChange(selectedRam, setSelectedRam, ram)} checked={selectedRam.includes(ram)} />
                     <label htmlFor={ram} className="ml-2 cursor-pointer text-gray-700">{ram}</label>
                   </div>
                 ))}
@@ -436,7 +436,7 @@ const UserProduct = () => {
               <OverlayPanel ref={screenOverlayRef} className="w-64 shadow-lg rounded-lg">
                 {screenOptions.map((screen) => (
                   <div key={screen} className="p-2 hover:bg-gray-50 cursor-pointer">
-                    <Checkbox className='border rounded' inputId={screen} value={screen} onChange={(e) => handleCheckboxChange(selectedScreen, setSelectedScreen, screen)} checked={selectedScreen.includes(screen)} />
+                    <Checkbox className='border rounded' inputId={screen} value={screen} onChange={(_e) => handleCheckboxChange(selectedScreen, setSelectedScreen, screen)} checked={selectedScreen.includes(screen)} />
                     <label htmlFor={screen} className="ml-2 cursor-pointer text-gray-700">{screen}</label>
                   </div>
                 ))}
@@ -448,7 +448,7 @@ const UserProduct = () => {
               <OverlayPanel ref={needsOverlayRef} className="w-64 shadow-lg rounded-lg">
                 {needsOptions.map((need) => (
                   <div key={need} className="p-2 hover:bg-gray-50 cursor-pointer">
-                    <Checkbox className='border rounded' inputId={need} value={need} onChange={(e) => handleCheckboxChange(selectedNeeds, setSelectedNeeds, need)} checked={selectedNeeds.includes(need)} />
+                    <Checkbox className='border rounded' inputId={need} value={need} onChange={(_e) => handleCheckboxChange(selectedNeeds, setSelectedNeeds, need)} checked={selectedNeeds.includes(need)} />
                     <label htmlFor={need} className="ml-2 cursor-pointer text-gray-700">{need}</label>
                   </div>
                 ))}
@@ -460,7 +460,7 @@ const UserProduct = () => {
               <OverlayPanel ref={featuresOverlayRef} className="w-64 shadow-lg rounded-lg">
                 {featuresOptions.map((feature) => (
                   <div key={feature} className="p-2 hover:bg-gray-50 cursor-pointer">
-                    <Checkbox className='border rounded' inputId={feature} value={feature} onChange={(e) => handleCheckboxChange(selectedFeatures, setSelectedFeatures, feature)} checked={selectedFeatures.includes(feature)} />
+                    <Checkbox className='border rounded' inputId={feature} value={feature} onChange={(_e) => handleCheckboxChange(selectedFeatures, setSelectedFeatures, feature)} checked={selectedFeatures.includes(feature)} />
                     <label htmlFor={feature} className="ml-2 cursor-pointer text-gray-700">{feature}</label>
                   </div>
                 ))}
@@ -552,7 +552,7 @@ const UserProduct = () => {
 
         {/* Comparison Bar */}
         <div className="fixed bottom-0 left-0 right-0 z-50">
-            <ComparisonBar availableProducts={Object.values(productsByBrand).flat()} />
+            <ComparisonBar />
         </div>
       </div>
     );

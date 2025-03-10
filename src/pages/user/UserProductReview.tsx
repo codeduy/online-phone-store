@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Rating } from 'primereact/rating';
 import { Button } from 'primereact/button';
@@ -111,10 +111,8 @@ const UserProductReview = () => {
             const limitedFiles = currentFiles.slice(0, maxImages);
             if (fileUploadRef.current) {
                 fileUploadRef.current.clear();
-                // Re-add only the first 3 images
-                limitedFiles.forEach(file => {
-                    fileUploadRef.current?.upload([file]);
-                });
+                // Set the files to the limited ones
+                setFiles(limitedFiles);
             }
             setFiles(limitedFiles);
         } else {
@@ -305,16 +303,16 @@ const UserProductReview = () => {
                         <div key={star} className="flex items-center gap-2 mb-2">
                             <span className="w-12 text-sm">{star} sao</span>
                             <div className="flex-1 h-2 bg-gray-200 rounded overflow-hidden">
-                                <div 
+                                {/* <div 
                                     className="h-full bg-yellow-400"
                                     style={{
                                         width: `${stats.total ? (stats[star as keyof typeof stats.five]/stats.total)*100 : 0}%`
                                     }}
-                                />
+                                /> */}
                             </div>
-                            <span className="w-12 text-sm text-right">
+                            {/* <span className="w-12 text-sm text-right">
                                 {stats[star as keyof typeof stats.five]}
-                            </span>
+                            </span> */}
                         </div>
                     ))}
                 </div>
@@ -512,7 +510,7 @@ const UserProductReview = () => {
                                     Kéo thả hoặc click để chọn ảnh (tối đa 3 ảnh)
                                 </p>
                             }
-                            onError={(e) => {
+                            onError={(_e) => {
                                 toast.current?.show({
                                     severity: 'error',
                                     summary: 'Lỗi',

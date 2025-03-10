@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Steps } from 'primereact/steps';
 import { Dropdown } from 'primereact/dropdown';
 import { Card } from 'primereact/card';
@@ -46,44 +46,44 @@ const StaffOrderDetails = () => {
     { label: 'Hoàn thành' },
   ];
 
-interface Product {
-    image: string;
-    name: string;
-    warranty: string;
-    quantity: number;
-}
+// interface Product {
+//     image: string;
+//     name: string;
+//     warranty: string;
+//     quantity: number;
+// }
 
-interface PaymentInfo {
-    totalAmount: number;
-    discount: number;
-    shippingFee: number;
-    amountToPay: number;
-    amountPaid: number;
-}
+// interface PaymentInfo {
+//     totalAmount: number;
+//     discount: number;
+//     shippingFee: number;
+//     amountToPay: number;
+//     amountPaid: number;
+// }
 
-interface CustomerInfo {
-    fullName: string;
-    phoneNumber: string;
-    address: string;
-}
+// interface CustomerInfo {
+//     fullName: string;
+//     phoneNumber: string;
+//     address: string;
+// }
 
-interface Order {
-    id: number;
-    status: string;
-    orderDate: Date;
-    products: Product[];
-    paymentInfo: PaymentInfo;
-    customerInfo: CustomerInfo;
-}
+// interface Order {
+//     id: number;
+//     status: string;
+//     orderDate: Date;
+//     products: Product[];
+//     paymentInfo: PaymentInfo;
+//     customerInfo: CustomerInfo;
+// }
 
-interface OrderStatus {
-    key: string;
-    label: string;
-}
+// interface OrderStatus {
+//     key: string;
+//     label: string;
+// }
 
-interface Step {
-    label: string;
-}
+// interface Step {
+//     label: string;
+// }
 
 const handleStatusChange = (e: { value: string }) => {
     setOrder({ ...order, status: e.value });

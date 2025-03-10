@@ -102,7 +102,7 @@ const AdminProfile = () => {
         const file = event.files[0];
         
         // Lưu File object để gửi lên server
-        const imageFile = file;
+        // const imageFile = file;
         
         // Tạo preview
         const reader = new FileReader();

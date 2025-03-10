@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { Steps } from 'primereact/steps';
+// import { Steps } from 'primereact/steps';
 import { Dropdown } from 'primereact/dropdown';
 import { Card } from 'primereact/card';
 import axios from 'axios';
@@ -205,21 +205,21 @@ const fetchOrderDetails = async (orderId: string) => {
     { key: 'cancelled', label: 'Đã hủy' }
   ];
 
-  const steps = [
-    { label: 'Đặt hàng' },
-    { label: 'Xác nhận' },
-    { label: 'Đang vận chuyển' },
-    { label: 'Hoàn thành' },
-  ];
+  // const steps = [
+  //   { label: 'Đặt hàng' },
+  //   { label: 'Xác nhận' },
+  //   { label: 'Đang vận chuyển' },
+  //   { label: 'Hoàn thành' },
+  // ];
 
-interface OrderStatus {
-    key: string;
-    label: string;
-}
+// interface OrderStatus {
+//     key: string;
+//     label: string;
+// }
 
-interface Step {
-    label: string;
-}
+// interface Step {
+//     label: string;
+// }
 
 const handleStatusChange = async (newStatus: string) => {
   if (!verifyToken()) return;

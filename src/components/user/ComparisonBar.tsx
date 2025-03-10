@@ -7,32 +7,32 @@ import { useNavigate } from 'react-router-dom';
 import { Product } from '../../pages/user/types/product';
 import { useComparison } from './ComparisonContext';
 import axios from 'axios';
-import { useCallback } from 'react';
-import { debounce } from 'lodash';
+// import { useCallback } from 'react';
+// import { debounce } from 'lodash';
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 interface ComparisonBarProps {
-  availableProducts: Product[];
+  // availableProducts: Product[];
 }
 
-interface SearchResponse {
-  success: boolean;
-  data: Product[];
-}
+// interface SearchResponse {
+//   success: boolean;
+//   data: Product[];
+// }
 
 interface ProductData {
   [key: string]: Product;
 }
 
 
-const getDisplayName = (product: Product): string => {
-  return product.name.toLowerCase().includes('iphone') 
-    ? `${product.baseProductName} ${product.variant?.storage || ''}`
-    : `${product.baseProductName} ${product.variant?.ram || ''}/${product.variant?.storage || ''}`;
-};
+// const getDisplayName = (product: Product): string => {
+//   return product.name.toLowerCase().includes('iphone') 
+//     ? `${product.baseProductName} ${product.variant?.storage || ''}`
+//     : `${product.baseProductName} ${product.variant?.ram || ''}/${product.variant?.storage || ''}`;
+// };
 
-const ComparisonBar: React.FC<ComparisonBarProps> = ({ availableProducts }) => {
+const ComparisonBar: React.FC<ComparisonBarProps> = ({  }) => {
   const { 
     comparisonProducts: products, 
     isMinimized,
@@ -99,6 +99,8 @@ const ComparisonBar: React.FC<ComparisonBarProps> = ({ availableProducts }) => {
                     originalPrice: originalPrice,
                     discountPrice: discountPrice,
                     discount: discount,
+                    price: originalPrice, // Add the required price property
+                    link: product.link || '', // Add the required link property
                     rating: product.rating?.average || 0,
                     specs: {
                         os: product.specs?.os || product.productDetails?.os || 'N/A',
@@ -211,9 +213,9 @@ const getDisplayName = (product: Product): string => {
     return name.toLowerCase().replace(/ /g, '-');
   };
 
-  const filteredProducts = Object.values(productDatabase).filter(product => 
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-);
+//   const filteredProducts = Object.values(productDatabase).filter(product => 
+//     product.name.toLowerCase().includes(searchTerm.toLowerCase())
+// );
 
 const handleAddProduct = (product: Product) => {
   if (products.length >= 3) {
@@ -256,7 +258,9 @@ const handleAddProduct = (product: Product) => {
 
     // Build image URL
     const baseUrl = API_URL.replace('/api', '');
-    const formattedTrademark = product.trademark.toUpperCase();
+    const formattedTrademark = typeof product.trademark === 'string' 
+      ? product.trademark.toUpperCase() 
+      : product.trademark.name.toUpperCase();
     const formattedName = product.baseProductName.replace(/\s+/g, '');
     // const imagePath = product.images[0];
 

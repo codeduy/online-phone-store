@@ -6,7 +6,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Rating } from 'primereact/rating';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
-import s21 from '/src/assets/img/s21.png';
+// import s21 from '/src/assets/img/s21.png';
 import { useCart } from './CartContext';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -43,10 +43,10 @@ interface Product {
     };
 }
 
-interface LocationState {
-    comparisonData?: Product[];
-    products?: Product[];
-  }
+// interface LocationState {
+//     comparisonData?: Product[];
+//     products?: Product[];
+//   }
 
 interface ProductData {
     [key: string]: Product;
@@ -57,7 +57,7 @@ const API_URL = `${import.meta.env.VITE_API_URL}`;
 const UserProductsCompare = () => {
     // const [selectedProducts, setSelectedProducts] = useState<(Product | null)[]>([]);
     const [showDialog, setShowDialog] = useState(false);
-    const [activeSlot, setActiveSlot] = useState<number | null>(null);
+    const [, setActiveSlot] = useState<number | null>(null);
     const { comparisonUrl } = useParams();
     const [activeIndexes] = useState([0]);
     const [products, setProducts] = useState<Product[]>([]);
@@ -69,7 +69,7 @@ const UserProductsCompare = () => {
     const [productDatabase, setProductDatabase] = useState<ProductData>({});
 
     const location = useLocation();
-    const locationState = location.state as LocationState;
+    // const locationState = location.state as LocationState;
 
     const searchProducts = async (searchTerm: string) => {
         if (!searchTerm.trim()) {
@@ -251,12 +251,12 @@ const UserProductsCompare = () => {
     //     }
     // }, [comparisonUrl]);
 
-    const formatProductName = (name: string) => {
-        return name
-            .split('-')
-            .join(' ')
-            .toUpperCase();
-    };
+    // const formatProductName = (name: string) => {
+    //     return name
+    //         .split('-')
+    //         .join(' ')
+    //         .toUpperCase();
+    // };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -620,7 +620,7 @@ const UserProductsCompare = () => {
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const { addToCart, fetchCart } = useCart();
+    const {  fetchCart } = useCart();
 
     const handleAddToCart = async (product: Product) => {
         try {

@@ -1,23 +1,23 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { TreeSelect } from 'primereact/treeselect';
-import { Card } from 'primereact/card';
-import autoTable from 'jspdf-autotable';
+// import { TreeSelect } from 'primereact/treeselect';
+// import { Card } from 'primereact/card';
+// import autoTable from 'jspdf-autotable';
 import { saveAs } from 'file-saver';
 import 'jspdf-autotable';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
-import { robotoFontData } from '../../assets/font/fontData';
+// import { robotoFontData } from '../../assets/font/fontData';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Toast } from 'primereact/toast';
 import { Order } from './types/order';
 import { Dropdown } from 'primereact/dropdown';
-import { addLocale } from 'primereact/api';
+// import { addLocale } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
@@ -30,14 +30,14 @@ interface DecodedToken {
 
 const AdminOrders = () => {
     const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
-    const [showExportOptions, setShowExportOptions] = useState(false);
+    // const [showExportOptions, setShowExportOptions] = useState(false);
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(false);
     const toast = useRef<Toast>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
-    const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+    // const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
     const navigate = useNavigate();
 
     const verifyToken = useCallback(() => {
@@ -221,7 +221,7 @@ const AdminOrders = () => {
     
 
     const statusBodyTemplate = (rowData: Order) => {
-        const statusOption = orderStatuses.find(s => s.key === rowData.status);
+        // const statusOption = orderStatuses.find(s => s.key === rowData.status);
         return (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <Dropdown
@@ -324,34 +324,34 @@ const AdminOrders = () => {
         { key: 'cancelled', label: 'Đã hủy' }
     ];
 
-    const handleFilter = () => {
-        let filtered = [...orders];
+    // const handleFilter = () => {
+    //     let filtered = [...orders];
 
-        // Lọc theo search query nếu có
-        if (searchQuery.trim()) {
-            filtered = filtered.filter(order => 
-                order.id.toLowerCase().includes(searchQuery.toLowerCase())
-            );
-        }
+    //     // Lọc theo search query nếu có
+    //     if (searchQuery.trim()) {
+    //         filtered = filtered.filter(order => 
+    //             order.id.toLowerCase().includes(searchQuery.toLowerCase())
+    //         );
+    //     }
 
-        // Lọc theo ngày nếu cả hai ngày được chọn
-        if (startDate && endDate) {
-            filtered = filtered.filter(order => {
-                const orderDate = new Date(order.orderDate);
-                const start = new Date(startDate);
-                const end = new Date(endDate);
+    //     // Lọc theo ngày nếu cả hai ngày được chọn
+    //     if (startDate && endDate) {
+    //         filtered = filtered.filter(order => {
+    //             const orderDate = new Date(order.orderDate);
+    //             const start = new Date(startDate);
+    //             const end = new Date(endDate);
 
-                // Set thời gian cho ngày bắt đầu là 00:00:00
-                start.setHours(0, 0, 0, 0);
-                // Set thời gian cho ngày kết thúc là 23:59:59
-                end.setHours(23, 59, 59, 999);
+    //             // Set thời gian cho ngày bắt đầu là 00:00:00
+    //             start.setHours(0, 0, 0, 0);
+    //             // Set thời gian cho ngày kết thúc là 23:59:59
+    //             end.setHours(23, 59, 59, 999);
                 
-                return orderDate >= start && orderDate <= end;
-            });
-        }
+    //             return orderDate >= start && orderDate <= end;
+    //         });
+    //     }
 
-        setFilteredOrders(filtered);
-    };
+    //     setFilteredOrders(filtered);
+    // };
 
     interface SaveAsExcelFileParams {
         buffer: ArrayBuffer;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
@@ -36,14 +36,14 @@ const StaffNews = () => {
         isEnabled: true
     });
 
-    const handleSearch = () => {
-        const filtered = newsList.filter(news =>
-            news.title.includes(searchTerm) ||
-            news.subtitle.includes(searchTerm) ||
-            news.content.includes(searchTerm)
-        );
-        setFilteredNews(filtered);
-    };
+    // const handleSearch = () => {
+    //     const filtered = newsList.filter(news =>
+    //         news.title.includes(searchTerm) ||
+    //         news.subtitle.includes(searchTerm) ||
+    //         news.content.includes(searchTerm)
+    //     );
+    //     setFilteredNews(filtered);
+    // };
 
     const handleAddNews = () => {
         setNewNews({

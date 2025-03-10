@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import { Helmet } from 'react-helmet';
+// import { Helmet } from 'react-helmet';
 
     interface CartContextType {
         cartItems: CartItem[];
@@ -52,7 +52,7 @@ import { Helmet } from 'react-helmet';
         removeVoucher: function (): Promise<any> {
             throw new Error('Function not implemented.');
         },
-        setCartItems: function (items: CartItem[]): void {
+        setCartItems: function (): void {
             throw new Error('Function not implemented.');
         }
     });

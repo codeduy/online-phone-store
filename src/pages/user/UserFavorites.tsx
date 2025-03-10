@@ -23,18 +23,18 @@ interface Product {
     baseProductName?: string;
 }
 
-interface CartItem {
-    id: string;
-    name: string;
-    price: number;
-    quantity: number;
-    images?: string[];
-    variant?: {
-        ram?: string;
-        storage?: string;
-    };
-    baseProductName?: string;
-}
+// interface CartItem {
+//     id: string;
+//     name: string;
+//     price: number;
+//     quantity: number;
+//     images?: string[];
+//     variant?: {
+//         ram?: string;
+//         storage?: string;
+//     };
+//     baseProductName?: string;
+// }
 
 // const API_URL = 'http://localhost:3000/api';
 

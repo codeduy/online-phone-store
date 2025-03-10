@@ -1,39 +1,39 @@
-import React, { createContext, useState, useContext, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { RadioButton } from 'primereact/radiobutton';
-import { Checkbox } from 'primereact/checkbox';
+// import { Checkbox } from 'primereact/checkbox';
 import { useCart } from './CartContext';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import { Toast } from 'primereact/toast';
 import { useLocation, useNavigate  } from 'react-router-dom';
-import moment from 'moment';
+// import moment from 'moment';
 
 // const API_URL = 'http://localhost:3000/api';
 
-interface CreateOrderPayload {
-  items: {
-      product_id: string;
-      quantity: number;
-      price: number;
-      color?: string;
-  }[];
-  shipping_info: {
-      fullName: string;
-      phone: string;
-      address: string;
-  };
-  total_amount: number;
-  shipping_fee: number;
-  discount?: number;
-  final_amount: number;
-  voucher_code?: string;
-  status: 'pending';
-}
+// interface CreateOrderPayload {
+//   items: {
+//       product_id: string;
+//       quantity: number;
+//       price: number;
+//       color?: string;
+//   }[];
+//   shipping_info: {
+//       fullName: string;
+//       phone: string;
+//       address: string;
+//   };
+//   total_amount: number;
+//   shipping_fee: number;
+//   discount?: number;
+//   final_amount: number;
+//   voucher_code?: string;
+//   status: 'pending';
+// }
 
 interface UserProfile {
   full_name: string;
@@ -67,12 +67,12 @@ const UserCart = () => {
     finalAmount,
     fetchCart,
     setCartItems,
-    applyVoucher,
+    // applyVoucher,
     removeVoucher 
   } = useCart();
 
   const [deliveryOption, setDeliveryOption] = useState('delivery');
-  const [showDeliveryDialog, setShowDeliveryDialog] = useState(false);
+  // const [showDeliveryDialog, setShowDeliveryDialog] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [discountCode, setDiscountCode] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('vnpay');
@@ -531,9 +531,9 @@ const handleCreateOrder = async () => {
     }
   };
 
-  const handlePlaceOrder = () => {
-    setShowSuccessDialog(true);
-  };
+  // const handlePlaceOrder = () => {
+  //   setShowSuccessDialog(true);
+  // };
 
   // Loading State
   if (loading) {

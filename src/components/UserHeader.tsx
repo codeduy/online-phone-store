@@ -1,6 +1,6 @@
 import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
-import { ToggleButton } from 'primereact/togglebutton';
+// import { ToggleButton } from 'primereact/togglebutton';
 import { useEffect, useState, useRef } from 'react';
 import { Menu } from 'primereact/menu';
 import { useNavigate } from 'react-router-dom';
@@ -19,10 +19,10 @@ interface Category {
   logo_url: string;
 }
 
-interface SearchResponse {
-  success: boolean;
-  data: Product[];
-}
+// interface SearchResponse {
+//   success: boolean;
+//   data: Product[];
+// }
 
 interface ProductData {
   [key: string]: Product;
@@ -31,17 +31,17 @@ interface ProductData {
 const API_URL = 'http://localhost:3000/api';
 
 export default function UserHeader() {
-  const [darkMode, setDarkMode] = useState(false);
+  // const [darkMode, setDarkMode] = useState(false);
   const overlayPanelRef = useRef<OverlayPanel>(null);
   const menuRef = useRef<Menu>(null);
   const navigate = useNavigate();
   const { cartCount } = useCart();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  // const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [showSearchDialog, setShowSearchDialog] = useState(false);
+  // const [showSearchDialog, setShowSearchDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [productDatabase, setProductDatabase] = useState<{[key: string]: Product}>({});
   const debouncedSearch = useRef<NodeJS.Timeout>();
@@ -204,9 +204,9 @@ export default function UserHeader() {
     fetchCategories();
   }, []);
 
-  const handleLogoutClick = () => {
-    setShowLogoutDialog(true);
-  };
+  // const handleLogoutClick = () => {
+  //   setShowLogoutDialog(true);
+  // };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -232,7 +232,7 @@ export default function UserHeader() {
     } catch (error) {
       console.error('Logout error:', error);
     }
-    setShowLogoutDialog(false);
+    // setShowLogoutDialog(false);
   };
 
   const userMenuItems = isAuthenticated ? [
@@ -409,7 +409,9 @@ export default function UserHeader() {
   
     // Build image URL
     const baseUrl = API_URL.replace('/api', '');
-    const formattedTrademark = product.trademark.toUpperCase();
+    const formattedTrademark = typeof product.trademark === 'string' 
+      ? product.trademark.toUpperCase() 
+      : product.trademark.name.toUpperCase();
     const formattedName = product.name.replace(/\s+/g, '');
     const imagePath = product.images[0];
     

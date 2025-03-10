@@ -2,11 +2,11 @@ import { Outlet } from "react-router-dom";
 import UserHeader from "../UserHeader";
 import UserFooter from "./UserFooter";
 import '/src/styles/tailwind.css';
-import { useState } from 'react';
+// import { useState } from 'react';
 import UserSidebar from "./UserSidebar";
 
 const UserLayout = () => {
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
 
   return (
     <div className="h-screen flex flex-col">
