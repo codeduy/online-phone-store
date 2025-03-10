@@ -71,7 +71,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://mobileshop-yi46.onrender.com'],
+  origin: ['http://localhost:5173', 'https://mobileshop-cntt.onrender.com'],
   credentials: true
 }));
 
