@@ -17,7 +17,7 @@ export default function Header() {
     try {
         const token = localStorage.getItem('adminToken');
         if (token) {
-            await axios.post('http://localhost:3000/api/admin/logout', {}, {
+            await axios.post('/admin/logout', {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -61,7 +61,7 @@ export default function Header() {
   const startContent = (
     <div className="flex items-center gap-4">
       <img
-        src="\src\assets\img\logo.png"
+        src={`${import.meta.env.VITE_IMAGE_URL}/images/logo/logo.png`}
         alt="Website Logo"
         className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
         onClick={() => navigate('/admin')}
