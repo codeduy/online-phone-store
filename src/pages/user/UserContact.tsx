@@ -60,7 +60,7 @@ const UserContact: React.FC = () => {
                 return;
             }
 
-            const response = await axios.post('http://localhost:3000/api/contacts', formData);
+            const response = await axios.post('/api/contacts', formData);
             
             if (response.data.success) {
                 toast.current?.show({

@@ -36,7 +36,7 @@ interface CartItem {
     baseProductName?: string;
 }
 
-const API_URL = 'http://localhost:3000/api';
+// const API_URL = 'http://localhost:3000/api';
 
 const UserFavorites: React.FC = () => {
     const toast = useRef<Toast>(null);
@@ -65,7 +65,7 @@ const UserFavorites: React.FC = () => {
                 return;
             }
     
-            const response = await axios.get(`${API_URL}/favorites/${userId}`, {
+            const response = await axios.get(`/favorites/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -219,7 +219,7 @@ const UserFavorites: React.FC = () => {
         }
     
         const imagePath = product.images[0];
-        const baseUrl = API_URL.replace('/api', '');
+        const baseUrl = `${import.meta.env.VITE_IMAGE_URL}`;
     
         // If image path is already complete
         if (imagePath.startsWith('/images/')) {

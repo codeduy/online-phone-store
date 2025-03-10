@@ -18,7 +18,7 @@ import { useComparison } from '../../components/user/ComparisonContext';
 import { Product as ComparisonProduct, Product } from '../user/types/product';
 import { Helmet } from 'react-helmet';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 interface Review {
     _id: string;

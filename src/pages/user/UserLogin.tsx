@@ -22,7 +22,7 @@ const LoginPage = () => {
         if (!token) return;
 
         try {
-            const response = await axios.post('http://localhost:3000/api/auth/verify-token', null, {
+            const response = await axios.post('/auth/verify-token', null, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -82,7 +82,7 @@ const LoginPage = () => {
     setError('');
 
     try {
-        const response = await axios.post('http://localhost:3000/api/auth/login', {
+        const response = await axios.post('/auth/login', {
             username: formData.username,
             password: formData.password
         });

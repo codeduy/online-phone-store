@@ -133,7 +133,7 @@ const fetchOrderDetails = async (orderId: string) => {
   try {
     setLoading(true);
     const token = localStorage.getItem('adminToken');
-    const response = await axios.get(`http://localhost:3000/api/admin/orders/${orderId}`, {
+    const response = await axios.get(`/admin/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -226,7 +226,7 @@ const handleStatusChange = async (newStatus: string) => {
   try {
     const token = localStorage.getItem('adminToken');
     const response = await axios.put(
-      `http://localhost:3000/api/admin/orders/${id}/status`,
+      `/admin/orders/${id}/status`,
       { status: newStatus },
       {
         headers: { Authorization: `Bearer ${token}` }
@@ -272,7 +272,7 @@ const handleStatusChange = async (newStatus: string) => {
         images: product.product_id.images
     });
 
-    const baseUrl = 'http://localhost:3000';
+    const baseUrl = `${import.meta.env.VITE_IMAGE_URL}`;
 
     // Get trademark from category_id
     let trademark = 'UNKNOWN';

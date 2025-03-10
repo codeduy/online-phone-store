@@ -246,7 +246,7 @@ useEffect(() => {
   const loadProductForEdit = async (rowData: ProductData) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/admin/products/${rowData.id}/details`,
+        `/admin/products/${rowData.id}/details`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
@@ -363,7 +363,7 @@ useEffect(() => {
       }
   
       const response = await axios.put(
-        `http://localhost:3000/api/admin/products/categories/${editCategory._id}`,
+        `/admin/products/categories/${editCategory._id}`,
         formData,
         {
           headers: {
@@ -412,7 +412,7 @@ useEffect(() => {
       formData.append('logo', categoryLogo);
   
       const response = await axios.post(
-        'http://localhost:3000/api/admin/products/categories',
+        '/admin/products/categories',
         formData,
         {
           headers: {
@@ -452,7 +452,7 @@ useEffect(() => {
   
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/admin/products/search?query=${text}`,
+        `/admin/products/search?query=${text}`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
@@ -506,7 +506,7 @@ const handleSpecialFeaturesChange = (e: any) => {
     const fetchCategories = async () => {
       try {
           const token = localStorage.getItem('adminToken');
-          const response = await axios.get('http://localhost:3000/api/admin/products/categories', {
+          const response = await axios.get('/admin/products/categories', {
               headers: { Authorization: `Bearer ${token}` }
           });
 
@@ -592,7 +592,7 @@ const handleSpecialFeaturesChange = (e: any) => {
     try {
         const token = localStorage.getItem('adminToken');
         const response = await axios.delete(
-            `http://localhost:3000/api/admin/products/${productId}`, 
+            `/admin/products/${productId}`, 
             {
                 headers: { Authorization: `Bearer ${token}` }
             }
@@ -627,7 +627,7 @@ const handleSpecialFeaturesChange = (e: any) => {
 const handleDeleteCategory = async (categoryId: string) => {
     try {
         const token = localStorage.getItem('adminToken');
-        await axios.delete(`http://localhost:3000/api/admin/products/categories/${categoryId}`, {
+        await axios.delete(`/admin/products/categories/${categoryId}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -653,7 +653,7 @@ const handleDeleteCategory = async (categoryId: string) => {
     try {
         setLoading(true);
         const token = localStorage.getItem('adminToken');
-        const response = await axios.get('http://localhost:3000/api/admin/products', {
+        const response = await axios.get('/admin/products', {
             headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -743,7 +743,7 @@ useEffect(() => {
         });
 
         const response = await axios.put(
-            `http://localhost:3000/api/admin/products/${selectedProduct.id}`,
+            `/admin/products/${selectedProduct.id}`,
             formData,
             {
                 headers: {
@@ -822,7 +822,7 @@ useEffect(() => {
 
         const token = localStorage.getItem('adminToken');
         const response = await axios.post(
-            'http://localhost:3000/api/admin/products',
+            '/admin/products',
             formData,
             {
                 headers: {
@@ -1085,7 +1085,7 @@ const specialFeatureItemTemplate = (option: any) => {
                 
                 return (
                   <img 
-                    src={`http://localhost:3000${imageUrl}`}
+                    src={`${import.meta.env.VITE_IMAGE_URL}${imageUrl}`}
                     alt={rowData.name} 
                     className="w-16 h-16 object-contain"
                     // onError={(e) => {
@@ -1245,7 +1245,7 @@ const specialFeatureItemTemplate = (option: any) => {
                       <div key={category._id} className="flex items-center justify-between border p-3 rounded-lg">
                           <div className="flex items-center gap-4">
                               <img 
-                                  src={`http://localhost:3000${category.logo_url}`}
+                                  src={`${import.meta.env.VITE_IMAGE_URL}${category.logo_url}`}
                                   alt={`${category.name} logo`}
                                   className="w-12 h-12 object-contain"
                                   onError={(e) => {

@@ -68,7 +68,7 @@ const ForgotPasswordPage = () => {
   const handleSendVerificationCode = async () => {
     setIsLoading(true);
     try {
-        await axios.post('http://localhost:3000/api/auth/check-email', {
+        await axios.post('/auth/check-email', {
             email: formData.email
         });
         setCurrentStep(ResetStep.VERIFY_CODE);
@@ -83,7 +83,7 @@ const ForgotPasswordPage = () => {
   const handleVerifyCode = async () => {
     setIsLoading(true);
     try {
-        const response = await axios.post('http://localhost:3000/api/auth/verify-code', {
+        const response = await axios.post('/auth/verify-code', {
             email: formData.email,
             code: formData.verificationCode
         });
@@ -100,7 +100,7 @@ const ForgotPasswordPage = () => {
     setIsLoading(true);
     try {
         const resetToken = localStorage.getItem('resetToken');
-        await axios.post('http://localhost:3000/api/auth/reset-password', {
+        await axios.post('/auth/reset-password', {
             resetToken,
             newPassword: formData.newPassword
         });

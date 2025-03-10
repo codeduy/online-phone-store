@@ -39,7 +39,7 @@ const PaymentResult = () => {
                     if (pendingOrder) {
                         const token = localStorage.getItem('token');
                         await axios.post(
-                            'http://localhost:3000/api/orders/create',
+                            '/orders/create',
                             JSON.parse(pendingOrder),
                             {
                                 headers: {

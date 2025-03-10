@@ -126,7 +126,7 @@ const AdminCoupons = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('http://localhost:3000/api/admin/vouchers', {
+      const response = await axios.get('/admin/vouchers', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.success) {
@@ -260,7 +260,7 @@ const AdminCoupons = () => {
 
       if (isEditing && couponData.id) {
         const response = await axios.put(
-          `http://localhost:3000/api/admin/vouchers/${couponData.id}`,
+          `/admin/vouchers/${couponData.id}`,
           couponPayload,
           {
             headers: {
@@ -281,7 +281,7 @@ const AdminCoupons = () => {
         }
       } else {
         await axios.post(
-          'http://localhost:3000/api/admin/vouchers',
+          '/admin/vouchers',
           couponPayload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -352,7 +352,7 @@ const AdminCoupons = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const response = await axios.patch(
-        `http://localhost:3000/api/admin/vouchers/${couponId}/toggle`,
+        `/admin/vouchers/${couponId}/toggle`,
         {},
         {
           headers: {
@@ -366,8 +366,8 @@ const AdminCoupons = () => {
         fetchCoupons();
         toast.current?.show({
           severity: 'success',
-          summary: 'Success',
-          detail: 'Voucher status updated successfully'
+          summary: 'Thành công',
+          detail: 'Trạng thái mã giảm giá đã được cập nhật'
         });
       }
     } catch (error) {
@@ -396,7 +396,7 @@ const AdminCoupons = () => {
       
       try {
           const token = localStorage.getItem('adminToken');
-          await axios.delete(`http://localhost:3000/api/admin/vouchers/${couponToDelete}`, {
+          await axios.delete(`/admin/vouchers/${couponToDelete}`, {
               headers: { Authorization: `Bearer ${token}` }
           });
           fetchCoupons();

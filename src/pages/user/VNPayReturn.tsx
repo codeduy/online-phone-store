@@ -14,7 +14,7 @@ const VNPayReturn = () => {
                 const token = localStorage.getItem('token');
                 
                 const response = await axios.post(
-                    'http://localhost:3000/api/vnpay/verify-payment',
+                    '/vnpay/verify-payment',
                     params,
                     {
                         headers: {
@@ -51,7 +51,7 @@ const VNPayReturn = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(
-                'http://localhost:3000/api/orders/create',
+                '/orders/create',
                 orderData,
                 {
                     headers: {

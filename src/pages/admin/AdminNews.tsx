@@ -112,7 +112,7 @@ const AdminNews = () => {
                 }
 
                 const response = await axios.get(
-                    `http://localhost:3000/api/admin/news/search?query=${searchValue}`,
+                    `/admin/news/search?query=${searchValue}`,
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }
@@ -157,7 +157,7 @@ const AdminNews = () => {
                 return;
             }
     
-            const response = await axios.get('http://localhost:3000/api/admin/news', {
+            const response = await axios.get('/admin/news', {
                 headers: { 
                     Authorization: `Bearer ${token}`
                 }
@@ -200,7 +200,7 @@ const AdminNews = () => {
             const newStatus = currentStatus === 'true' ? 'false' : 'true';
             
             await axios.put(
-                `http://localhost:3000/api/admin/news/${id}`,
+                `/admin/news/${id}`,
                 { status: newStatus },
                 {
                     headers: { Authorization: `Bearer ${token}` }
@@ -249,7 +249,7 @@ const AdminNews = () => {
             const formData = new FormData();
             formData.append('image', file);
 
-            const response = await axios.post('http://localhost:3000/api/admin/news/upload', formData, {
+            const response = await axios.post('/admin/news/upload', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -294,8 +294,8 @@ const AdminNews = () => {
     
             const method = newNews._id ? 'put' : 'post';
             const url = newNews._id 
-                ? `http://localhost:3000/api/admin/news/${newNews._id}`
-                : 'http://localhost:3000/api/admin/news';
+                ? `/admin/news/${newNews._id}`
+                : '/admin/news';
     
             const response = await axios[method](
                 url, 
@@ -335,7 +335,7 @@ const AdminNews = () => {
         
         try {
             const token = localStorage.getItem('adminToken');
-            await axios.delete(`http://localhost:3000/api/admin/news/${newsToDelete}`, {
+            await axios.delete(`/admin/news/${newsToDelete}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchNews();
@@ -352,23 +352,21 @@ const AdminNews = () => {
                 <title>Quản lí tin tức và sự kiện</title>
                 <link rel="icon" href="../../src/assets/img/phone.ico" />
             </Helmet>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-4">
                     <InputText 
                         value={searchTerm} 
                         onChange={(e) => handleSearch(e.target.value)} 
                         placeholder="Tìm kiếm tin tức..." 
-                        style={{ width: '100%', maxWidth: '24rem' }} 
-                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200'
+                        className="w-96 px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors duration-200"
                     />
                 </div>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <Button 
-                        label="Thêm tin tức" 
-                        onClick={handleAddNews} 
-                        style={{ padding: '0.5rem', border: '1px solid #e2e8f0' }} 
-                    />
-                </div>
+                <Button 
+                    label="Thêm tin tức" 
+                    icon="pi pi-plus"
+                    onClick={handleAddNews} 
+                    className="px-4 py-2 bg-blue-600 text-white border border-blue-600 rounded-lg hover:bg-blue-700 hover:border-blue-700 transition-colors duration-200"
+                />
             </div>
 
             <Card style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
@@ -377,12 +375,13 @@ const AdminNews = () => {
                     responsiveLayout="scroll" 
                     loading={loading} 
                     emptyMessage="Không tìm thấy tin tức nào"
+                    className="p-datatable-lg"
                 >
                     <Column 
                         header="Hình ảnh" 
                         body={(rowData) => (
                             <img 
-                                src={`http://localhost:3000${rowData.image}`} 
+                                src={`${import.meta.env.VITE_IMAGE_URL}${rowData.image}`} 
                                 alt={rowData.title}
                                 style={{ width: '100px', height: '60px', objectFit: 'cover' }}
                             />
@@ -441,17 +440,21 @@ const AdminNews = () => {
                 header={newNews._id ? "Sửa tin tức" : "Thêm tin tức"} 
                 visible={showDialog} 
                 onHide={() => setShowDialog(false)} 
-                style={{ width: '70vw' }}
+                className="w-[90vw] max-w-3xl rounded-lg shadow-lg border border-gray-200"
+                pt={{
+                    root: { className: 'border rounded-lg shadow-lg' },
+                    header: { className: 'text-xl font-semibold text-gray-800 p-4 border-b bg-gray-50' },
+                    content: { className: 'p-6' },
+                    footer: { className: 'flex gap-2 justify-end p-4 bg-gray-50 border-t' }
+                }}
             >
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <div>
-                        <label htmlFor="title" style={{ display: 'block', paddingBottom: '0.25rem' }}>Tiêu đề</label>
+                <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
+                        <label className="font-medium text-gray-700">Tiêu đề</label>
                         <InputText 
-                            id="title" 
                             value={newNews.title} 
                             onChange={(e) => setNewNews({ ...newNews, title: e.target.value })} 
-                            style={{ width: '100%', border: '1px solid #e2e8f0', padding: '0.5rem' }}
-                            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200'
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors duration-200"
                         />
                     </div>
                     <div>
@@ -509,7 +512,7 @@ const AdminNews = () => {
                         <label htmlFor="image" style={{ display: 'block', paddingBottom: '0.25rem' }}>Hình ảnh</label>
                         <FileUpload
                             name="image"
-                            url={`http://localhost:3000/api/admin/news/upload`}
+                            url={`/admin/news/upload`}
                             accept="image/*"
                             maxFileSize={1000000}
                             customUpload
@@ -537,45 +540,34 @@ const AdminNews = () => {
                 header="Xác nhận xóa" 
                 visible={showDeleteDialog} 
                 onHide={() => setShowDeleteDialog(false)}
-                footer={
-                    <div>
-                        <Button 
-                            label="Hủy" 
-                            icon="pi pi-times" 
-                            onClick={() => setShowDeleteDialog(false)} 
-                            className="p-button-text 
-                                bg-white
-                                text-gray-700 
-                                border 
-                                border-gray-300
-                                hover:bg-blue-50 
-                                hover:text-blue-600 
-                                transition-all 
-                                duration-200 
-                                rounded-md
-                                p-2" 
-                        /> &nbsp;
-                        <Button 
-                            label="Xóa" 
-                            icon="pi pi-trash" 
-                            onClick={confirmDelete} 
-                            // style={{ backgroundColor: '#f44336', color: '#fff' }}
-                            className='p-button-danger 
-                                text-red-500 
-                                border
-                                border-red-300
-                                bg-white 
-                                hover:bg-red-50 
-                                hover:text-red-600 
-                                transition-all 
-                                duration-200 
-                                rounded-md 
-                                p-2'
-                        />
-                    </div>
-                }
+                className="w-[90vw] max-w-md rounded-lg shadow-lg border border-gray-200"
+                pt={{
+                    root: { className: 'border rounded-lg shadow-lg' },
+                    header: { className: 'text-xl font-semibold text-gray-800 p-4 border-b bg-gray-50' },
+                    content: { className: 'p-6 flex flex-col items-center gap-4' },
+                    footer: { className: 'flex justify-end gap-3 p-4 bg-gray-50 border-t' }
+                }}
             >
-                <p>Bạn có chắc chắn muốn xóa tin tức này?</p>
+                <div className="flex flex-col items-center gap-4">
+                    <i className="pi pi-exclamation-triangle text-5xl text-yellow-500" />
+                    <p className="text-center text-gray-600">
+                        Bạn có chắc chắn muốn xóa tin tức này?
+                    </p>
+                </div>
+                <div className="flex justify-end gap-3">
+                    <Button 
+                        label="Hủy" 
+                        icon="pi pi-times" 
+                        onClick={() => setShowDeleteDialog(false)} 
+                        className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 transition-colors duration-200"
+                    /> 
+                    <Button 
+                        label="Xóa" 
+                        icon="pi pi-trash" 
+                        onClick={confirmDelete} 
+                        className="px-4 py-2 bg-white text-red-600 border border-red-300 rounded-lg hover:bg-red-50 hover:border-red-400 transition-colors duration-200"
+                    />
+                </div>
             </Dialog>
         </div>
     );

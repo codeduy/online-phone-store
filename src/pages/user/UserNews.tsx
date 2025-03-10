@@ -35,8 +35,8 @@ const UserNews: React.FC = () => {
         const fetchData = async () => {
             try {
                 const [promotionsRes, newsRes] = await Promise.all([
-                    axios.get('http://localhost:3000/api/news/promotions'),
-                    axios.get('http://localhost:3000/api/news/tech')
+                    axios.get('/news/promotions'),
+                    axios.get('/news/tech')
                 ]);
                 setPromotions(promotionsRes.data);
                 setNews(newsRes.data);
@@ -64,7 +64,7 @@ const UserNews: React.FC = () => {
             <LinkComponent {...linkProps} className="block">
                 <div className="relative group overflow-hidden rounded-lg shadow-lg">
                     <img 
-                        src={`http://localhost:3000${promo.image}`}
+                        src={`${import.meta.env.VITE_IMAGE_URL}${promo.image}`}
                         alt={promo.title}
                         className="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-105"
                         onError={(e) => {
@@ -130,7 +130,7 @@ const UserNews: React.FC = () => {
                                 <Card className="hover:shadow-lg transition-shadow">
                                     <div className="flex gap-4">
                                         <img 
-                                            src={`http://localhost:3000${item.image}`}
+                                            src={`${import.meta.env.VITE_IMAGE_URL}${item.image}`}
                                             alt={item.title}
                                             className="w-24 h-24 object-cover rounded"
                                             onError={(e) => {

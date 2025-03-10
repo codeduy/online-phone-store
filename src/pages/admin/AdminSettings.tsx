@@ -5,6 +5,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { RadioButton } from 'primereact/radiobutton';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
+import axiosInstance, { API_CONFIG } from '../../config/axiosInstance';
 
 const AdminSettings = () => {
     const [selectedSetting, setSelectedSetting] = useState('basic');

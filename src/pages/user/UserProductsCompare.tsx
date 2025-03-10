@@ -52,7 +52,7 @@ interface ProductData {
     [key: string]: Product;
 }
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 const UserProductsCompare = () => {
     // const [selectedProducts, setSelectedProducts] = useState<(Product | null)[]>([]);
@@ -735,42 +735,21 @@ const UserProductsCompare = () => {
     };
 
     const generateProductLink = (product: Product): string => {
-        try {
-          // Xử lý tên cơ bản trước
-          const baseName = product.baseProductName
-            .toLowerCase()
-            .replace(/\s+/g, '-') // Thay thế khoảng trắng bằng dấu gạch ngang
-            .replace(/[^a-z0-9-]/g, ''); // Loại bỏ ký tự đặc biệt
-      
-          // Kiểm tra xem có phải iPhone không
-          const isIphone = baseName.includes('iphone');
-      
-          if (isIphone) {
-            // Đối với iPhone: chỉ thêm dung lượng bộ nhớ
-            const storage = product.variant?.storage?.toLowerCase()
-              .replace(/\s+/g, '')
-              .replace('gb', 'gb');
-            return `${baseName}-${storage}`;
-          } else {
-            // Đối với các sản phẩm khác: thêm cả RAM và bộ nhớ
-            const ram = product.variant?.ram?.toLowerCase()
-              .replace(/\s+/g, '')
-              .replace('gb', 'gb');
-            const storage = product.variant?.storage?.toLowerCase()
-              .replace(/\s+/g, '')
-              .replace('gb', 'gb');
-      
-            // Thêm "5g" nếu tên sản phẩm có chứa "5g"
-            const has5G = product.baseProductName.toLowerCase().includes('5g');
-            const suffix = has5G ? '-5g' : '';
-      
-            return `${baseName}${suffix}-${ram}-${storage}`;
-          }
-        } catch (error) {
-          console.error('Error generating product link:', error);
-          return '#'; // Trả về # nếu có lỗi
+        const baseName = product.baseProductName
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9-]/g, '');
+        
+        const isIphone = baseName.includes('iphone');
+        
+        if (isIphone) {
+          return `${baseName}-${product.variant?.storage?.toLowerCase()}`;
+        } else {
+          const ram = product.variant?.ram?.toLowerCase().replace(/\s+/g, '');
+          const storage = product.variant?.storage?.toLowerCase().replace(/\s+/g, '');
+          return `${baseName}-${ram}-${storage}`;
         }
-    };
+      };
 
     return (        
         <div className="p-4 bg-gray-50 min-h-screen">

@@ -20,7 +20,7 @@ const AdminLogin = () => {
         try {
             const token = localStorage.getItem('adminToken');
             if (token) {
-                await axios.post('http://localhost:3000/api/admin/logout', {}, {
+                await axios.post('/admin/logout', {}, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -109,7 +109,7 @@ const AdminLogin = () => {
                 return;
             }
     
-            const response = await axios.post('http://localhost:3000/api/admin/login', {
+            const response = await axios.post('/admin/login', {
                 username: username.trim(),
                 password: password
             });

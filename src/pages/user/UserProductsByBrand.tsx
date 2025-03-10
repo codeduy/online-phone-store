@@ -9,7 +9,7 @@ import { useComparison } from '../../components/user/ComparisonContext';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 const formatPrice = (price: number): string => {
   return new Intl.NumberFormat('vi-VN').format(price);

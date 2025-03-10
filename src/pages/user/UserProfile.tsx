@@ -19,7 +19,7 @@ const UserProfile = () => {
                     return;
                 }
         
-                const response = await axios.get('http://localhost:3000/api/auth/profile', {
+                const response = await axios.get('/auth/profile', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -37,7 +37,7 @@ const UserProfile = () => {
         
                     // Set profile image if exists
                     if (userData.profile.imageUrl) {
-                        setProfileImage(`http://localhost:3000${userData.profile.imageUrl}`);
+                        setProfileImage(`${import.meta.env.VITE_IMAGE_URL}${userData.profile.imageUrl}`);
                     }
                 }
             } catch (error) {
@@ -97,7 +97,7 @@ const UserProfile = () => {
             formData.append('phone', profile.phone || '');
     
             const response = await axios.put(
-                'http://localhost:3000/api/auth/profile',
+                '/auth/profile',
                 formData,
                 {
                     headers: { 
@@ -165,7 +165,7 @@ const UserProfile = () => {
             formData.append('phone', profile.phone || '');
     
             const response = await axios.put(
-                'http://localhost:3000/api/auth/profile',
+                '/auth/profile',
                 formData,
                 {
                     headers: { 
@@ -213,7 +213,7 @@ const UserProfile = () => {
             }
     
             await axios.put(
-                'http://localhost:3000/api/auth/change-password',
+                '/auth/change-password',
                 {
                     oldPassword: passwords.oldPassword,
                     newPassword: passwords.newPassword

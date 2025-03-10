@@ -10,7 +10,7 @@ import { Helmet } from 'react-helmet';
 import { FileUpload } from 'primereact/fileupload';
 import { InputTextarea } from 'primereact/inputtextarea';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 interface Review {
     _id: string;

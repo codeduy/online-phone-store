@@ -57,7 +57,7 @@ import { Helmet } from 'react-helmet';
         }
     });
 
-    const API_URL = 'http://localhost:3000/api';
+    // const API_URL = 'http://localhost:3000/api';
 
     export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -79,7 +79,7 @@ import { Helmet } from 'react-helmet';
                     throw new Error('Vui lòng đăng nhập để xem giỏ hàng');
                 }
         
-                const response = await axios.get(`${API_URL}/cart`, {
+                const response = await axios.get(`/cart`, {
                     headers: { 
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -124,7 +124,7 @@ import { Helmet } from 'react-helmet';
                 }
         
                 const response = await axios.post(
-                    `${API_URL}/cart/add`, 
+                    `/cart/add`, 
                     { productId, quantity, formattedName },
                     { 
                         headers: { 
@@ -156,7 +156,7 @@ import { Helmet } from 'react-helmet';
                     throw new Error('Vui lòng đăng nhập');
                 }
         
-                const response = await axios.delete(`${API_URL}/cart/item/${itemId}`, {
+                const response = await axios.delete(`/cart/item/${itemId}`, {
                     headers: { 
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -198,7 +198,7 @@ import { Helmet } from 'react-helmet';
                 }
         
                 const response = await axios.put(
-                    `${API_URL}/cart/item/${itemId}`, 
+                    `/cart/item/${itemId}`, 
                     { quantity },
                     { 
                         headers: { 
@@ -235,7 +235,7 @@ import { Helmet } from 'react-helmet';
                 }
     
                 const response = await axios.post(
-                    `${API_URL}/cart/apply-voucher`,
+                    `/cart/apply-voucher`,
                     { code },
                     { 
                         headers: { 
@@ -268,7 +268,7 @@ import { Helmet } from 'react-helmet';
                 }
     
                 const response = await axios.delete(
-                    `${API_URL}/cart/voucher`,
+                    `/cart/voucher`,
                     { 
                         headers: { 
                             'Authorization': `Bearer ${token}`,

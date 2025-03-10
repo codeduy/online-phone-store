@@ -53,7 +53,7 @@ interface Product {
   special_features: string[];
 }
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 const UserProductsFilter = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000000]);

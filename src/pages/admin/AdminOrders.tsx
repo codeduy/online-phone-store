@@ -95,7 +95,7 @@ const AdminOrders = () => {
             const endStr = end.toISOString();
             
             const response = await axios.get(
-                `http://localhost:3000/api/admin/orders/filter/date`,
+                `/admin/orders/filter/date`,
                 {
                     params: {
                         startDate: startStr,
@@ -138,7 +138,7 @@ const AdminOrders = () => {
         try {
             const token = localStorage.getItem('adminToken');
             const response = await axios.put(
-                `http://localhost:3000/api/admin/orders/${orderId}/status`,
+                `/admin/orders/${orderId}/status`,
                 { status: newStatus },
                 {
                     headers: { Authorization: `Bearer ${token}` }
@@ -291,7 +291,7 @@ const AdminOrders = () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('adminToken');
-            const response = await axios.get('http://localhost:3000/api/admin/orders', {
+            const response = await axios.get('/admin/orders', {
                 headers: { Authorization: `Bearer ${token}` }
             });
     

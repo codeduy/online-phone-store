@@ -56,8 +56,11 @@ import { FilterProvider } from "./components/user/FilterContext.tsx";
 
 import PaymentResult from './pages/user/PaymentResult.tsx';
 
+import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 
-axios.defaults.baseURL = "http://localhost:3000/api";
+if (process.env.NODE_ENV === 'production') disableReactDevTools();
+
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;
 
 const App = () => {

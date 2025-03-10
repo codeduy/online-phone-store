@@ -55,7 +55,7 @@ const AdminProfile = () => {
                     'Authorization': `Bearer ${token}`
                 });
         
-                const response = await axios.get('http://localhost:3000/api/admin/profile', {
+                const response = await axios.get('/admin/profile', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -75,7 +75,7 @@ const AdminProfile = () => {
                     });
         
                     if (userData.profile.imageUrl) {
-                        setProfileImage(`http://localhost:3000${userData.profile.imageUrl}`);
+                        setProfileImage(`${import.meta.env.VITE_IMAGE_URL}${userData.profile.imageUrl}`);
                     }
                 }
             } catch (error) {
@@ -163,7 +163,7 @@ const AdminProfile = () => {
             });
     
             const response = await axios.put(
-                'http://localhost:3000/api/admin/profile',
+                '/admin/profile',
                 formData,
                 {
                     headers: { 
@@ -206,7 +206,7 @@ const AdminProfile = () => {
             }
     
             const response = await axios.put(
-                'http://localhost:3000/api/admin/change-password',
+                '/admin/change-password',
                 {
                     oldPassword: passwords.oldPassword,
                     newPassword: passwords.newPassword

@@ -107,7 +107,7 @@ const AdminCustomers = () => {
                 }
 
                 const response = await axios.get(
-                    `http://localhost:3000/api/admin/customers/search?query=${searchValue}`,
+                    `/admin/customers/search?query=${searchValue}`,
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }
@@ -142,7 +142,7 @@ const AdminCustomers = () => {
             const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
             
             await axios.put(
-                `http://localhost:3000/api/admin/customers/${customerId}`,
+                `/admin/customers/${customerId}`,
                 { status: newStatus },
                 {
                     headers: { Authorization: `Bearer ${token}` }
@@ -170,7 +170,7 @@ const AdminCustomers = () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('adminToken');
-            const response = await axios.get('http://localhost:3000/api/admin/customers', {
+            const response = await axios.get('/admin/customers', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             
@@ -230,7 +230,7 @@ const AdminCustomers = () => {
             }
     
             await axios.put(
-                `http://localhost:3000/api/admin/customers/${selectedCustomer._id}`,
+                `/admin/customers/${selectedCustomer._id}`,
                 updateData,
                 {
                     headers: { Authorization: `Bearer ${token}` }

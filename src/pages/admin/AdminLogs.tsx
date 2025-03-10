@@ -34,7 +34,7 @@ const AdminLogs = () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('adminToken');
-            const response = await axios.get('http://localhost:3000/api/admin/logs', {
+            const response = await axios.get('/admin/logs', {
                 headers: { Authorization: `Bearer ${token}` }
             });
     

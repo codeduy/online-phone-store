@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Toast } from 'primereact/toast';
 import { Helmet } from 'react-helmet';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 interface OrderItem {
     id: string;

@@ -13,7 +13,7 @@ import { Toast } from 'primereact/toast';
 import { useLocation, useNavigate  } from 'react-router-dom';
 import moment from 'moment';
 
-const API_URL = 'http://localhost:3000/api';
+// const API_URL = 'http://localhost:3000/api';
 
 interface CreateOrderPayload {
   items: {
@@ -96,7 +96,7 @@ const UserCart = () => {
                 // Clear cart in backend
                 const token = localStorage.getItem('token');
                 if (token) {
-                    await axios.delete(`${API_URL}/cart/clear`, {
+                    await axios.delete(`/cart/clear`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
@@ -159,7 +159,7 @@ const handleCreateOrder = async () => {
         try {
             // 1. Tạo đơn hàng trước
             const orderResponse = await axios.post(
-                `${API_URL}/orders/create`,
+                `/orders/create`,
                 orderData,
                 {
                     headers: {
@@ -174,7 +174,7 @@ const handleCreateOrder = async () => {
                 
                 // 2. Tạo URL thanh toán VNPay
                 const vnpayResponse = await axios.post(
-                    `${API_URL}/vnpay/create_payment_url`,
+                    `/vnpay/create_payment_url`,
                     {
                         amount: finalAmount,
                         orderId: orderId // Truyền orderId
@@ -211,7 +211,7 @@ const handleCreateOrder = async () => {
     }
 
       const response = await axios.post(
-          `${API_URL}/orders/create`,
+          `/orders/create`,
           orderData,
           {
               headers: {
@@ -291,7 +291,7 @@ const handleCreateOrder = async () => {
   
       // Send update request to backend
       const response = await axios.put(
-        `${API_URL}/users/profile/${userId}`,
+        `/users/profile/${userId}`,
         {
           full_name: userInfo.fullName,
           phone_number: userInfo.phone,
@@ -345,7 +345,7 @@ const handleCreateOrder = async () => {
         }
   
         const response = await axios.get(
-          `${API_URL}/users/profile/${userId}`,
+          `/users/profile/${userId}`,
           {
             headers: { 
               'Authorization': `Bearer ${token}`,
@@ -450,7 +450,7 @@ const handleCreateOrder = async () => {
         }
 
         const response = await axios.delete(
-            `${API_URL}/cart/remove-voucher`,
+            `/cart/remove-voucher`,
             {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -501,7 +501,7 @@ const handleCreateOrder = async () => {
         }
 
         const response = await axios.post(
-            `${API_URL}/cart/apply-voucher`,
+            `/cart/apply-voucher`,
             { code: discountCode.trim() },
             {
                 headers: {
