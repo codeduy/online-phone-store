@@ -333,8 +333,10 @@ const handleAddToComparison = (product: Product) => {
         displaySize: product.specs.display?.size || '',
         refreshRate: product.specs.display?.refresh_rate || '',
         brightness: product.specs.display?.brightness || '',
-        batteryCapacity: product.specs.battery?.capacity || '',
-        charging: product.specs.battery?.charging || ''
+        battery: {
+          capacity: product.specs.battery?.capacity || '',
+          charging: product.specs.battery?.charging || ''
+        }
       } : undefined
     };
 

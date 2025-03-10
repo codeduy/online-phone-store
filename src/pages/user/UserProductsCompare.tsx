@@ -773,7 +773,7 @@ const UserProductsCompare = () => {
                                             <ul className="list-none p-0 m-0">
                                                 {Object.entries(products[0]?.specs || {})
                                                     .filter(([key]) => ['os', 'cpu', 'gpu', 'ram', 'storage'].includes(key))
-                                                    .map(([key, _], index) => (
+                                                    .map(([key, _], _index) => (
                                                         (!showOnlyDifferences || hasDifferences(key as keyof Product['specs'])) && (
                                                             <li key={key} className="mb-6 pb-2 border-b border-gray-200">
                                                                 {key === 'os' && 'Hệ điều hành'}
@@ -821,7 +821,7 @@ const UserProductsCompare = () => {
                                             <ul className="list-none p-0 m-0">
                                                 {Object.entries(products[0]?.specs || {})
                                                     .filter(([key]) => ['rearCamera', 'frontCamera', 'screenTech', 'screenSize', 'refreshRate', 'brightness'].includes(key))
-                                                    .map(([key, _], index) => (
+                                                    .map(([key, _], _index) => (
                                                         (!showOnlyDifferences || hasDifferences(key as keyof Product['specs'])) && (
                                                             <li key={key} className="mb-6 pb-2 border-b border-gray-200">
                                                                 {key === 'rearCamera' && 'Độ phân giải camera sau'}
@@ -869,7 +869,7 @@ const UserProductsCompare = () => {
                                             <ul className="list-none p-0 m-0">
                                                 {Object.entries(products[0]?.specs || {})
                                                     .filter(([key]) => ['battery', 'charging'].includes(key))
-                                                    .map(([key, _], index) => (
+                                                    .map(([key, _], _index) => (
                                                         (!showOnlyDifferences || hasDifferences(key as keyof Product['specs'])) && (
                                                             <li key={key} className="mb-6 pb-2 border-b border-gray-200">
                                                                 {key === 'battery' && 'Dung lượng pin'}

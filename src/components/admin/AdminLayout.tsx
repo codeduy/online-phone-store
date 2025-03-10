@@ -2,11 +2,11 @@ import { Outlet } from "react-router-dom";
 import Header from "../Header";
 import AdminSidebar from "./AdminSidebar";
 import '/src/styles/tailwind.css';
-import { useState } from 'react';
-import { Button } from 'primereact/button';
+// import { useState } from 'react';
+// import { Button } from 'primereact/button';
 
 const AdminLayout = () => {
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
 
   return (
     <div className="h-screen flex flex-col bg-gray-50"> {/* Đổi nền chung thành xám nhạt */}

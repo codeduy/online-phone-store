@@ -25,7 +25,7 @@ const StaffNews = () => {
         // Add more sample news items...
     ]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [filteredNews, setFilteredNews] = useState<NewsItem[]>([]);
+    const [filteredNews, ] = useState<NewsItem[]>([]);
     const [showDialog, setShowDialog] = useState(false);
     const [newNews, setNewNews] = useState<NewsItem>({
         id: 0,
